@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="This is version 0.2 -> working good but need some adjustment like notification navbar-top"
+    />
+    <title>BTS-Barge Tracking System</title>
+    <!-- Font Awesome JS -->
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+      integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+      integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/adaro-bs.css" />
+    <!-- <link rel="stylesheet" href="/vendor/bootstrap/scss/bootstrap.css"> -->
+    <link rel="stylesheet" href="/custom.css" />
+    <!-- buat vis timeline -->
+    <link
+      href="dist/vis-timeline-graph2d.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" type="text/css" href="logisticPlan.css" />
+
+    <!-- Scrollbar Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="sidebar-top">
+        <img class="logo-full" src="./logo-adaro-head.png" alt="" />
+        <img class="logo-mini" src="./logo-adaro-coal.png" alt="" />
+      </div>
+      <nav class="sidebar">
+        <div class="sidebar-header">
+          <div class="wrapper">
+            <div class="row">
+              <div class="col-1">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="col">
+                <h4>Antonio Banderas</h4>
+                <div class="lead">as Admin</div>
+                <div class="lead">from Adaro Logistics</div>
+              </div>
+            </div>
+          </div>
+          <div class="wrapper-mini">
+            <div class="row">
+              <div class="col">
+                <div class="fas fa-user"></div>
+                <h4>Antonio Banderas</h4>
+                <div class="lead">as Admin</div>
+                <div class="lead">from Adaro Logistics</div>
+              </div>
+            </div>
+          </div>
+          <img src="" alt="" />
+        </div>
+
+        <ul class="list-unstyled components">
+          <li>
+            <a href="#">
+              <i class="fas fa-briefcase"></i>
+              <span>Logistic Planner</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#homeSubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle nowraps"
+            >
+              <i class="fas fa-home"></i>
+              <span>Barge Monitoring</span>
+            </a>
+            <ul class="collapse list-unstyled" id="homeSubmenu">
+              <li>
+                <a href="#">Barge Tracking History</a>
+              </li>
+              <li>
+                <a class="selected" href="#">Barge Stoppage</a>
+              </li>
+              <li>
+                <a href="#">Tug Master Timesheet</a>
+              </li>
+              <li>
+                <a href="#">Satellite Map Visulization</a>
+              </li>
+              <li>
+                <a href="#">Fishmap</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-briefcase"></i>
+              <span>Port Activity</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#pageSubmenu"
+              data-toggle="collapse"
+              aria-expanded="false"
+              class="dropdown-toggle nowraps"
+            >
+              <i class="fas fa-copy"></i>
+              <span>Contractor Portal</span>
+            </a>
+            <ul class="collapse list-unstyled" id="pageSubmenu">
+              <li>
+                <a href="#">Master List</a>
+              </li>
+              <li>
+                <a href="#">Ship Owner Activity</a>
+              </li>
+              <li>
+                <a href="#">Report</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="content-container">
+        <nav class="navbar navbar-expand-lg navbar-bts">
+          <button
+            class="navbar-toggler collapsed"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbar-top"
+            aria-controls="navbar-top"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <div class="navbar-collapse collapse" id="navbar-top">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Back</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="#"
+                  >Home <span class="sr-only">(current)</span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+              </li>
+              <li class="nav-item"></li>
+            </ul>
+
+            <div class="dropdown">
+              <div
+                class="bell-button dropdown-Toggle"
+                id="list-notification"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-bell"></i>
+                <div class="total-notif">
+                  <span>99</span>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="list-notification">
+                  <a href="#" class="dropdown-item">
+                    <span class="label-notification">This is label</span>
+                    <p>This is notification content from some modules</p>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <span class="label-notification">This is label</span>
+                    <p>This is notification content from some modules</p>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <span class="label-notification">This is label</span>
+                    <p>This is notification content from some modules</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div class="container-fluid content welcome-bg">
+          <div class="row welcome">
+            <div id="mytimeline">
+              <div id="myForm" style="display: none;">
+                <div class="panel panel-primary">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label"
+                            >Start Date In Item</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="fname"
+                            id="fname"
+                            value="07/11/2019 15:49:01"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label">End Date In Item </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="fname"
+                            id="fname"
+                            value="07/11/2019 15:49:01"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <div
+                            class="input-group date"
+                            id="datetimepicker1"
+                            data-target-input="nearest"
+                          >
+                            <input
+                              type="text"
+                              class="form-control datetimepicker-input"
+                              data-target="#datetimepicker1"
+                            />
+                            <div
+                              class="input-group-append"
+                              data-target="#datetimepicker1"
+                              data-toggle="datetimepicker"
+                            >
+                              <div class="input-group-text">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <div
+                            class="input-group date"
+                            id="datetimepicker2"
+                            data-target-input="nearest"
+                          >
+                            <input
+                              type="text"
+                              class="form-control datetimepicker-input"
+                              data-target="#datetimepicker2"
+                            />
+                            <div
+                              class="input-group-append"
+                              data-target="#datetimepicker2"
+                              data-toggle="datetimepicker"
+                            >
+                              <div class="input-group-text">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      value="Submit"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div id="result"></div>
+              <div class="textLeftTimeline">
+                <strong>Logistics planners</strong>
+              </div>
+              <div class="menuVisTimeline">
+                <div class="grid-container">
+                  <div class="grid-item item1">
+                    Select & Drag Crane / Barge :
+                  </div>
+                  <div class="grid-item item3">
+                    <li
+                      draggable="true"
+                      class="item vis-item crane"
+                      data-id="crane"
+                      id="dropCrane"
+                    >
+                      Crane
+                    </li>
+                  </div>
+                  <div class="grid-item item4">
+                    <li
+                      draggable="true"
+                      class="item vis-item barge"
+                      data-id="barge"
+                      id="dropBarge"
+                    >
+                      Barge
+                    </li>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="./bootstrap.bundle.min.js"></script>
+    <script src="./jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="./custom.js"></script>
+
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore.js"
+    ></script>
+
+    <script src="dist/vis-timeline-graph2d.min.js"></script>
+    <script type="text/javascript" src="logisticPlan.js"></script>
+
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css"
+    />
+
+    <script type="text/javascript">
+      $(function() {
+        // $("#datetimepicker1").datetimepicker();
+
+        $("#datetimepicker1").datetimepicker({
+          format: "DD/MM/YYYY HH:mm:ss",
+          inline: true,
+          sideBySide: true
+        });
+
+        $("#datetimepicker2").datetimepicker({
+          format: "DD/MM/YYYY HH:mm:ss",
+          inline: true,
+          sideBySide: true
+        });
+      });
+    </script>
+  </body>
+</html>

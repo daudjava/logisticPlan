@@ -1,0 +1,167 @@
+.vis-timeline {
+  border: 2px solid rgba(153, 149, 149, 0.699);
+  font-family: purisa, "comic sans", cursive;
+  font-size: 10pt;
+  margin-top: 10px;
+}
+
+/* create a custom sized dot at the bottom of the red item */
+.vis-item.actual {
+  background-color: rgb(252, 31, 31);
+  border-color: darkred;
+  color: black;
+  text-align: center;
+  font-family: monospace;
+  box-shadow: 0 0 5px gray;
+  margin-top: 4px;
+  font-size: 12pt;
+  pointer-events: none;
+}
+
+.vis-item.expected {
+  background-color: transparent;
+  border-style: dashed !important;
+  z-index: 0;
+  text-align: center;
+  border-color: rgb(0, 0, 0);
+  height: 40px;
+  margin-top: 0px;
+  padding-top: 5px;
+  pointer-events: none;
+}
+
+/* create a custom sized dot at the bottom of the red item */
+.vis-item.crane {
+  background-color: rgba(0, 47, 255, 0.671);
+  border-color: rgb(0, 47, 255);
+  color: black;
+  text-align: center;
+  font-family: monospace;
+  box-shadow: 0 0 5px gray;
+}
+
+/* create a custom sized dot at the bottom of the red item */
+.vis-item.barge {
+  background-color: rgba(238, 255, 0, 0.671);
+  border-color: rgb(255, 217, 0);
+  color: black;
+  text-align: center;
+  font-family: monospace;
+  box-shadow: 0 0 5px gray;
+}
+
+/* tinggi setiap baris */
+.vis-label .vis-inner {
+  height: auto;
+  width: auto;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+}
+
+.vis-item .vis-item-overflow {
+  margin: -2px;
+}
+
+.vis-nested-group {
+  background-color: transparent;
+}
+
+.vis-group-level-unknown-but-gte1 {
+  border: 1px solid #757575;
+}
+.vis-labelset .vis-label.red {
+  background-color: transparent;
+}
+
+#dropCrane {
+  position: absolute;
+  display: block;
+}
+#dropBarge {
+  position: absolute;
+  display: block;
+}
+
+#mytimeline {
+  width: 100%;
+  position: relative;
+}
+
+.textLeftTimeline {
+  position: absolute;
+  top: -28px;
+  left: 0;
+  margin-right: 70px;
+  z-index: 9999;
+  font-size: 25px;
+}
+
+.menuVisTimeline {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 70px;
+  z-index: 9999;
+}
+
+#dropCrane {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+#dropBarge {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+.grid-container {
+  display: grid;
+
+  padding: 0px;
+
+  row-gap: 5px;
+
+  column-gap: 110px;
+
+  margin-right: 10px;
+
+  margin-top: -25px;
+}
+
+.grid-item {
+  text-align: center;
+}
+
+.item1 {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+
+li.item {
+  list-style: none;
+  width: 100px;
+  color: #1a1a1a;
+  background-color: #d5ddf6;
+  border: 1px solid #97b0f8;
+  border-radius: 2px;
+  margin-bottom: 5px;
+  padding: 5px 12px;
+}
+
+li.item:before {
+  /* content: "≣"; */
+  font-family: Arial, sans-serif;
+  display: inline-block;
+  font-size: inherit;
+  cursor: move;
+}
+
+.items-panel {
+  display: flex;
+  justify-content: space-around;
+}
+
+.popover {
+  max-width: 800.6px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 0 6px 1px #eee;
+}
