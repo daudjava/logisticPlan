@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>BTS-Barge Tracking System</title>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+      integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+      integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="/adaro-bs.css" />
     <!-- <link rel="stylesheet" href="/vendor/bootstrap/scss/bootstrap.css"> -->
     <link rel="stylesheet" href="/custom.css" />
@@ -21,10 +33,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"
     />
-    <!-- <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
-    /> -->
 
     <style type="text/css">
       .container {
@@ -39,35 +47,130 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-sm-6">
-          <div class="form-group">
-            <div
-              class="input-group date"
-              id="datetimepicker1"
-              data-target-input="nearest"
-            >
-              <input
-                type="text"
-                class="form-control datetimepicker-input"
-                data-target="#datetimepicker1"
-              />
-              <div
-                class="input-group-append"
-                data-target="#datetimepicker1"
-                data-toggle="datetimepicker"
-              >
-                <div class="input-group-text">
-                  <i class="fa fa-calendar"></i>
+        <!-- <button id="btnTest">test</button> -->
+        <div class="col-sm-4">
+          <button
+            tabindex="0"
+            class="btn btn-primary"
+            role="button"
+            data-toggle="popover"
+            data-trigger="click"
+            data-placement="bottom"
+            data-container="body"
+            data-html="true"
+            id="PopS"
+            data-content='<div id="popover-content">
+        <form role="form" method="post">
+            <div class="form-group">
+                <label>Start time?</label>
+                <div class="input-group date" id="datetimepicker1">
+                    <input type="text" class="form-control" placeholder="Start Date time of event" /> <span class="input-group-addon">
+                        <span class="fas fa-calendar"></span>
+        </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>End time?</label>
+                <div class="input-group date" id="datetimepicker2">
+                    <input type="text" class="form-control" placeholder="End Date time" /> <span class="input-group-addon">
+                        <span class="fas fa-calendar"></span>
+        </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" id="btn-submit">Search between dates</button>
+            </div>
+        </form>
+        </div>'
+          >
+            Date
+          </button>
+        </div>
+        <!-- <div id="myForm" style="display: block;">
+          <div class="panel panel-primary">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">Start Date In Item</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="fname"
+                      id="fname"
+                      value="07/11/2019 15:49:01"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">End Date In Item </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="fname"
+                      id="fname"
+                      value="07/11/2019 15:49:01"
+                      readonly
+                    />
+                  </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div
+                      class="input-group date"
+                      id="datetimepicker1"
+                      data-target-input="nearest"
+                    >
+                      <input
+                        type="text"
+                        class="form-control datetimepicker-input"
+                        data-target="#datetimepicker1"
+                      />
+                      <div
+                        class="input-group-append"
+                        data-target="#datetimepicker1"
+                        data-toggle="datetimepicker"
+                      >
+                        <div class="input-group-text">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div
+                      class="input-group date"
+                      id="datetimepicker2"
+                      data-target-input="nearest"
+                    >
+                      <input
+                        type="text"
+                        class="form-control datetimepicker-input"
+                        data-target="#datetimepicker2"
+                      />
+                      <div
+                        class="input-group-append"
+                        data-target="#datetimepicker2"
+                        data-toggle="datetimepicker"
+                      >
+                        <div class="input-group-text">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input type="submit" class="btn btn-primary" value="Submit" />
             </div>
           </div>
-        </div>
-        <script type="text/javascript">
-          $(function() {
-            $("#datetimepicker1").datetimepicker();
-          });
-        </script>
+        </div> -->
       </div>
     </div>
 
@@ -98,4 +201,94 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css"
     />
   </body>
+
+  <script type="text/javascript">
+    // $(document).ready(function() {
+    //   $("#PopS")
+    //     .popover({
+    //       html: true,
+    //       placement: "bottom",
+    //       html: true,
+    //       sanitize: false
+    //     })
+    //     .on("shown.bs.popover", function() {
+    //       $("#datetimepicker1").datetimepicker();
+    //       $("#datetimepicker2").datetimepicker();
+    //     });
+    // });
+
+    $(function() {
+      // $("#datetimepicker1").datetimepicker();
+
+      $("#datetimepicker1").datetimepicker({
+        format: "DD/MM/YYYY HH:mm:ss",
+        inline: true,
+        sideBySide: true
+      });
+
+      $("#datetimepicker2").datetimepicker({
+        format: "DD/MM/YYYY HH:mm:ss",
+        inline: true,
+        sideBySide: true
+      });
+    });
+    $(document).ready(function() {
+      var showPopover = $.fn.popover.Constructor.prototype.show;
+      $.fn.popover.Constructor.prototype.show = function() {
+        showPopover.call(this);
+        if (this.options.showCallback) {
+          this.options.showCallback.call(this);
+        }
+      };
+
+      $("#PopS").popover({
+        placement: "bottom",
+        html: true,
+        sanitize: false,
+        title:
+          '<strong>Item Information</strong> <a href="#" class="close" data-dismiss="alert" style="margin-top:-4px;">&times;</a>',
+        showCallback: function() {
+          // $(".datetimepicker1").datetimepicker();
+          // $(".datetimepicker2").datetimepicker();
+          $("#datetimepicker1").datetimepicker({
+            format: "DD/MM/YYYY HH:mm:ss",
+            inline: true,
+            sideBySide: true
+          });
+        }
+      });
+    });
+
+    // $("#btnTest")
+    //   .popover({
+    //     placement: "bottom",
+    //     html: true,
+    //     sanitize: false,
+    //     title:
+    //       '<strong>Item Information</strong> <a href="#" class="close" data-dismiss="alert" style="margin-top:-4px;">&times;</a>',
+    //     content: $("#myForm").html()
+    //   })
+    //   .on("click", function() {
+    //     console.log("focus DI click11111");
+    //     $(".close").on("click", function() {
+    //       firstItemClick.popover("hide");
+    //     });
+
+    //     $(".btn-primary").click(function() {
+    //       $("#result").after("form submitted by " + $("#email").val());
+    //       $.post(
+    //         "/echo/html/",
+    //         {
+    //           email: $("#email").val(),
+    //           name: $("#name").val(),
+    //           gender: $("#gender").val()
+    //         },
+    //         function(r) {
+    //           $("#pops").popover("hide");
+    //           $("#result").html("resonse from server could be here");
+    //         }
+    //       );
+    //     });
+    //   });
+  </script>
 </html>

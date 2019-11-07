@@ -1,10 +1,3 @@
-.vis-timeline {
-  border: 2px solid rgba(153, 149, 149, 0.699);
-  font-family: purisa, "comic sans", cursive;
-  font-size: 10pt;
-  margin-top: 10px;
-}
-
 /* create a custom sized dot at the bottom of the red item */
 .vis-item.actual {
   background-color: rgb(252, 31, 31);
@@ -57,11 +50,6 @@
   padding-right: 8px !important;
   padding-left: 8px !important;
 }
-
-.vis-item .vis-item-overflow {
-  margin: -2px;
-}
-
 .vis-nested-group {
   background-color: transparent;
 }
@@ -81,10 +69,16 @@
   position: absolute;
   display: block;
 }
-
 #mytimeline {
   width: 100%;
   position: relative;
+}
+
+.vis-timeline {
+  border: 2px solid rgba(153, 149, 149, 0.699);
+  font-family: purisa, "comic sans", cursive;
+  font-size: 10pt;
+  margin-top: 10px;
 }
 
 .textLeftTimeline {
@@ -157,16 +151,4 @@ li.item:before {
 .items-panel {
   display: flex;
   justify-content: space-around;
-}
-
-.popover {
-  max-width: 100%; /* Max Width of the popover (depending on the container!) */
-  border-radius: 6px;
-  border: none;
-  box-shadow: 0 0 6px 1px #eee;
-  border: 1px solid rgba(168, 168, 168, 0.8);
-}
-
-#div-popup-box {
-  font-size: 14px;
 }

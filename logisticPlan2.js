@@ -298,6 +298,25 @@ function customOrder(a, b) {
   return a.itemIndex - b.itemIndex;
 }
 
+// var options = {
+//   //   onUpdate: function(item, callback) {
+//   //     console.log(item);
+//   //     console.log("updateUpdateUpdateUpdate");
+//   //     item.content = prompt("Edit items text:", item.content);
+//   //     if (item.content != null) {
+//   //       callback(item); // send back adjusted item
+//   //     } else {
+//   //       callback(null); // cancel updating the item
+//   //     }
+//   //   },
+//   // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
+//   onMove: function(item, callback) {
+//     //when resize item
+//     callback(item); // send back adjusted new item
+//   },
+//   onRemove: function(item, callback) {}
+// };
+
 var options = {
   height: "530px",
   min: new Date(2019, 9, 1), // lower limit of visible range
@@ -329,122 +348,193 @@ var options = {
   groupOrder: function(a, b) {
     return b.orderGroup - a.orderGroup;
   },
+
   onUpdate: function(item, callback) {
-    console.log(item);
-    console.log("updateUpdateUpdateUpdate");
-    item.content = prompt("Edit items text:", item.content);
-    if (item.content != null) {
-      callback(item); // send back adjusted item
-    } else {
-      callback(null); // cancel updating the item
-    }
+    prettyPrompt("Update item", "Edit items text:", item.content, function(
+      value
+    ) {
+      if (value) {
+        item.content = value;
+        callback(item); // send back adjusted item
+      } else {
+        callback(null); // cancel updating the item
+      }
+    });
   },
   // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
   onMove: function(item, callback) {
     //when resize item
     callback(item); // send back adjusted new item
-
-    var newItem_dropped = timeline1.itemsData.get(item.id);
-    var lookTheirParent = newItem_dropped.groupParent;
-    var itemObj = timeline1.itemsData.get();
-    var index = itemObj.findIndex(
-      x => x.group === lookTheirParent && x.className === "actual"
-    );
-
-    var mapMaxDateEnd = itemObj
-      .map(function(e) {
-        return e.groupParent === lookTheirParent && e.subgroup !== 0
-          ? e.end
-          : "";
-      })
-      .sort()
-      .reverse();
-    var mapMaxDateStart = itemObj
-      .map(function(e) {
-        return e.groupParent === lookTheirParent && e.subgroup !== 0
-          ? e.start
-          : "";
-      })
-      .sort()
-      .reverse();
-
-    var maxEndDate = max_date(mapMaxDateEnd);
-    var maxStartDate = min_date(mapMaxDateStart);
-
-    items.update({
-      id: itemObj[index].id,
-      start: maxStartDate,
-      end: maxEndDate
-    });
+    updateActualVessel(item);
   },
   onRemove: function(item, callback) {
-    var itemObj = timeline1.itemsData.get();
+    prettyConfirm(
+      "Remove item",
+      "Do you really want to remove item " + item.content + "?",
+      function(ok) {
+        if (ok) {
+          var itemObj = timeline1.itemsData.get();
 
-    var selectedParent = timeline1.itemsData.get(item.id);
+          var selectedParent = timeline1.itemsData.get(item.id);
 
-    var insideGroupItem = itemObj.filter(function(num) {
-      return num.group == selectedParent.group ? num.id : "";
-    });
+          var insideGroupItem = itemObj.filter(function(num) {
+            return num.group == selectedParent.group ? num.id : "";
+          });
 
-    var countItemData = _.countBy(itemObj, function(num) {
-      return num.groupParent == selectedParent.groupParent ? num.className : "";
-    });
+          var countItemData = _.countBy(itemObj, function(num) {
+            return num.groupParent == selectedParent.groupParent
+              ? num.className
+              : "";
+          });
 
-    const countCraneItem = countItemData.crane;
-    var groupRemoved = itemObj.filter(function(e) {
-      let statementDelet =
-        e.groupChild == selectedParent.group || e.group == selectedParent.group;
-      if (countCraneItem < 2) {
-        statementDelet =
-          e.groupChild == selectedParent.group ||
-          e.group == selectedParent.group ||
-          (e.group == selectedParent.groupParent && e.className == "actual");
-      }
-      return statementDelet ? e : "";
-    });
+          const countCraneItem = countItemData.crane;
+          var groupRemoved = itemObj.filter(function(e) {
+            let statementDelet =
+              e.groupChild == selectedParent.group ||
+              e.group == selectedParent.group;
+            if (item.className == "crane") {
+              if (countCraneItem < 2) {
+                statementDelet =
+                  e.groupChild == selectedParent.group ||
+                  e.group == selectedParent.group ||
+                  (e.group == selectedParent.groupParent &&
+                    e.className == "actual");
+              }
+            }
+            return statementDelet ? e : "";
+          });
 
-    let countGroupItem = insideGroupItem.length;
-    console.log(groupRemoved);
-    console.log("groupRemoved");
+          let countGroupItem = insideGroupItem.length;
+          console.log(groupRemoved);
+          console.log("groupRemoved");
 
-    if (countGroupItem < 2) {
-      groupRemoved.forEach(function(element) {
-        console.log(element.group);
-        console.log("Element remove from the group");
-        items.remove({ id: element.id });
-        if (element.className != "actual") {
-          groups.remove({ id: element.group });
+          if (countGroupItem < 2) {
+            groupRemoved.forEach(function(element) {
+              var firstItemClick = $(".vis-item-overflow");
+              firstItemClick.popover("hide");
+              console.log(element.group);
+              console.log("Element remove from the group");
+              items.remove({ id: element.id });
+              if (element.className != "actual") {
+                groups.remove({ id: element.group });
+              }
+            });
+          }
+
+          callback(item); // send back adjusted new item
+
+          console.log(timeline1.itemsData.get());
+          console.log("itemObjAfterDelet");
+        } else {
+          callback(null); // cancel deletion
         }
-      });
-    }
-
-    callback(item); // send back adjusted new item
-
-    console.log(timeline1.itemsData.get());
-    console.log("itemObjAfterDelet");
+      }
+    );
   }
 };
-
+function runscript(object) {
+  object.querySelector(".insider").style.color = "red";
+}
 var container = document.getElementById("mytimeline");
 
 var timeline1 = new vis.Timeline(container, items, groups, options);
 
+// items.on("*", function(event, properties) {
+//   logEvent(event, properties);
+// });
+
+// function logEvent(event, properties) {
+//   var log = document.getElementById("log");
+//   var msg = document.createElement("div");
+//   msg.innerHTML =
+//     "event=" +
+//     JSON.stringify(event) +
+//     ", " +
+//     "properties=" +
+//     JSON.stringify(properties);
+//   log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+// }
+
+function prettyConfirm(title, text, callback) {
+  swal(
+    {
+      title: title,
+      text: text,
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55"
+    },
+    callback
+  );
+}
+
+function prettyPrompt(title, text, inputValue, callback) {
+  swal(
+    {
+      title: title,
+      text: text,
+      type: "input",
+      showCancelButton: true,
+      inputValue: inputValue
+    },
+    callback
+  );
+}
+function updateActualVessel(item) {
+  var newItem_dropped = timeline1.itemsData.get(item.id);
+  var lookTheirParent = newItem_dropped.groupParent;
+  var itemObj = timeline1.itemsData.get();
+  var index = itemObj.findIndex(
+    x => x.group === lookTheirParent && x.className === "actual"
+  );
+
+  var mapMaxDateEnd = itemObj
+    .map(function(e) {
+      return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : "";
+    })
+    .sort()
+    .reverse();
+  var mapMaxDateStart = itemObj
+    .map(function(e) {
+      return e.groupParent === lookTheirParent && e.subgroup !== 0
+        ? e.start
+        : "";
+    })
+    .sort()
+    .reverse();
+
+  var maxEndDate = max_date(mapMaxDateEnd);
+  var maxStartDate = min_date(mapMaxDateStart);
+
+  items.update({
+    id: itemObj[index].id,
+    start: maxStartDate,
+    end: maxEndDate
+  });
+}
+
 var sel = 1;
+
+// timeline1.on("click", function(properties) {
+//   console.log(" click event fired");
+// });
+timeline1.on("doubleClick", function(properties) {
+  console.log("Double click event fired");
+});
 timeline1.on("select", function(properties) {
   var target = properties.event.target;
   var item = items.get(properties.items);
   if (item[0] !== undefined) {
     var itemSelected = item[0];
-    console.log("Jalankan click");
+    console.log(itemSelected);
+    console.log("Onselect event fired");
     var selectedIdItem = itemSelected.id;
     var selectedContentItem = itemSelected.content;
     var selectedStartItem = itemSelected.start;
     var selectedEndItem = itemSelected.end;
     var selectedContentItem = itemSelected.content;
-
     // let stringClass = target.attributes.class.nodeValue;
     // var itemDom = $("." + stringClass);
-
     var firstItemClick = $(".vis-item-overflow");
     // var secondItemClick = $(".vis-drag-center");
     firstItemClick
@@ -513,12 +603,13 @@ timeline1.on("select", function(properties) {
         console.log("popover is open!!!");
         $("#edtStartDate").datetimepicker({
           format: "YYYY-MM-DD HH:mm:ss",
-          sideBySide: true
+          sideBySide: true,
+          date: moment(selectedStartItem, "YYYY-MM-DD HH:mm:ss")
         });
-
         $("#edtEndDate").datetimepicker({
           format: "YYYY-MM-DD HH:mm:ss",
-          sideBySide: true
+          sideBySide: true,
+          date: moment(selectedEndItem, "YYYY-MM-DD HH:mm:ss")
         });
       })
       .on("click", function() {
@@ -548,8 +639,13 @@ timeline1.on("select", function(properties) {
           console.log(objUpdate);
           console.log("result input submit");
           items.update(objUpdate);
+          updateActualVessel(objUpdate);
         });
       });
+
+    firstItemClick.click(function(e) {
+      e.stopPropagation();
+    });
   }
 });
 
@@ -584,6 +680,7 @@ function handleDragStart(event) {
     subgroup: sg,
     subgroupOrder: sgo,
     groupParent: 0,
+    domObj: event.target,
     content: event.target.innerHTML.trim(),
     editable: { updateTime: true, updateGroup: false, remove: true }
   };
