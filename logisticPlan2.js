@@ -318,7 +318,7 @@ function customOrder(a, b) {
 // };
 
 var options = {
-  height: "530px",
+  height: '95%',
   min: new Date(2019, 9, 1), // lower limit of visible range
   max: new Date(2019, 12, 1), // upper limit of visible range
   // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
