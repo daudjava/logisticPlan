@@ -373,53 +373,7 @@ var options = {
       "Do you really want to remove item " + item.content + "?",
       function(ok) {
         if (ok) {
-          var itemObj = timeline1.itemsData.get();
-
-          var selectedParent = timeline1.itemsData.get(item.id);
-
-          var insideGroupItem = itemObj.filter(function(num) {
-            return num.group == selectedParent.group ? num.id : "";
-          });
-
-          var countItemData = _.countBy(itemObj, function(num) {
-            return num.groupParent == selectedParent.groupParent
-              ? num.className
-              : "";
-          });
-
-          const countCraneItem = countItemData.crane;
-          var groupRemoved = itemObj.filter(function(e) {
-            let statementDelet =
-              e.groupChild == selectedParent.group ||
-              e.group == selectedParent.group;
-            if (item.className == "crane") {
-              if (countCraneItem < 2) {
-                statementDelet =
-                  e.groupChild == selectedParent.group ||
-                  e.group == selectedParent.group ||
-                  (e.group == selectedParent.groupParent &&
-                    e.className == "actual");
-              }
-            }
-            return statementDelet ? e : "";
-          });
-
-          let countGroupItem = insideGroupItem.length;
-          console.log(groupRemoved);
-          console.log("groupRemoved");
-
-          if (countGroupItem < 2) {
-            groupRemoved.forEach(function(element) {
-              var firstItemClick = $(".vis-item-overflow");
-              firstItemClick.popover("hide");
-              console.log(element.group);
-              console.log("Element remove from the group");
-              items.remove({ id: element.id });
-              if (element.className != "actual") {
-                groups.remove({ id: element.group });
-              }
-            });
-          }
+          deleteItem(item);
 
           callback(item); // send back adjusted new item
 
@@ -513,14 +467,68 @@ function updateActualVessel(item) {
   });
 }
 
+function deleteItem(item) {
+  var itemObj = timeline1.itemsData.get();
+
+  var selectedParent = timeline1.itemsData.get(item.id);
+
+  var insideGroupItem = itemObj.filter(function(num) {
+    return num.group == selectedParent.group ? num.id : "";
+  });
+
+  var countItemData = _.countBy(itemObj, function(num) {
+    return num.groupParent == selectedParent.groupParent
+      ? num.className
+      : "";
+  });
+
+  const countCraneItem = countItemData.crane;
+  var groupRemoved = itemObj.filter(function(e) {
+    let statementDelet =
+      e.groupChild == selectedParent.group ||
+      e.group == selectedParent.group;
+    if (item.className == "crane") {
+      if (countCraneItem < 2) {
+        statementDelet =
+          e.groupChild == selectedParent.group ||
+          e.group == selectedParent.group ||
+          (e.group == selectedParent.groupParent &&
+            e.className == "actual");
+      }
+    }
+    return statementDelet ? e : "";
+  });
+
+  let countGroupItem = insideGroupItem.length;
+  console.log(groupRemoved);
+  console.log("groupRemoved");
+
+  if (countGroupItem < 2) {
+    groupRemoved.forEach(function(element) {
+      var firstItemClick = $(".vis-item-overflow");
+      firstItemClick.popover("hide");
+      console.log(element.group);
+      console.log("Element remove from the group");
+      items.remove({ id: element.id });
+      if (element.className != "actual") {
+        groups.remove({ id: element.group });
+      }
+    });
+  }
+}
+
 var sel = 1;
 
 // timeline1.on("click", function(properties) {
 //   console.log(" click event fired");
 // });
 timeline1.on("doubleClick", function(properties) {
-  console.log("Double click event fired");
+  let item = items.get(properties.items);
+  let getLastItemDrop = item.length - 1; 
+    var itemSelected = item[getLastItemDrop];
+    items.remove({ id: itemSelected.id });
 });
+
 timeline1.on("select", function(properties) {
   var target = properties.event.target;
   var item = items.get(properties.items);
@@ -536,6 +544,10 @@ timeline1.on("select", function(properties) {
     // var itemDom = $("." + stringClass);
     var firstItemClick = $(".vis-item-overflow");
     // var secondItemClick = $(".vis-drag-center");
+    
+    firstItemClick.on('click', function (e) {
+      firstItemClick.not(this).popover('hide');
+    });
     firstItemClick
       .popover({
         placement: "bottom",
