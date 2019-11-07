@@ -532,7 +532,6 @@ timeline1.on("select", function(properties) {
     var selectedContentItem = itemSelected.content;
     var selectedStartItem = itemSelected.start;
     var selectedEndItem = itemSelected.end;
-    var selectedContentItem = itemSelected.content;
     // let stringClass = target.attributes.class.nodeValue;
     // var itemDom = $("." + stringClass);
     var firstItemClick = $(".vis-item-overflow");
@@ -552,10 +551,8 @@ timeline1.on("select", function(properties) {
           '<label for="colFormLabelLg" class="col-auto col-form-label col-form-label-sm font-weight-bold">Name :</label>' +
           '<div class="col-auto">' +
           '<input type="hidden" class="form-control" id="itemId" value="' +
-          selectedIdItem +
           '"/>' +
           '<label class="form-check-label" id="itemName">' +
-          selectedContentItem +
           "</label>" +
           "</div>" +
           "</div>" +
@@ -563,17 +560,13 @@ timeline1.on("select", function(properties) {
           '<div class="col-md-6">' +
           '<div class="form-group">' +
           '<label class="control-label">Start Date In Item</label>' +
-          '<input type="text" class="form-control" name="fname" id="fname" value="' +
-          selectedStartItem +
-          '" readonly/>' +
+          '<input type="text" class="form-control" id="txtStartItem" readonly/>' +
           "</div>" +
           "</div>" +
           '<div class="col-md-6">' +
           '<div class="form-group">' +
           '<label class="control-label">End Date In Item </label>' +
-          '<input type="text" class="form-control" name="fname" id="fname" value="' +
-          selectedEndItem +
-          '" readonly/>' +
+          '<input type="text" class="form-control" id="txtEndItem" readonly/>' +
           "</div>" +
           "</div>" +
           "</div>" +
@@ -600,6 +593,14 @@ timeline1.on("select", function(properties) {
           "</div>"
       })
       .on("shown.bs.popover", function() {
+        
+    console.log(selectedIdItem);
+    $('#itemId').val(selectedIdItem);
+    $("#itemName").empty();
+    $("#itemName").append(selectedContentItem);
+    $('#txtStartItem').val(selectedStartItem);
+    $('#txtEndItem').val(selectedEndItem);
+    // $("#itemName").html("some value");
         console.log("popover is open!!!");
         $("#edtStartDate").datetimepicker({
           format: "YYYY-MM-DD HH:mm:ss",
