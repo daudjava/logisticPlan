@@ -16,157 +16,157 @@ for (var i = 1; i < numberOfGroups; i++) {
     showNested: true,
     orderGroup: 8,
     isSubGroup: false,
-    content: "Group&nbsp;" + i
+    content: 'Group&nbsp;' + i
   });
 }
 
 var arrayItem = [
   {
     id: 1,
-    vesselNo: "A",
-    text: "Vessel",
+    vesselNo: 'A',
+    text: 'Vessel',
     groupContent: 1,
-    startDate: "2019-10-21 12:00:00",
-    endDate: "2019-10-24 00:00:00",
-    className: "expected",
+    startDate: '2019-10-21 12:00:00',
+    endDate: '2019-10-24 00:00:00',
+    className: 'expected',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
-    id: "1A",
-    vesselNo: "",
-    text: "Actual Vessel A",
+    id: '1A',
+    vesselNo: '',
+    text: 'Actual Vessel A',
     groupContent: 1,
-    startDate: "2019-10-21 12:00:00",
-    endDate: "2019-10-24 00:00:00",
-    className: "actual",
+    startDate: '2019-10-21 12:00:00',
+    endDate: '2019-10-24 00:00:00',
+    className: 'actual',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
     id: 2,
-    vesselNo: "B",
-    text: "Vessel",
+    vesselNo: 'B',
+    text: 'Vessel',
     groupContent: 2,
-    startDate: "2019-10-23 00:00:00",
-    endDate: "2019-10-25 12:00:00",
-    className: "expected",
+    startDate: '2019-10-23 00:00:00',
+    endDate: '2019-10-25 12:00:00',
+    className: 'expected',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
     id: 3,
-    vesselNo: "C",
-    text: "Vessel",
+    vesselNo: 'C',
+    text: 'Vessel',
     groupContent: 3,
-    startDate: "2019-10-25 00:00:00",
-    endDate: "2019-10-28 00:00:00",
-    className: "expected",
+    startDate: '2019-10-25 00:00:00',
+    endDate: '2019-10-28 00:00:00',
+    className: 'expected',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
     id: 4,
-    vesselNo: "D",
-    text: "Vessel",
+    vesselNo: 'D',
+    text: 'Vessel',
     groupContent: 4,
-    startDate: "2019-10-28 00:00:00",
-    endDate: "2019-10-29 12:00:00",
-    className: "expected",
+    startDate: '2019-10-28 00:00:00',
+    endDate: '2019-10-29 12:00:00',
+    className: 'expected',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
-    id: "4A",
-    vesselNo: "D",
-    text: "Actual Vessel",
+    id: '4A',
+    vesselNo: 'D',
+    text: 'Actual Vessel',
     groupContent: 4,
-    startDate: "2019-10-28 00:00:00",
-    endDate: "2019-10-29 12:00:00",
-    className: "actual",
+    startDate: '2019-10-28 00:00:00',
+    endDate: '2019-10-29 12:00:00',
+    className: 'actual',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
     id: 5,
-    vesselNo: "E",
-    text: "Vessel",
+    vesselNo: 'E',
+    text: 'Vessel',
     groupContent: 5,
-    startDate: "2019-10-30 00:00:00",
-    endDate: "2019-10-31 00:00:00",
-    className: "expected",
+    startDate: '2019-10-30 00:00:00',
+    endDate: '2019-10-31 00:00:00',
+    className: 'expected',
     subgroup: 0,
     subgroupOrder: 0
   },
   {
     id: 6,
-    vesselNo: "",
-    text: "Crane",
+    vesselNo: '',
+    text: 'Crane',
     groupContent: 1,
-    startDate: "2019-10-21 12:00:00",
-    endDate: "2019-10-24 00:00:00",
-    className: "crane",
-    type: "range",
+    startDate: '2019-10-21 12:00:00',
+    endDate: '2019-10-24 00:00:00',
+    className: 'crane',
+    type: 'range',
     subgroup: 1,
     subgroupOrder: 1
   },
   {
     id: 7,
-    vesselNo: "",
-    text: "Barge",
+    vesselNo: '',
+    text: 'Barge',
     groupContent: 1,
-    startDate: "2019-10-21 12:00:00",
-    endDate: "2019-10-24 00:00:00",
-    className: "barge",
-    type: "range",
+    startDate: '2019-10-21 12:00:00',
+    endDate: '2019-10-24 00:00:00',
+    className: 'barge',
+    type: 'range',
     subgroup: 2,
     subgroupOrder: 1
   },
   {
     id: 8,
-    vesselNo: "",
-    text: "Crane",
+    vesselNo: '',
+    text: 'Crane',
     groupContent: 4,
-    startDate: "2019-10-28 00:00:00",
-    endDate: "2019-10-29 12:00:00",
-    className: "crane",
-    type: "range",
+    startDate: '2019-10-28 00:00:00',
+    endDate: '2019-10-29 12:00:00',
+    className: 'crane',
+    type: 'range',
     subgroup: 1,
     subgroupOrder: 1
   },
   {
     id: 9,
-    vesselNo: "",
-    text: "Barge",
+    vesselNo: '',
+    text: 'Barge',
     groupContent: 4,
-    startDate: "2019-10-28 00:00:00",
-    endDate: "2019-10-29 12:00:00",
-    className: "barge",
-    type: "range",
+    startDate: '2019-10-28 00:00:00',
+    endDate: '2019-10-29 12:00:00',
+    className: 'barge',
+    type: 'range',
     subgroup: 2,
     subgroupOrder: 1
   },
   {
     id: 10,
-    vesselNo: "",
-    text: "Crane",
+    vesselNo: '',
+    text: 'Crane',
     groupContent: 4,
-    startDate: "2019-10-28 00:00:00",
-    endDate: "2019-10-29 12:00:00",
-    className: "crane",
-    type: "range",
+    startDate: '2019-10-28 00:00:00',
+    endDate: '2019-10-29 12:00:00',
+    className: 'crane',
+    type: 'range',
     subgroup: 1,
     subgroupOrder: 1
   },
   {
     id: 11,
-    vesselNo: "",
-    text: "Barge",
+    vesselNo: '',
+    text: 'Barge',
     groupContent: 4,
-    startDate: "2019-10-28 00:00:00",
-    endDate: "2019-10-29 12:00:00",
-    className: "barge",
-    type: "range",
+    startDate: '2019-10-28 00:00:00',
+    endDate: '2019-10-29 12:00:00',
+    className: 'barge',
+    type: 'range',
     subgroup: 2,
     subgroupOrder: 1
   }
@@ -184,13 +184,13 @@ for (var indexItem = 0; indexItem < numberOfItems; indexItem++) {
       id: indexItem,
       className: arrayItem[indexItem].className,
       group: arrayItem[indexItem].groupContent,
-      groupChild: "",
+      groupChild: '',
       groupParent: arrayItem[indexItem].groupContent,
       subgroup: arrayItem[indexItem].subgroup,
       subgroupOrder: arrayItem[indexItem].subgroupOrder,
       start: arrayItem[indexItem].startDate, //'2019-10-21 00:00:00'
       end: arrayItem[indexItem].endDate,
-      content: arrayItem[indexItem].text + " " + arrayItem[indexItem].vesselNo
+      content: arrayItem[indexItem].text + ' ' + arrayItem[indexItem].vesselNo
     });
   } else {
     // berarti child
@@ -198,7 +198,7 @@ for (var indexItem = 0; indexItem < numberOfItems; indexItem++) {
   }
 }
 
-var groupChild = "";
+var groupChild = '';
 var sumCrane = 0;
 var sumBarge = 0;
 function createGroup(itemSelected, indexItem) {
@@ -206,7 +206,7 @@ function createGroup(itemSelected, indexItem) {
   let selectedGroup = itemSelected.groupContent;
 
   var groupNow = selectedGroup;
-  let groupSub = "";
+  let groupSub = '';
   if (groupBefore != groupNow) {
     idSubGroupCrane = 1;
     idSubGroupBarge = 1;
@@ -220,18 +220,18 @@ function createGroup(itemSelected, indexItem) {
   }
 
   groupBefore = selectedGroup;
-  let countCrane = itemSelected.className === "crane" ? idSubGroupCrane : 0;
-  let countBarge = itemSelected.className === "barge" ? idSubGroupBarge : 0;
-  let idItem = "";
+  let countCrane = itemSelected.className === 'crane' ? idSubGroupCrane : 0;
+  let countBarge = itemSelected.className === 'barge' ? idSubGroupBarge : 0;
+  let idItem = '';
   let qGroup = 0;
-  if (itemSelected.className == "crane") {
-    idItem = selectedGroup + "C" + countCrane;
+  if (itemSelected.className == 'crane') {
+    idItem = selectedGroup + 'C' + countCrane;
     idSubGroupCrane = idSubGroupCrane + 1;
     groupChild = idItem;
     sumCrane = sumCrane + 2;
     qGroup = maxCrane - sumCrane;
   } else {
-    idItem = selectedGroup + "B" + countBarge;
+    idItem = selectedGroup + 'B' + countBarge;
     idSubGroupBarge = idSubGroupBarge + 1;
     groupSub = groupChild;
     sumBarge = sumBarge + 2;
@@ -264,7 +264,7 @@ function addGroupData(itemSelected, idItem, indexItem, groupSub) {
     subgroupOrder: itemSelected.subgroupOrder,
     start: itemSelected.startDate, //'2019-10-21 00:00:00'
     end: itemSelected.endDate,
-    content: itemSelected.text + " " + arrayItem[indexItem].vesselNo,
+    content: itemSelected.text + ' ' + arrayItem[indexItem].vesselNo,
     editable: { updateTime: true, updateGroup: false, remove: true }
   });
 }
@@ -318,21 +318,21 @@ function customOrder(a, b) {
 // };
 
 var options = {
-  height: "95%",
+  height: '95%',
   min: new Date(2019, 9, 1), // lower limit of visible range
   max: new Date(2019, 12, 1), // upper limit of visible range
   // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
   zoomMax: 1000 * 60 * 60 * 24 * 31 * 2, // about three months in milliseconds
-  locale: "en",
+  locale: 'en',
   showCurrentTime: true,
   stack: true,
   stackSubgroups: true,
-  start: "2019-10-21 00:00:00", //'2019-10-21 00:00:00'
-  end: "2019-10-31 12:00:00",
+  start: '2019-10-21 00:00:00', //'2019-10-21 00:00:00'
+  end: '2019-10-31 12:00:00',
   editable: true,
   verticalScroll: true,
-  zoomKey: "ctrlKey",
-  orientation: "top",
+  zoomKey: 'ctrlKey',
+  orientation: 'top',
   margin: {
     item: {
       horizontal: -1
@@ -343,16 +343,14 @@ var options = {
     range: true
   },
   loadingScreenTemplate: function() {
-    return "<br><h1>Loading...</h1>";
+    return '<br><h1>Loading...</h1>';
   },
   groupOrder: function(a, b) {
     return b.orderGroup - a.orderGroup;
   },
 
   onUpdate: function(item, callback) {
-    prettyPrompt("Update item", "Edit items text:", item.content, function(
-      value
-    ) {
+    prettyPrompt('Update item', 'Edit items text:', item.content, function(value) {
       if (value) {
         item.content = value;
         callback(item); // send back adjusted item
@@ -369,28 +367,24 @@ var options = {
     showPopOverItem(item);
   },
   onRemove: function(item, callback) {
-    prettyConfirm(
-      "Remove item",
-      "Do you really want to remove item " + item.content + "?",
-      function(ok) {
-        if (ok) {
-          deleteItem(item);
+    prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
+      if (ok) {
+        deleteItem(item);
 
-          callback(item); // send back adjusted new item
+        callback(item); // send back adjusted new item
 
-          console.log(timeline1.itemsData.get());
-          console.log("itemObjAfterDelet");
-        } else {
-          callback(null); // cancel deletion
-        }
+        console.log(timeline1.itemsData.get());
+        console.log('itemObjAfterDelet');
+      } else {
+        callback(null); // cancel deletion
       }
-    );
+    });
   }
 };
 function runscript(object) {
-  object.querySelector(".insider").style.color = "red";
+  object.querySelector('.insider').style.color = 'red';
 }
-var container = document.getElementById("mytimeline");
+var container = document.getElementById('mytimeline');
 
 var timeline1 = new vis.Timeline(container, items, groups, options);
 
@@ -415,9 +409,9 @@ function prettyConfirm(title, text, callback) {
     {
       title: title,
       text: text,
-      type: "warning",
+      type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#DD6B55"
+      confirmButtonColor: '#DD6B55'
     },
     callback
   );
@@ -428,7 +422,7 @@ function prettyPrompt(title, text, inputValue, callback) {
     {
       title: title,
       text: text,
-      type: "input",
+      type: 'input',
       showCancelButton: true,
       inputValue: inputValue
     },
@@ -439,21 +433,17 @@ function updateActualVessel(item) {
   var newItem_dropped = timeline1.itemsData.get(item.id);
   var lookTheirParent = newItem_dropped.groupParent;
   var itemObj = timeline1.itemsData.get();
-  var index = itemObj.findIndex(
-    x => x.group === lookTheirParent && x.className === "actual"
-  );
+  var index = itemObj.findIndex(x => x.group === lookTheirParent && x.className === 'actual');
 
   var mapMaxDateEnd = itemObj
     .map(function(e) {
-      return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : "";
+      return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : '';
     })
     .sort()
     .reverse();
   var mapMaxDateStart = itemObj
     .map(function(e) {
-      return e.groupParent === lookTheirParent && e.subgroup !== 0
-        ? e.start
-        : "";
+      return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.start : '';
     })
     .sort()
     .reverse();
@@ -474,40 +464,39 @@ function deleteItem(item) {
   var selectedParent = timeline1.itemsData.get(item.id);
 
   var insideGroupItem = itemObj.filter(function(num) {
-    return num.group == selectedParent.group ? num.id : "";
+    return num.group == selectedParent.group ? num.id : '';
   });
 
   var countItemData = _.countBy(itemObj, function(num) {
-    return num.groupParent == selectedParent.groupParent ? num.className : "";
+    return num.groupParent == selectedParent.groupParent ? num.className : '';
   });
 
   const countCraneItem = countItemData.crane;
   var groupRemoved = itemObj.filter(function(e) {
-    let statementDelet =
-      e.groupChild == selectedParent.group || e.group == selectedParent.group;
-    if (item.className == "crane") {
+    let statementDelet = e.groupChild == selectedParent.group || e.group == selectedParent.group;
+    if (item.className == 'crane') {
       if (countCraneItem < 2) {
         statementDelet =
           e.groupChild == selectedParent.group ||
           e.group == selectedParent.group ||
-          (e.group == selectedParent.groupParent && e.className == "actual");
+          (e.group == selectedParent.groupParent && e.className == 'actual');
       }
     }
-    return statementDelet ? e : "";
+    return statementDelet ? e : '';
   });
 
   let countGroupItem = insideGroupItem.length;
   console.log(groupRemoved);
-  console.log("groupRemoved");
+  console.log('groupRemoved');
 
   if (countGroupItem < 2) {
     groupRemoved.forEach(function(element) {
-      var firstItemClick = $(".vis-item-overflow");
-      firstItemClick.popover("hide");
+      var firstItemClick = $('.vis-item-overflow');
+      firstItemClick.popover('hide');
       console.log(element.group);
-      console.log("Element remove from the group");
+      console.log('Element remove from the group');
       items.remove({ id: element.id });
-      if (element.className != "actual") {
+      if (element.className != 'actual') {
         groups.remove({ id: element.group });
       }
     });
@@ -516,22 +505,22 @@ function deleteItem(item) {
 
 function showPopOverItem(itemSelected) {
   console.log(itemSelected);
-  console.log("Onselect event fired");
+  console.log('Onselect event fired');
   var selectedIdItem = itemSelected.id;
   var selectedContentItem = itemSelected.content;
   var selectedStartItem = itemSelected.start;
   var selectedEndItem = itemSelected.end;
   // let stringClass = target.attributes.class.nodeValue;
   // var itemDom = $("." + stringClass);
-  var firstItemClick = $(".vis-item-overflow");
+  var firstItemClick = $('.vis-item-overflow');
   // var secondItemClick = $(".vis-drag-center");
 
-  firstItemClick.on("click", function(e) {
-    firstItemClick.not(this).popover("hide");
+  firstItemClick.on('click', function(e) {
+    firstItemClick.not(this).popover('hide');
   });
   firstItemClick
     .popover({
-      placement: "bottom",
+      placement: 'bottom',
       html: true,
       sanitize: false,
       title:
@@ -546,90 +535,84 @@ function showPopOverItem(itemSelected) {
         '<input type="hidden" class="form-control" id="itemId" value="' +
         '"/>' +
         '<label class="form-check-label" id="itemName">' +
-        "</label>" +
-        "</div>" +
-        "</div>" +
+        '</label>' +
+        '</div>' +
+        '</div>' +
         '<div class="row">' +
         '<div class="col-md-6">' +
         '<div class="form-group">' +
         '<label class="control-label">Start Date In Item</label>' +
         '<input type="text" class="form-control" id="txtStartItem" readonly/>' +
-        "</div>" +
-        "</div>" +
+        '</div>' +
+        '</div>' +
         '<div class="col-md-6">' +
         '<div class="form-group">' +
         '<label class="control-label">End Date In Item </label>' +
         '<input type="text" class="form-control" id="txtEndItem" readonly/>' +
-        "</div>" +
-        "</div>" +
-        "</div>" +
+        '</div>' +
+        '</div>' +
+        '</div>' +
         '<div class="row">' +
         '<div class="col-sm-6">' +
         '<label class="control-label font-weight-bold">Custom Start Date</label>' +
         '<input type="text" class="form-control datetimepicker-input" id="edtStartDate" data-toggle="datetimepicker" data-target="#edtStartDate"/>' +
-        "</div>" +
+        '</div>' +
         '<div class="col-sm-6">' +
         '<label class="control-label font-weight-bold">Custom End Date</label>' +
         '<input type="text" class="form-control datetimepicker-input" id="edtEndDate" data-toggle="datetimepicker" data-target="#edtEndDate"/>' +
-        "</div>" +
-        "</div>" +
-        "<hr>" +
+        '</div>' +
+        '</div>' +
+        '<hr>' +
         '<div class="row justify-content-between" style="margin-top:5px;margin-bottom:3px;margin-left:0px;">' +
         '<div class="col-4">' +
         '<input type="submit" class="btn btn-danger btn-lg" value="Cancel" />' +
-        "</div>" +
+        '</div>' +
         '<div class="col-4">' +
         '<input type="submit" class="btn btn-primary btn-lg" value="Submit" />' +
-        "</div>" +
-        "</div>" +
-        "</div>" +
-        "</div>"
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
     })
-    .on("shown.bs.popover", function() {
+    .on('shown.bs.popover', function() {
       console.log(selectedIdItem);
-      $("#itemId").val(selectedIdItem);
-      $("#itemName").empty();
-      $("#itemName").append(selectedContentItem);
-      $("#txtStartItem").val(selectedStartItem);
-      $("#txtEndItem").val(selectedEndItem);
+      $('#itemId').val(selectedIdItem);
+      $('#itemName').empty();
+      $('#itemName').append(selectedContentItem);
+      $('#txtStartItem').val(selectedStartItem);
+      $('#txtEndItem').val(selectedEndItem);
       // $("#itemName").html("some value");
-      console.log("popover is open!!!");
-      $("#edtStartDate").datetimepicker({
-        format: "YYYY-MM-DD HH:mm:ss",
+      console.log('popover is open!!!');
+      $('#edtStartDate').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
         sideBySide: true
         // date: moment(selectedStartItem, "YYYY-MM-DD HH:mm:ss")
       });
-      $("#edtEndDate").datetimepicker({
-        format: "YYYY-MM-DD HH:mm:ss",
+      $('#edtEndDate').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
         sideBySide: true
         // date: moment(selectedEndItem, "YYYY-MM-DD HH:mm:ss")
       });
-      $("#edtStartDate").datetimepicker(
-        "date",
-        moment(selectedStartItem, "YYYY-MM-DD HH:mm:ss")
-      );
-      $("#edtEndDate").datetimepicker(
-        "date",
-        moment(selectedEndItem, "YYYY-MM-DD HH:mm:ss")
-      );
+      $('#edtStartDate').datetimepicker('date', moment(selectedStartItem, 'YYYY-MM-DD HH:mm:ss'));
+      $('#edtEndDate').datetimepicker('date', moment(selectedEndItem, 'YYYY-MM-DD HH:mm:ss'));
     })
-    .on("click", function() {
-      console.log("focus DI click11111");
-      $(".close").on("click", function() {
-        firstItemClick.popover("hide");
+    .on('click', function() {
+      console.log('focus DI click11111');
+      $('.close').on('click', function() {
+        firstItemClick.popover('hide');
         timeline1.setSelection(-1);
       });
-      $(".btn-danger").click(function() {
-        firstItemClick.popover("hide");
+      $('.btn-danger').click(function() {
+        firstItemClick.popover('hide');
         timeline1.setSelection(-1);
       });
-      $(".btn-primary").click(function() {
-        firstItemClick.popover("hide");
+      $('.btn-primary').click(function() {
+        firstItemClick.popover('hide');
         timeline1.setSelection(-1);
-        let newStartDate = $("#edtStartDate").val();
-        let newEndDate = $("#edtEndDate").val();
-        let itemName = $("#itemName").text();
-        let itemId = $("#itemId").val();
+        let newStartDate = $('#edtStartDate').val();
+        let newEndDate = $('#edtEndDate').val();
+        let itemName = $('#itemName').text();
+        let itemId = $('#itemId').val();
         let objUpdate = {
           id: itemId,
           contex: itemName,
@@ -638,7 +621,7 @@ function showPopOverItem(itemSelected) {
         };
         // $("#result").after("form submitted by " + JSON.stringify(objUpdate));
         console.log(objUpdate);
-        console.log("result input submit");
+        console.log('result input submit');
         items.update(objUpdate);
         updateActualVessel(objUpdate);
       });
@@ -654,14 +637,14 @@ var sel = 1;
 // timeline1.on("click", function(properties) {
 //   console.log(" click event fired");
 // });
-timeline1.on("doubleClick", function(properties) {
+timeline1.on('doubleClick', function(properties) {
   let item = items.get(properties.items);
   let getLastItemDrop = item.length - 1;
   var itemSelected = item[getLastItemDrop];
   items.remove({ id: itemSelected.id });
 });
 
-timeline1.on("select", function(properties) {
+timeline1.on('select', function(properties) {
   var target = properties.event.target;
   var item = items.get(properties.items);
   if (item[0] !== undefined) {
@@ -672,10 +655,7 @@ timeline1.on("select", function(properties) {
 
 var itemObj = timeline1.itemsData.get();
 var maxIdForNewItem =
-  itemObj.reduce(
-    (max, arrayItem) => (arrayItem.id > max ? arrayItem.id : max),
-    arrayItem[0].id
-  ) + 1;
+  itemObj.reduce((max, arrayItem) => (arrayItem.id > max ? arrayItem.id : max), arrayItem[0].id) + 1;
 
 var getMaxId = numberOfItems;
 var itemAddCrane = 1;
@@ -683,10 +663,10 @@ var itemAddBarge = 1;
 function handleDragStart(event) {
   var sg = 0;
   var sgo = 0;
-  let color = event.target.attributes["data-id"].value;
-  event.dataTransfer.effectAllowed = "move";
+  let color = event.target.attributes['data-id'].value;
+  event.dataTransfer.effectAllowed = 'move';
 
-  if (color == "crane") {
+  if (color == 'crane') {
     sg = itemAddCrane;
     sgo = itemAddCrane;
   } else {
@@ -696,7 +676,7 @@ function handleDragStart(event) {
 
   var item = {
     id: maxIdForNewItem,
-    type: "range",
+    type: 'range',
     className: color,
     subgroup: sg,
     subgroupOrder: sgo,
@@ -708,8 +688,8 @@ function handleDragStart(event) {
 
   event.target.id = maxIdForNewItem;
 
-  event.dataTransfer.setData("text", JSON.stringify(item));
-  if (color == "crane") {
+  event.dataTransfer.setData('text', JSON.stringify(item));
+  if (color == 'crane') {
     itemAddCrane = itemAddCrane + 1;
   } else {
     itemAddBarge = itemAddBarge + 1;
@@ -732,7 +712,7 @@ function handleDragEnd(event) {
     var index = convertToArray.findIndex(x => x.group == selectedGroup); //find index group selected
     var selectedParent = itemObj[index].groupParent;
     var countItemData = _.countBy(convertToArray, function(num) {
-      return num.groupParent == selectedParent ? num.className : "";
+      return num.groupParent == selectedParent ? num.className : '';
     });
 
     var groupParent = itemObj[index].groupParent;
@@ -747,11 +727,10 @@ function handleDragEnd(event) {
       sumBarge = 0;
       countItemCrane = 1;
       groupData = [];
-      let detectItemCrane =
-        countItemData.crane != undefined ? countItemData.crane : 0;
+      let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
       countItemCrane = detectItemCrane + countItemCrane;
-      generateIdSubGroupCrane = "";
-      generateIdSubGroupBarge = "";
+      generateIdSubGroupCrane = '';
+      generateIdSubGroupBarge = '';
     } else {
       groupData = groupData;
       countItemCrane = countItemCrane;
@@ -760,10 +739,10 @@ function handleDragEnd(event) {
     if (whereItemPlaced == 0) {
       // group vessel
 
-      if (newItem_dropped.className == "crane") {
+      if (newItem_dropped.className == 'crane') {
         // var index = convertToArray.findIndex(x => (x.group == selectedGroup) && (x.className == 'actual')); //find index group selected
         var findActualItem = _.countBy(convertToArray, function(num) {
-          return num.groupParent == selectedParent ? num.className : "";
+          return num.groupParent == selectedParent ? num.className : '';
         });
         let isThereActualItem = findActualItem.actual;
 
@@ -774,27 +753,27 @@ function handleDragEnd(event) {
           let endDateItem = itemObj[index].end;
           items.add({
             id: maxIdForNewItem,
-            className: "actual",
+            className: 'actual',
             group: groupParent,
-            groupChild: "",
+            groupChild: '',
             groupParent: groupParent,
             subgroup: 0,
             subgroupOrder: 0,
             start: startDateItem, //'2019-10-21 00:00:00'
             end: endDateItem,
-            content: "Vessel New"
+            content: 'Vessel New'
           });
 
           maxIdForNewItem++;
         }
 
         if (countItemCrane > maxCraneItem) {
-          console.log("Jumlah crane melebihi kapasitas!");
+          console.log('Jumlah crane melebihi kapasitas!');
           items.remove({
             id: newItem_dropped.id,
             subgroup: 1,
             subgroupOrder: 1,
-            groupChild: "",
+            groupChild: '',
             groupParent: groupParent,
             group: selectedGroup,
             start: startDateItem,
@@ -804,13 +783,13 @@ function handleDragEnd(event) {
         } else {
           if (!groupSelect.isSubGroup) {
             // klo dia taroh di parent
-            let generateIdSubGroupCrane = selectedGroup + "C" + countItemCrane;
+            let generateIdSubGroupCrane = selectedGroup + 'C' + countItemCrane;
             sumCrane = maxCrane - countItemCrane * 2;
             let qGroup = sumCrane;
             groupData = [
               {
                 id: generateIdSubGroupCrane,
-                content: "Crane ",
+                content: 'Crane ',
                 isSubGroup: true,
                 orderGroup: qGroup
               }
@@ -828,7 +807,7 @@ function handleDragEnd(event) {
             id: newItem_dropped.id,
             subgroup: 1,
             subgroupOrder: 1,
-            groupChild: "",
+            groupChild: '',
             groupParent: groupParent,
             group: selectedGroup,
             start: startDateItem,
@@ -837,12 +816,12 @@ function handleDragEnd(event) {
         }
       } else {
         // klo taroh crane di child
-        console.log("hapus Item");
+        console.log('hapus Item');
         items.remove({
           id: newItem_dropped.id,
           subgroup: 1,
           subgroupOrder: 1,
-          groupChild: "",
+          groupChild: '',
           groupParent: groupParent,
           group: selectedGroup,
           start: startDateItem,
@@ -855,13 +834,13 @@ function handleDragEnd(event) {
       // group crane
 
       var countChildItem = _.countBy(convertToArray, function(num) {
-        return num.groupChild == selectedGroup ? num.className : "";
+        return num.groupChild == selectedGroup ? num.className : '';
       });
       let countBargeItemInCraneGroup = countChildItem.barge;
 
       let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
 
-      if (newItem_dropped.className == "barge") {
+      if (newItem_dropped.className == 'barge') {
         // klo masukin barge
         if (countBargeItemInCraneGroup == undefined) {
           // belum ada barge pada crane
@@ -869,13 +848,13 @@ function handleDragEnd(event) {
           var parentSelect = groups.get(parentGroup); //get parent group
           if (groupSelect.isSubGroup) {
             //harus taroh di child
-            var generateIdSubGroupBarge = parentGroup + "B" + getGroupSelected;
+            var generateIdSubGroupBarge = parentGroup + 'B' + getGroupSelected;
             sumBarge = maxbarge - getGroupSelected * 2;
             var qGroup = sumBarge;
             groupData = [
               {
                 id: generateIdSubGroupBarge,
-                content: "Barge ",
+                content: 'Barge ',
                 isSubGroup: true,
                 orderGroup: qGroup
               }
@@ -929,7 +908,7 @@ function handleDragEnd(event) {
     } else {
       // group barge
 
-      if (newItem_dropped.className == "crane") {
+      if (newItem_dropped.className == 'crane') {
         timeline1.itemsData.remove({
           id: newItem_dropped.id,
           subgroup: 1,
@@ -963,7 +942,7 @@ function handleDragEnd(event) {
 
     infoDragged(newItem_dropped);
   } else {
-    console.log("ItemDropNull");
+    console.log('ItemDropNull');
     maxIdForNewItem--;
   }
 }
@@ -977,17 +956,17 @@ function infoDragged(newItem_dropped) {
   // document.getElementById("output").innerHTML = html;
 
   console.log(timeline1.itemsData.get());
-  console.log("dataItem");
+  console.log('dataItem');
   console.log(groups.get());
-  console.log("--------222");
+  console.log('--------222');
 }
 
-var itemCrane = document.getElementById("dropCrane");
-var itemBarge = document.getElementById("dropBarge");
-itemCrane.addEventListener("dragstart", handleDragStart.bind(this), false);
-itemBarge.addEventListener("dragstart", handleDragStart.bind(this), false);
-itemCrane.addEventListener("dragend", handleDragEnd.bind(this), false);
-itemBarge.addEventListener("dragend", handleDragEnd.bind(this), false);
+var itemCrane = document.getElementById('dropCrane');
+var itemBarge = document.getElementById('dropBarge');
+itemCrane.addEventListener('dragstart', handleDragStart.bind(this), false);
+itemBarge.addEventListener('dragstart', handleDragStart.bind(this), false);
+itemCrane.addEventListener('dragend', handleDragEnd.bind(this), false);
+itemBarge.addEventListener('dragend', handleDragEnd.bind(this), false);
 
 //----------------------------------Option Select----------------------
 // $("#dropDownCrane").on("click", function() {
@@ -1002,34 +981,34 @@ itemBarge.addEventListener("dragend", handleDragEnd.bind(this), false);
 // });
 
 function showDropDownCrane() {
-  document.getElementById("divDropdownCrane").classList.toggle("show");
+  document.getElementById('divDropdownCrane').classList.toggle('show');
 }
 
 function showDropDownBarge() {
-  document.getElementById("divDropdownBarge").classList.toggle("show");
+  document.getElementById('divDropdownBarge').classList.toggle('show');
 }
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
-  if (!event.target.matches(".dropbtn")) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName('dropdown-content');
     var i;
     for (i = 0; i < dropdowns.length; i++) {
       var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("show")) {
-        openDropdown.classList.remove("show");
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
       }
     }
   }
 };
 
 let dataDropDown = [
-  { id: 11, name: "Crane A", typeClass: "Crane" },
-  { id: 12, name: "Crane Keala Marga Nasa", typeClass: "Crane" },
-  { id: 13, name: "Crane A2", typeClass: "Crane" },
-  { id: 21, name: "Barge B", typeClass: "Barge" },
-  { id: 22, name: "Barge B1", typeClass: "Barge" },
-  { id: 23, name: "Barge B2", typeClass: "Barge" }
+  { id: 11, name: 'Crane A', typeClass: 'Crane' },
+  { id: 12, name: 'Crane Keala Marga Nasa', typeClass: 'Crane' },
+  { id: 13, name: 'Crane A2', typeClass: 'Crane' },
+  { id: 21, name: 'Barge B', typeClass: 'Barge' },
+  { id: 22, name: 'Barge B1', typeClass: 'Barge' },
+  { id: 23, name: 'Barge B2', typeClass: 'Barge' }
 ];
 $.each(dataDropDown, function(index, value) {
   console.log(value);
@@ -1044,17 +1023,17 @@ $.each(dataDropDown, function(index, value) {
     value.typeClass +
     '">' +
     value.name +
-    "</a>";
-  console.log("#divDropdown" + value.typeClass);
-  $("#divDropdown" + value.typeClass).append(newHTML);
+    '</a>';
+  console.log('#divDropdown' + value.typeClass);
+  $('#divDropdown' + value.typeClass).append(newHTML);
 });
 
 // $(".dropDownCrane").on("click", function() {
-$(".dropdown-content a").on("click", function() {
-  var dataId = $(this).attr("data-id");
-  var classType = $(this).attr("data-classType");
-  var dataName = $(this).attr("data-item");
-  $("#drop" + classType).text(dataName);
+$('.dropdown-content a').on('click', function() {
+  var dataId = $(this).attr('data-id');
+  var classType = $(this).attr('data-classType');
+  var dataName = $(this).attr('data-item');
+  $('#drop' + classType).text(dataName);
 });
 
 // $("#cranec").data("dataObj", { id: 16, name: "craneC" });
