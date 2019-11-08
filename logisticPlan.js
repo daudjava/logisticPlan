@@ -1002,11 +1002,11 @@ itemBarge.addEventListener("dragend", handleDragEnd.bind(this), false);
 // });
 
 function showDropDownCrane() {
-  document.getElementById("divDropdowncrane").classList.toggle("show");
+  document.getElementById("divDropdownCrane").classList.toggle("show");
 }
 
 function showDropDownBarge() {
-  document.getElementById("divDropdownbarge").classList.toggle("show");
+  document.getElementById("divDropdownBarge").classList.toggle("show");
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -1024,34 +1024,37 @@ window.onclick = function(event) {
 };
 
 let dataDropDown = [
-  { id: 11, name: "Crane A", className: "crane" },
-  { id: 12, name: "Crane Keala Marga Nasa", className: "crane" },
-  { id: 13, name: "Crane A2", className: "crane" },
-  { id: 21, name: "Barge B", className: "barge" },
-  { id: 22, name: "Barge B1", className: "barge" },
-  { id: 23, name: "Barge B2", className: "barge" }
+  { id: 11, name: "Crane A", typeClass: "Crane" },
+  { id: 12, name: "Crane Keala Marga Nasa", typeClass: "Crane" },
+  { id: 13, name: "Crane A2", typeClass: "Crane" },
+  { id: 21, name: "Barge B", typeClass: "Barge" },
+  { id: 22, name: "Barge B1", typeClass: "Barge" },
+  { id: 23, name: "Barge B2", typeClass: "Barge" }
 ];
 $.each(dataDropDown, function(index, value) {
   console.log(value);
   var newHTML =
     '<a href="#" class="dropDown' +
-    value.className +
+    value.typeClass +
     '" data-id="' +
     value.id +
     '" data-item="' +
     value.name +
+    '" data-classType="' +
+    value.typeClass +
     '">' +
     value.name +
     "</a>";
-  console.log("#divDropdown" + value.className);
-  $("#divDropdown" + value.className).append(newHTML);
+  console.log("#divDropdown" + value.typeClass);
+  $("#divDropdown" + value.typeClass).append(newHTML);
 });
 
 // $(".dropDownCrane").on("click", function() {
 $(".dropdown-content a").on("click", function() {
   var dataId = $(this).attr("data-id");
+  var classType = $(this).attr("data-classType");
   var dataName = $(this).attr("data-item");
-  $("#dropCrane").text(dataName);
+  $("#drop" + classType).text(dataName);
 });
 
 // $("#cranec").data("dataObj", { id: 16, name: "craneC" });
