@@ -51,8 +51,8 @@
   <body>
     <div class="wrapper">
       <div class="sidebar-top">
-        <img class="logo-full" src="./logo-adaro-head.png" alt="" />
-        <img class="logo-mini" src="./logo-adaro-coal.png" alt="" />
+        <img class="logo-full" src="img/logo-adaro-head.png" alt="" />
+        <img class="logo-mini" src="img/logo-adaro-coal.png" alt="" />
       </div>
       <nav class="sidebar">
         <div class="sidebar-header">
@@ -222,9 +222,25 @@
                   <div class="grid-item item1">
                     Select & Drag Crane / Barge :
                   </div>
-                  <div class="grid-item item3">
+                  <div class="grid-item item3 form-inline">
+                    <div class="dropdown">
+                      <input
+                        id="dropDownCrane"
+                        type="image"
+                        src="img/menuCrane.png"
+                        alt="Drop Down Crane"
+                        width="37"
+                        height="37"
+                        onclick="showDropDownCrane()"
+                        class="dropbtn"
+                      />
+
+                      <div id="divDropdowncrane" class="dropdown-content"></div>
+                    </div>
+
                     <li
                       draggable="true"
+                      style="margin-left: 35px;"
                       class="item vis-item crane"
                       data-id="crane"
                       id="dropCrane"
@@ -232,9 +248,25 @@
                       Crane
                     </li>
                   </div>
-                  <div class="grid-item item4">
+                  <div class="grid-item item4 form-inline">
+                    <div class="dropdown">
+                      <input
+                        id="dropDownBarge"
+                        type="image"
+                        src="img/menuBarge.png"
+                        alt="Drop Down Barge"
+                        width="37"
+                        onclick="showDropDownBarge()"
+                        height="37"
+                        class="dropbtn"
+                      />
+
+                      <div id="divDropdownbarge" class="dropdown-content"></div>
+                    </div>
+
                     <li
                       draggable="true"
+                      style="margin-left: 36px;"
                       class="item vis-item barge"
                       data-id="barge"
                       id="dropBarge"
@@ -262,7 +294,7 @@
     ></script>
 
     <script src="dist/vis-timeline-graph2d.min.js"></script>
-    <script type="text/javascript" src="logisticPlan2.js"></script>
+    <script type="text/javascript" src="logisticPlan.js"></script>
 
     <script
       type="text/javascript"
@@ -276,20 +308,5 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css"
     />
-
-    <script type="text/javascript">
-      // $(function() {
-      //   // $("#datetimepicker1").datetimepicker();
-      //   $("#datetimepicker1").datetimepicker({
-      //     format: "DD/MM/YYYY HH:mm:ss",
-      //     sideBySide: true
-      //   });
-
-      //   $("#datetimepicker2").datetimepicker({
-      //     format: "DD/MM/YYYY HH:mm:ss",
-      //     sideBySide: true
-      //   });
-      // });
-    </script>
   </body>
 </html>

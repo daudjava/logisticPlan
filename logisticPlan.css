@@ -105,24 +105,19 @@
 }
 
 #dropCrane {
-  border: 1px solid rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 
 #dropBarge {
-  border: 1px solid rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 
 .grid-container {
   display: grid;
-
   padding: 0px;
-
   row-gap: 5px;
-
   column-gap: 110px;
-
-  margin-right: 10px;
-
+  margin-right: 20px;
   margin-top: -25px;
 }
 
@@ -169,4 +164,35 @@ li.item:before {
 
 #div-popup-box {
   font-size: 14px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
 }
