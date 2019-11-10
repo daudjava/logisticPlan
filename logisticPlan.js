@@ -1,11 +1,11 @@
 //global variable
-let maxCrane = 8;
-let maxbarge = 7;
-let maxCraneItem = 3;
+const maxCrane = 8;
+const maxbarge = 7;
+const maxCraneItem = 3;
 // create groups
-var numberOfGroups = 8;
+const numberOfGroups = 8;
 
-var groupParentBefore = -1;
+let groupParentBefore = -1;
 
 var groups = new vis.DataSet();
 for (var i = 1; i < numberOfGroups; i++) {
@@ -350,9 +350,25 @@ var options = {
   onRemove: function(item, callback) {
     prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
       if (ok) {
+        // let selectedGroup = item.groupParent;
+        // let index = findIndexItem(selectedGroup);
+
+        // console.log(item);
+        // console.log('item');
+        // let selectedParent = findThatParent(index);
+        // let countItemData = countItemInsideTheGroup(selectedParent);
+        // countItemCrane = 1;
+
+        // let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
+        // countItemCrane = detectItemCrane + countItemCrane;
+
         deleteItem(item);
 
         callback(item); // send back adjusted new item
+
+        updateActualVessel(item.groupParent);
+
+        $('div.popover:visible').popover('hide');
 
         console.log(timeline1.itemsData.get());
         console.log('itemObjAfterDelet');
@@ -436,8 +452,8 @@ function updateActualVessel(groupParent) {
 
     console.log(mapMaxDateEnd);
     console.log('mapMaxDateEnd');
-    var maxEndDate = moment(max_date(mapMaxDateEnd)).format('YYYY-MM-DD hh:mm:ss');
-    var maxStartDate = moment(min_date(mapMaxDateStart)).format('YYYY-MM-DD hh:mm:ss');
+    var maxEndDate = max_date(mapMaxDateEnd);
+    var maxStartDate = min_date(mapMaxDateStart);
     console.log(maxEndDate);
     console.log('maxEndDate');
     items.update({
@@ -489,13 +505,8 @@ function deleteItem(item) {
       console.log('Element remove from the group');
       if (element.className !== 'actual') {
         groups.remove({ id: element.group });
-        updateActualVessel(itemGroup);
       }
     });
-  } else {
-    console.log(item.groupParent);
-    console.log('itemElse');
-    updateActualVessel(item.groupParent);
   }
 }
 
@@ -653,6 +664,8 @@ var maxIdForNewItem =
 var getMaxId = numberOfItems;
 var itemAddCrane = 1;
 var itemAddBarge = 1;
+
+const allObjItem = timeline1.itemsData.get();
 function handleDragStart(event) {
   var sg = 0;
   var sgo = 0;
@@ -697,23 +710,22 @@ var countItemCrane = 1;
 var sumCrane = 0;
 function handleDragEnd(event) {
   if (timeline1.itemsData.get(event.target.id) != null) {
-    var newItem_dropped = timeline1.itemsData.get(event.target.id);
-    var selectedGroup = newItem_dropped.group;
+    let newItem_dropped = timeline1.itemsData.get(event.target.id);
+    let selectedGroup = newItem_dropped.group;
 
-    var itemObj = timeline1.itemsData.get();
-    var convertToArray = Object.values(itemObj);
-    var index = convertToArray.findIndex(x => x.group == selectedGroup); //find index group selected
-    var selectedParent = itemObj[index].groupParent;
-    var countItemData = _.countBy(convertToArray, function(num) {
-      return num.groupParent == selectedParent ? num.className : '';
-    });
+    console.log(selectedGroup);
+    console.log('selectedGroup');
+    // var convertToArray = Object.values(itemObj);
+    let index = findIndexItem(selectedGroup);
+    let selectedParent = findThatParent(index);
+    let countItemData = countItemInsideTheGroup(selectedParent);
 
-    var groupParent = itemObj[index].groupParent;
-    var groupParentNow = groupParent;
+    let groupParent = itemObj[index].groupParent;
+    let groupParentNow = groupParent;
 
-    var whereItemPlaced = itemObj[index].subgroup;
+    let whereItemPlaced = itemObj[index].subgroup;
 
-    var groupSelect = groups.get(selectedGroup); //get current group
+    let groupSelect = groups.get(selectedGroup); //get current group
 
     if (groupParentBefore != groupParentNow) {
       sumCrane = 0;
@@ -728,13 +740,15 @@ function handleDragEnd(event) {
       groupData = groupData;
       countItemCrane = countItemCrane;
     }
+    console.log(countItemCrane);
+    console.log('countItemCranecountItemCranecountItemCranecountItemCranecountItemCrane');
 
     if (whereItemPlaced == 0) {
       // group vessel
 
       if (newItem_dropped.className == 'crane') {
         // var index = convertToArray.findIndex(x => (x.group == selectedGroup) && (x.className == 'actual')); //find index group selected
-        var findActualItem = _.countBy(convertToArray, function(num) {
+        var findActualItem = _.countBy(allObjItem, function(num) {
           return num.groupParent == selectedParent ? num.className : '';
         });
         let isThereActualItem = findActualItem.actual;
@@ -826,7 +840,7 @@ function handleDragEnd(event) {
     } else if (whereItemPlaced == 1) {
       // group crane
 
-      var countChildItem = _.countBy(convertToArray, function(num) {
+      var countChildItem = _.countBy(allObjItem, function(num) {
         return num.groupChild == selectedGroup ? num.className : '';
       });
       let countBargeItemInCraneGroup = countChildItem.barge;
@@ -941,6 +955,8 @@ function handleDragEnd(event) {
     groupBefore = groupChild;
 
     infoDragged(newItem_dropped);
+
+    timeline1.setSelection(-1);
   } else {
     console.log('ItemDropNull');
     maxIdForNewItem--;
@@ -987,6 +1003,22 @@ function increaseDate(endDate, differentTime) {
   // console.log(tomorrow.format('YYYY-MM-DD hh:mm:ss'));
   // console.log('tomorrow');
   return tomorrow;
+}
+
+function findIndexItem(selectedGroup) {
+  return allObjItem.findIndex(x => x.group == selectedGroup);
+}
+
+function findThatParent(indexItem) {
+  var selectedParent = allObjItem[indexItem].groupParent;
+  return selectedParent;
+}
+
+function countItemInsideTheGroup(selectedParent) {
+  let itemInsideVessel = _.countBy(allObjItem, function(num) {
+    return num.groupParent == selectedParent ? num.className : '';
+  });
+  return itemInsideVessel;
 }
 
 var itemCrane = document.getElementById('dropCrane');
