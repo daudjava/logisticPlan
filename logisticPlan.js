@@ -270,7 +270,7 @@ function addGroupData(itemSelected, idItem, indexItem, groupSub) {
 }
 
 function max_date(all_dates) {
-  var max_dt = all_dates[0],
+  let max_dt = all_dates[0],
     max_dtObj = new Date(all_dates[0]);
   all_dates.forEach(function(dt, index) {
     if (new Date(dt) > max_dtObj) {
@@ -297,25 +297,6 @@ function customOrder(a, b) {
   // order by id
   return a.itemIndex - b.itemIndex;
 }
-
-// var options = {
-//   //   onUpdate: function(item, callback) {
-//   //     console.log(item);
-//   //     console.log("updateUpdateUpdateUpdate");
-//   //     item.content = prompt("Edit items text:", item.content);
-//   //     if (item.content != null) {
-//   //       callback(item); // send back adjusted item
-//   //     } else {
-//   //       callback(null); // cancel updating the item
-//   //     }
-//   //   },
-//   // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
-//   onMove: function(item, callback) {
-//     //when resize item
-//     callback(item); // send back adjusted new item
-//   },
-//   onRemove: function(item, callback) {}
-// };
 
 var options = {
   height: '95%',
@@ -363,7 +344,7 @@ var options = {
   onMove: function(item, callback) {
     //when resize item
     callback(item); // send back adjusted new item
-    updateActualVessel(item);
+    updateActualVessel(item.groupParent);
     showPopOverItem(item);
   },
   onRemove: function(item, callback) {
@@ -381,6 +362,7 @@ var options = {
     });
   }
 };
+
 function runscript(object) {
   object.querySelector('.insider').style.color = 'red';
 }
@@ -429,33 +411,41 @@ function prettyPrompt(title, text, inputValue, callback) {
     callback
   );
 }
-function updateActualVessel(item) {
-  var newItem_dropped = timeline1.itemsData.get(item.id);
-  var lookTheirParent = newItem_dropped.groupParent;
+
+function updateActualVessel(groupParent) {
+  // var newItem_dropped = timeline1.itemsData.get(item.id);
+  var lookTheirParent = groupParent;
   var itemObj = timeline1.itemsData.get();
   var index = itemObj.findIndex(x => x.group === lookTheirParent && x.className === 'actual');
+  console.log(lookTheirParent);
+  console.log('lookTheirParent');
+  if (index > 0) {
+    //klo actualnya udh di hapus
+    let mapMaxDateEnd = itemObj
+      .map(function(e) {
+        return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : '';
+      })
+      .sort()
+      .reverse();
+    let mapMaxDateStart = itemObj
+      .map(function(e) {
+        return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.start : '';
+      })
+      .sort()
+      .reverse();
 
-  var mapMaxDateEnd = itemObj
-    .map(function(e) {
-      return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : '';
-    })
-    .sort()
-    .reverse();
-  var mapMaxDateStart = itemObj
-    .map(function(e) {
-      return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.start : '';
-    })
-    .sort()
-    .reverse();
-
-  var maxEndDate = max_date(mapMaxDateEnd);
-  var maxStartDate = min_date(mapMaxDateStart);
-
-  items.update({
-    id: itemObj[index].id,
-    start: maxStartDate,
-    end: maxEndDate
-  });
+    console.log(mapMaxDateEnd);
+    console.log('mapMaxDateEnd');
+    var maxEndDate = moment(max_date(mapMaxDateEnd)).format('YYYY-MM-DD hh:mm:ss');
+    var maxStartDate = moment(min_date(mapMaxDateStart)).format('YYYY-MM-DD hh:mm:ss');
+    console.log(maxEndDate);
+    console.log('maxEndDate');
+    items.update({
+      id: itemObj[index].id,
+      start: maxStartDate,
+      end: maxEndDate
+    });
+  }
 }
 
 function deleteItem(item) {
@@ -486,20 +476,26 @@ function deleteItem(item) {
   });
 
   let countGroupItem = insideGroupItem.length;
-  console.log(groupRemoved);
-  console.log('groupRemoved');
 
+  console.log(countGroupItem);
+  console.log('groupRemoved');
   if (countGroupItem < 2) {
     groupRemoved.forEach(function(element) {
       var firstItemClick = $('.vis-item-overflow');
       firstItemClick.popover('hide');
-      console.log(element.group);
-      console.log('Element remove from the group');
+      let itemGroup = element.groupParent;
       items.remove({ id: element.id });
-      if (element.className != 'actual') {
+      console.log(element);
+      console.log('Element remove from the group');
+      if (element.className !== 'actual') {
         groups.remove({ id: element.group });
+        updateActualVessel(itemGroup);
       }
     });
+  } else {
+    console.log(item.groupParent);
+    console.log('itemElse');
+    updateActualVessel(item.groupParent);
   }
 }
 
@@ -581,8 +577,6 @@ function showPopOverItem(itemSelected) {
       $('#itemName').append(selectedContentItem);
       $('#txtStartItem').val(selectedStartItem);
       $('#txtEndItem').val(selectedEndItem);
-      // $("#itemName").html("some value");
-      console.log('popover is open!!!');
       $('#edtStartDate').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
         sideBySide: true
@@ -597,7 +591,6 @@ function showPopOverItem(itemSelected) {
       $('#edtEndDate').datetimepicker('date', moment(selectedEndItem, 'YYYY-MM-DD HH:mm:ss'));
     })
     .on('click', function() {
-      console.log('focus DI click11111');
       $('.close').on('click', function() {
         firstItemClick.popover('hide');
         timeline1.setSelection(-1);
@@ -623,7 +616,7 @@ function showPopOverItem(itemSelected) {
         console.log(objUpdate);
         console.log('result input submit');
         items.update(objUpdate);
-        updateActualVessel(objUpdate);
+        updateActualVessel(objUpdate.groupParent);
       });
     });
 
@@ -892,8 +885,11 @@ function handleDragEnd(event) {
         }
       } else {
         // klo masukin crane
-        var startDateItem = itemObj[index].start;
-        var endDateItem = itemObj[index].end;
+        let convertStartToEnd = itemObj[index].end;
+        let differentTime = diffDateTime(itemObj[index].start, itemObj[index].end);
+
+        let endDateItem = increaseDate(convertStartToEnd, differentTime);
+
         items.update({
           id: newItem_dropped.id,
           subgroup: 2,
@@ -901,12 +897,14 @@ function handleDragEnd(event) {
           groupChild: newItem_dropped.group,
           groupParent: groupParent,
           group: selectedGroup,
-          start: startDateItem,
+          start: convertStartToEnd,
           end: endDateItem
         });
+
+        updateActualVessel(groupParent);
       }
     } else {
-      // group barge
+      // klo select placenya gk di group 1 atau 0
 
       if (newItem_dropped.className == 'crane') {
         timeline1.itemsData.remove({
@@ -920,9 +918,10 @@ function handleDragEnd(event) {
         });
         maxIdForNewItem--;
       } else {
-        // klo masukin barge
-        var startDateItem = itemObj[index].start;
-        var endDateItem = itemObj[index].end;
+        let convertStartToEnd = itemObj[index].end;
+        let differentTime = diffDateTime(itemObj[index].start, itemObj[index].end);
+
+        let endDateItem = increaseDate(convertStartToEnd, differentTime);
 
         timeline1.itemsData.update({
           id: newItem_dropped.id,
@@ -931,9 +930,10 @@ function handleDragEnd(event) {
           groupChild: newItem_dropped.group,
           groupParent: groupParent,
           group: selectedGroup,
-          start: startDateItem,
+          start: convertStartToEnd,
           end: endDateItem
         });
+        updateActualVessel(groupParent);
       }
     }
 
@@ -959,6 +959,34 @@ function infoDragged(newItem_dropped) {
   console.log('dataItem');
   console.log(groups.get());
   console.log('--------222');
+}
+
+function diffDateTime(startDate, endDate) {
+  let date1 = new Date(startDate);
+  let date2 = new Date(endDate);
+  var res = Math.abs(date1 - date2) / 1000;
+
+  // get total days between two dates
+  var days = Math.floor(res / 86400);
+  var hours = Math.floor(res / 3600) % 24;
+  var minutes = Math.floor(res / 60) % 60;
+  var seconds = res % 60;
+
+  let differentTime = { d: days, h: hours, m: minutes, s: seconds };
+
+  return differentTime;
+}
+
+function increaseDate(endDate, differentTime) {
+  var today = moment(endDate);
+  let tomorrow = moment(today)
+    .add(differentTime.d, 'days')
+    .add(differentTime.h, 'hours')
+    .add(differentTime.m, 'minutes')
+    .add(differentTime.s, 'seconds');
+  // console.log(tomorrow.format('YYYY-MM-DD hh:mm:ss'));
+  // console.log('tomorrow');
+  return tomorrow;
 }
 
 var itemCrane = document.getElementById('dropCrane');
