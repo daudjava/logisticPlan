@@ -22,61 +22,6 @@
     font-face
     Those font-face used for including fonts on folder fonts in this solution
 */
-/* open-sans-300 - latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 300;
-  src: url("../fonts/open-sans-v17-latin-300.eot");
-  /* IE9 Compat Modes */
-  src: local("Open Sans Light"), local("OpenSans-Light"), url("../fonts/open-sans-v17-latin-300.eot?#iefix") format("embedded-opentype"), url("../fonts/open-sans-v17-latin-300.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-300.woff") format("woff"), url("../fonts/open-sans-v17-latin-300.ttf") format("truetype"), url("../fonts/open-sans-v17-latin-300.svg#OpenSans") format("svg");
-  /* Legacy iOS */
-}
-
-/* open-sans-regular - latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/open-sans-v17-latin-regular.eot");
-  /* IE9 Compat Modes */
-  src: local("Open Sans Regular"), local("OpenSans-Regular"), url("../fonts/open-sans-v17-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/open-sans-v17-latin-regular.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-regular.woff") format("woff"), url("../fonts/open-sans-v17-latin-regular.ttf") format("truetype"), url("../fonts/open-sans-v17-latin-regular.svg#OpenSans") format("svg");
-  /* Legacy iOS */
-}
-
-/* open-sans-600 - latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: url("../fonts/open-sans-v17-latin-600.eot");
-  /* IE9 Compat Modes */
-  src: local("Open Sans SemiBold"), local("OpenSans-SemiBold"), url("../fonts/open-sans-v17-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/open-sans-v17-latin-600.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-600.woff") format("woff"), url("../fonts/open-sans-v17-latin-600.ttf") format("truetype"), url("../fonts/open-sans-v17-latin-600.svg#OpenSans") format("svg");
-  /* Legacy iOS */
-}
-
-/* open-sans-700 - latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: url("../fonts/open-sans-v17-latin-700.eot");
-  /* IE9 Compat Modes */
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url("../fonts/open-sans-v17-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/open-sans-v17-latin-700.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-700.woff") format("woff"), url("../fonts/open-sans-v17-latin-700.ttf") format("truetype"), url("../fonts/open-sans-v17-latin-700.svg#OpenSans") format("svg");
-  /* Legacy iOS */
-}
-
-/* open-sans-800 - latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 800;
-  src: url("../fonts/open-sans-v17-latin-800.eot");
-  /* IE9 Compat Modes */
-  src: local("Open Sans ExtraBold"), local("OpenSans-ExtraBold"), url("../fonts/open-sans-v17-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/open-sans-v17-latin-800.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-800.woff") format("woff"), url("../fonts/open-sans-v17-latin-800.ttf") format("truetype"), url("../fonts/open-sans-v17-latin-800.svg#OpenSans") format("svg");
-  /* Legacy iOS */
-}
-
 /*
     End of font face
 */
@@ -219,8 +164,8 @@ body {
   box-shadow: 0 3px 44px rgba(0, 0, 0, 0.4);
 }
 
-.login-page input[type="email"],
-.login-page input[type="password"] {
+.login-page input[type='email'],
+.login-page input[type='password'] {
   margin: 1rem auto;
   max-width: 23rem;
   padding: 0 1.25rem;
@@ -396,7 +341,7 @@ span {
   transition: all 500ms cubic-bezier(0.88, 0.01, 0.22, 1.005);
 }
 
-a[data-toggle="collapse"] {
+a[data-toggle='collapse'] {
   position: relative;
 }
 
@@ -438,7 +383,7 @@ ul.CTAs a {
 
 a.download {
   background: #fff;
-  color: #7386D5;
+  color: #7386d5;
 }
 
 a.article {
@@ -488,8 +433,8 @@ a.article:hover {
 @media (max-width: 767px) {
   .navbar-bts {
     -webkit-box-pack: end;
-        -ms-flex-pack: end;
-            justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
   }
 }
 
@@ -542,7 +487,7 @@ a.article:hover {
   box-shadow: 0 7px 17px rgba(0, 0, 0, 0.6);
   padding: 2rem;
   -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   height: calc(100% - 3.5rem);
   display: -webkit-box;
   display: -ms-flexbox;
@@ -565,8 +510,8 @@ a.article:hover {
 
 .welcome .col {
   -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
+  -ms-grid-row-align: center;
+  align-self: center;
   text-align: center;
 }
 

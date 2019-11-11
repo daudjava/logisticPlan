@@ -2,25 +2,22 @@
 const maxCrane = 8;
 const maxbarge = 7;
 const maxCraneItem = 3;
-// create groups
 const numberOfGroups = 8;
 
+const container = document.getElementById('mytimeline');
+
+let groups = new vis.DataSet();
 let groupParentBefore = -1;
+let groupBefore = -1;
+let groupChild = '';
 
-var groups = new vis.DataSet();
-for (var i = 1; i < numberOfGroups; i++) {
-  groups.add({
-    id: i,
-    subgroupStack: { 0: false, 1: true, 2: true },
-    nestedGroups: [],
-    showNested: true,
-    orderGroup: 8,
-    isSubGroup: false,
-    content: 'Group&nbsp;' + i
-  });
-}
+let items = new vis.DataSet();
+let sumCrane = 0;
+let sumBarge = 0;
+let idSubGroupCrane = 1;
+let idSubGroupBarge = 1;
 
-var arrayItem = [
+let arrayItem = [
   {
     id: 1,
     vesselNo: 'A',
@@ -172,12 +169,118 @@ var arrayItem = [
   }
 ];
 
-var numberOfItems = arrayItem.length;
-var items = new vis.DataSet();
-var idSubGroupCrane = 1;
-var idSubGroupBarge = 1;
-var groupBefore = -1;
-for (var indexItem = 0; indexItem < numberOfItems; indexItem++) {
+let options = {
+  height: '95%',
+  min: new Date(2019, 9, 1), // lower limit of visible range
+  max: new Date(2019, 12, 1), // upper limit of visible range
+  // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
+  zoomMax: 1000 * 60 * 60 * 24 * 31 * 2, // about three months in milliseconds
+  locale: 'en',
+  showCurrentTime: true,
+  stack: true,
+  stackSubgroups: true,
+  start: '2019-10-21 00:00:00', //'2019-10-21 00:00:00'
+  end: '2019-10-31 12:00:00',
+  editable: true,
+  verticalScroll: true,
+  zoomKey: 'ctrlKey',
+  orientation: 'top',
+  margin: {
+    item: {
+      horizontal: -1
+    }
+  },
+  itemsAlwaysDraggable: {
+    item: true,
+    range: true
+  },
+  loadingScreenTemplate: function() {
+    return '<br><h1>Loading...</h1>';
+  },
+  groupOrder: function(a, b) {
+    return b.orderGroup - a.orderGroup;
+  },
+  onUpdate: function(item, callback) {
+    prettyPrompt('Update item', 'Edit items text:', item.content, function(value) {
+      if (value) {
+        item.content = value;
+        callback(item); // send back adjusted item
+      } else {
+        callback(null); // cancel updating the item
+      }
+    });
+  },
+  // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
+  onMove: function(item, callback) {
+    //when resize item
+    callback(item); // send back adjusted new item
+    updateActualVessel(item.groupParent);
+    showPopOverItem(item);
+  },
+  onRemove: function(item, callback) {
+    prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
+      if (ok) {
+        deleteItem(item);
+
+        callback(item); // send back adjusted new item
+
+        updateActualVessel(item.groupParent);
+
+        $('div.popover:visible').popover('hide');
+
+        console.log(allObjItem());
+        console.log('allObjItemAfterDelet');
+      } else {
+        callback(null); // cancel deletion
+      }
+    });
+  }
+};
+
+let timeline1 = new vis.Timeline(container, items, groups, options);
+
+let numberOfItems = arrayItem.length;
+// let allObjItem = timeline1.itemsData.get();
+// const allObjItem = index => {
+//   return timeline1.itemsData.get();
+// };
+const allObjItem = function(indexItem) {
+  return timeline1.itemsData.get(indexItem);
+};
+
+const allGroupItem = function(indexGroup) {
+  return groups.get(indexGroup);
+};
+
+timeline1.on('doubleClick', function(properties) {
+  let item = items.get(properties.items);
+  let getLastItemDrop = item.length - 1;
+  let itemSelected = item[getLastItemDrop];
+  items.remove({ id: itemSelected.id });
+});
+
+timeline1.on('select', function(properties) {
+  let target = properties.event.target;
+  let item = items.get(properties.items);
+  if (item[0] !== undefined) {
+    let itemSelected = item[0];
+    showPopOverItem(itemSelected);
+  }
+});
+
+for (let i = 1; i < numberOfGroups; i++) {
+  groups.add({
+    id: i,
+    subgroupStack: { 0: false, 1: true, 2: true },
+    nestedGroups: [],
+    showNested: true,
+    orderGroup: 8,
+    isSubGroup: false,
+    content: 'Group&nbsp;' + i
+  });
+}
+
+for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
   if (arrayItem[indexItem].subgroup == 0) {
     // klo dia parent
     items.add({
@@ -193,20 +296,17 @@ for (var indexItem = 0; indexItem < numberOfItems; indexItem++) {
       content: arrayItem[indexItem].text + ' ' + arrayItem[indexItem].vesselNo
     });
   } else {
-    // berarti child
+    // add child Group
     createGroup(arrayItem, indexItem); // buat dulu groupnya
   }
 }
 
-var groupChild = '';
-var sumCrane = 0;
-var sumBarge = 0;
 function createGroup(itemSelected, indexItem) {
   itemSelected = itemSelected[indexItem];
   let selectedGroup = itemSelected.groupContent;
-
-  var groupNow = selectedGroup;
+  let groupNow = selectedGroup;
   let groupSub = '';
+
   if (groupBefore != groupNow) {
     idSubGroupCrane = 1;
     idSubGroupBarge = 1;
@@ -246,7 +346,9 @@ function createGroup(itemSelected, indexItem) {
       orderGroup: qGroup
     }
   ];
-  let groupSelect = groups.get(selectedGroup); //get current group
+
+  // let groupSelect = groups.get(selectedGroup); //get current group
+  let groupSelect = allGroupItem(selectedGroup); //get current group
   groupSelect.nestedGroups.push(idItem);
   groups.add(groupData);
   addGroupData(itemSelected, idItem, indexItem, groupSub);
@@ -269,138 +371,10 @@ function addGroupData(itemSelected, idItem, indexItem, groupSub) {
   });
 }
 
-function max_date(all_dates) {
-  let max_dt = all_dates[0],
-    max_dtObj = new Date(all_dates[0]);
-  all_dates.forEach(function(dt, index) {
-    if (new Date(dt) > max_dtObj) {
-      max_dt = dt;
-      max_dtObj = new Date(dt);
-    }
-  });
-  return max_dt;
-}
-
-function min_date(all_dates) {
-  var min_dt = all_dates[0],
-    min_dtObj = new Date(all_dates[0]);
-  all_dates.forEach(function(dt, index) {
-    if (new Date(dt) < min_dtObj) {
-      min_dt = dt;
-      min_dtObj = new Date(dt);
-    }
-  });
-  return min_dt;
-}
-
 function customOrder(a, b) {
   // order by id
   return a.itemIndex - b.itemIndex;
 }
-
-var options = {
-  height: '95%',
-  min: new Date(2019, 9, 1), // lower limit of visible range
-  max: new Date(2019, 12, 1), // upper limit of visible range
-  // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
-  zoomMax: 1000 * 60 * 60 * 24 * 31 * 2, // about three months in milliseconds
-  locale: 'en',
-  showCurrentTime: true,
-  stack: true,
-  stackSubgroups: true,
-  start: '2019-10-21 00:00:00', //'2019-10-21 00:00:00'
-  end: '2019-10-31 12:00:00',
-  editable: true,
-  verticalScroll: true,
-  zoomKey: 'ctrlKey',
-  orientation: 'top',
-  margin: {
-    item: {
-      horizontal: -1
-    }
-  },
-  itemsAlwaysDraggable: {
-    item: true,
-    range: true
-  },
-  loadingScreenTemplate: function() {
-    return '<br><h1>Loading...</h1>';
-  },
-  groupOrder: function(a, b) {
-    return b.orderGroup - a.orderGroup;
-  },
-
-  onUpdate: function(item, callback) {
-    prettyPrompt('Update item', 'Edit items text:', item.content, function(value) {
-      if (value) {
-        item.content = value;
-        callback(item); // send back adjusted item
-      } else {
-        callback(null); // cancel updating the item
-      }
-    });
-  },
-  // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
-  onMove: function(item, callback) {
-    //when resize item
-    callback(item); // send back adjusted new item
-    updateActualVessel(item.groupParent);
-    showPopOverItem(item);
-  },
-  onRemove: function(item, callback) {
-    prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
-      if (ok) {
-        // let selectedGroup = item.groupParent;
-        // let index = findIndexItem(selectedGroup);
-
-        // console.log(item);
-        // console.log('item');
-        // let selectedParent = findThatParent(index);
-        // let countItemData = countItemInsideTheGroup(selectedParent);
-        // countItemCrane = 1;
-
-        // let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
-        // countItemCrane = detectItemCrane + countItemCrane;
-
-        deleteItem(item);
-
-        callback(item); // send back adjusted new item
-
-        updateActualVessel(item.groupParent);
-
-        $('div.popover:visible').popover('hide');
-
-        console.log(timeline1.itemsData.get());
-        console.log('itemObjAfterDelet');
-      } else {
-        callback(null); // cancel deletion
-      }
-    });
-  }
-};
-
-function runscript(object) {
-  object.querySelector('.insider').style.color = 'red';
-}
-var container = document.getElementById('mytimeline');
-
-var timeline1 = new vis.Timeline(container, items, groups, options);
-
-// items.on("*", function(event, properties) {
-//   logEvent(event, properties);
-// });
-
-// function logEvent(event, properties) {
-//   var log = document.getElementById("log");
-//   var msg = document.createElement("div");
-//   msg.innerHTML =
-//     "event=" +
-//     JSON.stringify(event) +
-//     ", " +
-//     "properties=" +
-//     JSON.stringify(properties);
-//   log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
-// }
 
 function prettyConfirm(title, text, callback) {
   swal(
@@ -428,57 +402,81 @@ function prettyPrompt(title, text, inputValue, callback) {
   );
 }
 
+function runscript(object) {
+  object.querySelector('.insider').style.color = 'red';
+}
+
 function updateActualVessel(groupParent) {
-  // var newItem_dropped = timeline1.itemsData.get(item.id);
-  var lookTheirParent = groupParent;
-  var itemObj = timeline1.itemsData.get();
-  var index = itemObj.findIndex(x => x.group === lookTheirParent && x.className === 'actual');
-  console.log(lookTheirParent);
-  console.log('lookTheirParent');
+  // let newItem_dropped = timeline1.itemsData.get(item.id);
+  let lookTheirParent = groupParent;
+  // let allObjItem = timeline1.itemsData.get();
+  // console.log(allObjItem());
+  let index = allObjItem().findIndex(x => x.group === lookTheirParent && x.className === 'actual');
   if (index > 0) {
     //klo actualnya udh di hapus
-    let mapMaxDateEnd = itemObj
+    let mapMaxDateEnd = allObjItem()
       .map(function(e) {
         return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : '';
       })
       .sort()
       .reverse();
-    let mapMaxDateStart = itemObj
+    let mapMaxDateStart = allObjItem()
       .map(function(e) {
         return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.start : '';
       })
       .sort()
       .reverse();
 
-    console.log(mapMaxDateEnd);
-    console.log('mapMaxDateEnd');
-    var maxEndDate = max_date(mapMaxDateEnd);
-    var maxStartDate = min_date(mapMaxDateStart);
-    console.log(maxEndDate);
-    console.log('maxEndDate');
+    let maxEndDate = max_date(mapMaxDateEnd);
+    let maxStartDate = min_date(mapMaxDateStart);
     items.update({
-      id: itemObj[index].id,
+      id: allObjItem(index).id,
       start: maxStartDate,
       end: maxEndDate
     });
   }
 }
 
+function max_date(all_dates) {
+  let max_dt = all_dates[0],
+    max_dtObj = new Date(all_dates[0]);
+  all_dates.forEach(function(dt, index) {
+    if (new Date(dt) > max_dtObj) {
+      max_dt = dt;
+      max_dtObj = new Date(dt);
+    }
+  });
+  return max_dt;
+}
+
+function min_date(all_dates) {
+  let min_dt = all_dates[0],
+    min_dtObj = new Date(all_dates[0]);
+  all_dates.forEach(function(dt, index) {
+    if (new Date(dt) < min_dtObj) {
+      min_dt = dt;
+      min_dtObj = new Date(dt);
+    }
+  });
+  return min_dt;
+}
+
 function deleteItem(item) {
-  var itemObj = timeline1.itemsData.get();
+  // let allObjItem = timeline1.itemsData.get();
 
-  var selectedParent = timeline1.itemsData.get(item.id);
+  // let selectedParent = timeline1.itemsData.get(item.id);
+  let selectedParent = allObjItem(item.id);
 
-  var insideGroupItem = itemObj.filter(function(num) {
+  let insideGroupItem = allObjItem().filter(function(num) {
     return num.group == selectedParent.group ? num.id : '';
   });
 
-  var countItemData = _.countBy(itemObj, function(num) {
+  let countItemData = _.countBy(allObjItem(), function(num) {
     return num.groupParent == selectedParent.groupParent ? num.className : '';
   });
 
   const countCraneItem = countItemData.crane;
-  var groupRemoved = itemObj.filter(function(e) {
+  let groupRemoved = allObjItem().filter(function(e) {
     let statementDelet = e.groupChild == selectedParent.group || e.group == selectedParent.group;
     if (item.className == 'crane') {
       if (countCraneItem < 2) {
@@ -493,16 +491,12 @@ function deleteItem(item) {
 
   let countGroupItem = insideGroupItem.length;
 
-  console.log(countGroupItem);
-  console.log('groupRemoved');
   if (countGroupItem < 2) {
     groupRemoved.forEach(function(element) {
-      var firstItemClick = $('.vis-item-overflow');
+      let firstItemClick = $('.vis-item-overflow');
       firstItemClick.popover('hide');
       let itemGroup = element.groupParent;
       items.remove({ id: element.id });
-      console.log(element);
-      console.log('Element remove from the group');
       if (element.className !== 'actual') {
         groups.remove({ id: element.group });
       }
@@ -511,16 +505,14 @@ function deleteItem(item) {
 }
 
 function showPopOverItem(itemSelected) {
-  console.log(itemSelected);
-  console.log('Onselect event fired');
-  var selectedIdItem = itemSelected.id;
-  var selectedContentItem = itemSelected.content;
-  var selectedStartItem = itemSelected.start;
-  var selectedEndItem = itemSelected.end;
+  let selectedIdItem = itemSelected.id;
+  let selectedContentItem = itemSelected.content;
+  let selectedStartItem = itemSelected.start;
+  let selectedEndItem = itemSelected.end;
   // let stringClass = target.attributes.class.nodeValue;
-  // var itemDom = $("." + stringClass);
-  var firstItemClick = $('.vis-item-overflow');
-  // var secondItemClick = $(".vis-drag-center");
+  // let itemDom = $("." + stringClass);
+  let firstItemClick = $('.vis-item-overflow');
+  // let secondItemClick = $(".vis-drag-center");
 
   firstItemClick.on('click', function(e) {
     firstItemClick.not(this).popover('hide');
@@ -530,8 +522,7 @@ function showPopOverItem(itemSelected) {
       placement: 'bottom',
       html: true,
       sanitize: false,
-      title:
-        '<h3><strong>Item Information</strong> <a href="#" class="close" data-dismiss="alert" style="margin-top:-4px;">&times;</a></h3>',
+      title: '<h3><strong>Item Information</strong> <a href="#" class="close" data-dismiss="alert" style="margin-top:-4px;">&times;</a></h3>',
       // content: $("#myForm").html()
       content:
         '<div class="panel panel-primary" id="div-popup-box">' +
@@ -582,7 +573,6 @@ function showPopOverItem(itemSelected) {
         '</div>'
     })
     .on('shown.bs.popover', function() {
-      console.log(selectedIdItem);
       $('#itemId').val(selectedIdItem);
       $('#itemName').empty();
       $('#itemName').append(selectedContentItem);
@@ -624,8 +614,6 @@ function showPopOverItem(itemSelected) {
           end: newEndDate
         };
         // $("#result").after("form submitted by " + JSON.stringify(objUpdate));
-        console.log(objUpdate);
-        console.log('result input submit');
         items.update(objUpdate);
         updateActualVessel(objUpdate.groupParent);
       });
@@ -636,39 +624,13 @@ function showPopOverItem(itemSelected) {
   });
 }
 
-var sel = 1;
-
-// timeline1.on("click", function(properties) {
-//   console.log(" click event fired");
-// });
-timeline1.on('doubleClick', function(properties) {
-  let item = items.get(properties.items);
-  let getLastItemDrop = item.length - 1;
-  var itemSelected = item[getLastItemDrop];
-  items.remove({ id: itemSelected.id });
-});
-
-timeline1.on('select', function(properties) {
-  var target = properties.event.target;
-  var item = items.get(properties.items);
-  if (item[0] !== undefined) {
-    var itemSelected = item[0];
-    showPopOverItem(itemSelected);
-  }
-});
-
-var itemObj = timeline1.itemsData.get();
-var maxIdForNewItem =
-  itemObj.reduce((max, arrayItem) => (arrayItem.id > max ? arrayItem.id : max), arrayItem[0].id) + 1;
-
-var getMaxId = numberOfItems;
-var itemAddCrane = 1;
-var itemAddBarge = 1;
-
-const allObjItem = timeline1.itemsData.get();
+let getMaxId = numberOfItems;
+let itemAddCrane = 1;
+let itemAddBarge = 1;
+let maxIdForNewItem = allObjItem().reduce((max, arrayItem) => (arrayItem.id > max ? arrayItem.id : max), arrayItem[0].id) + 1;
 function handleDragStart(event) {
-  var sg = 0;
-  var sgo = 0;
+  let sg = 0;
+  let sgo = 0;
   let color = event.target.attributes['data-id'].value;
   event.dataTransfer.effectAllowed = 'move';
 
@@ -680,7 +642,7 @@ function handleDragStart(event) {
     sgo = itemAddBarge;
   }
 
-  var item = {
+  let item = {
     id: maxIdForNewItem,
     type: 'range',
     className: color,
@@ -704,30 +666,53 @@ function handleDragStart(event) {
   maxIdForNewItem = maxIdForNewItem + 1;
 }
 
-var groupBefore = -1;
-var groupData = [];
-var countItemCrane = 1;
-var sumCrane = 0;
-function handleDragEnd(event) {
-  if (timeline1.itemsData.get(event.target.id) != null) {
-    let newItem_dropped = timeline1.itemsData.get(event.target.id);
-    let selectedGroup = newItem_dropped.group;
+var counterDropCrane = (function() {
+  var offset = 1; // closure lets us to keep this value internally updated
 
-    console.log(selectedGroup);
-    console.log('selectedGroup');
-    // var convertToArray = Object.values(itemObj);
-    let index = findIndexItem(selectedGroup);
-    let selectedParent = findThatParent(index);
+  return function(option) {
+    // option for our basic counter
+    switch (option) {
+      case 0:
+        offset = 1;
+        break;
+      case 1:
+        offset++;
+        break;
+      case 2:
+        offset--;
+        break;
+    }
+    return offset;
+  };
+})();
+
+let groupData = [];
+function handleDragEnd(event) {
+  if (allObjItem(event.target.id) != null) {
+    let newItem_dropped = allObjItem(event.target.id);
+    let selectedGroup = newItem_dropped.group; // tempat item tersebut diletakan
+
+    let indexItem = findIndexItem(selectedGroup);
+    let selectedParent = findThatParent(indexItem);
+
     let countItemData = countItemInsideTheGroup(selectedParent);
 
-    let groupParent = itemObj[index].groupParent;
+    let groupParent = selectedParent; //group parent item tersebut
     let groupParentNow = groupParent;
 
-    let whereItemPlaced = itemObj[index].subgroup;
+    let whereItemPlaced = allObjItem(indexItem).subgroup;
 
-    let groupSelect = groups.get(selectedGroup); //get current group
+    let groupSelect = allGroupItem(selectedGroup); //item berada di group mana
 
+    let startDateItem = allObjItem(indexItem).start;
+    let endDateItem = allObjItem(indexItem).end;
+
+    let filterData = filterGroup(selectedGroup);
+    let countDataInGroup = filterData.length;
+    console.log(countDataInGroup);
+    console.log('filterData');
     if (groupParentBefore != groupParentNow) {
+      counterDropCrane(0);
       sumCrane = 0;
       sumBarge = 0;
       countItemCrane = 1;
@@ -737,27 +722,25 @@ function handleDragEnd(event) {
       generateIdSubGroupCrane = '';
       generateIdSubGroupBarge = '';
     } else {
+      counterDropCrane(1);
       groupData = groupData;
       countItemCrane = countItemCrane;
     }
-    console.log(countItemCrane);
-    console.log('countItemCranecountItemCranecountItemCranecountItemCranecountItemCrane');
 
+    console.log(counterDropCrane());
+    console.log('increaseItem');
     if (whereItemPlaced == 0) {
       // group vessel
 
       if (newItem_dropped.className == 'crane') {
-        // var index = convertToArray.findIndex(x => (x.group == selectedGroup) && (x.className == 'actual')); //find index group selected
-        var findActualItem = _.countBy(allObjItem, function(num) {
+        let findActualItem = _.countBy(allObjItem(), function(num) {
           return num.groupParent == selectedParent ? num.className : '';
         });
         let isThereActualItem = findActualItem.actual;
 
         if (isThereActualItem == undefined) {
-          // belum ada barge pada crane
+          // belum ada barge dan crane
 
-          let startDateItem = itemObj[index].start;
-          let endDateItem = itemObj[index].end;
           items.add({
             id: maxIdForNewItem,
             className: 'actual',
@@ -770,28 +753,16 @@ function handleDragEnd(event) {
             end: endDateItem,
             content: 'Vessel New'
           });
-
           maxIdForNewItem++;
         }
 
         if (countItemCrane > maxCraneItem) {
-          console.log('Jumlah crane melebihi kapasitas!');
-          items.remove({
-            id: newItem_dropped.id,
-            subgroup: 1,
-            subgroupOrder: 1,
-            groupChild: '',
-            groupParent: groupParent,
-            group: selectedGroup,
-            start: startDateItem,
-            end: endDateItem
-          });
-          maxIdForNewItem--;
+          singleDeletItem(newItem_dropped.id);
         } else {
           if (!groupSelect.isSubGroup) {
             // klo dia taroh di parent
-            let generateIdSubGroupCrane = selectedGroup + 'C' + countItemCrane;
-            sumCrane = maxCrane - countItemCrane * 2;
+            let generateIdSubGroupCrane = selectedGroup + 'C' + countDataInGroup;
+            sumCrane = maxCrane - countDataInGroup * 2;
             let qGroup = sumCrane;
             groupData = [
               {
@@ -807,8 +778,6 @@ function handleDragEnd(event) {
             selectedGroup = generateIdSubGroupCrane;
             countItemCrane = countItemCrane + 1; // berkurang 2
           }
-          let startDateItem = itemObj[index].start;
-          let endDateItem = itemObj[index].end;
 
           items.update({
             id: newItem_dropped.id,
@@ -823,24 +792,12 @@ function handleDragEnd(event) {
         }
       } else {
         // klo taroh crane di child
-        console.log('hapus Item');
-        items.remove({
-          id: newItem_dropped.id,
-          subgroup: 1,
-          subgroupOrder: 1,
-          groupChild: '',
-          groupParent: groupParent,
-          group: selectedGroup,
-          start: startDateItem,
-          end: endDateItem
-        });
-        // items.remove({id: newItem_dropped.id, subgroup:sg,subgroupOrder:sgo,itemIndex:sgo, groupParent:groupParent, group: selectedGroup, start:startDateItem, end:endDateItem});
-        maxIdForNewItem--;
+        singleDeletItem(newItem_dropped.id);
       }
     } else if (whereItemPlaced == 1) {
       // group crane
 
-      var countChildItem = _.countBy(allObjItem, function(num) {
+      let countChildItem = _.countBy(allObjItem(), function(num) {
         return num.groupChild == selectedGroup ? num.className : '';
       });
       let countBargeItemInCraneGroup = countChildItem.barge;
@@ -851,13 +808,13 @@ function handleDragEnd(event) {
         // klo masukin barge
         if (countBargeItemInCraneGroup == undefined) {
           // belum ada barge pada crane
-          var parentGroup = groupSelect.nestedInGroup;
-          var parentSelect = groups.get(parentGroup); //get parent group
+          let parentGroup = groupSelect.nestedInGroup;
+          let parentSelect = allGroupItem(parentGroup); //get parent group
           if (groupSelect.isSubGroup) {
             //harus taroh di child
-            var generateIdSubGroupBarge = parentGroup + 'B' + getGroupSelected;
-            sumBarge = maxbarge - getGroupSelected * 2;
-            var qGroup = sumBarge;
+            let generateIdSubGroupBarge = parentGroup + 'B' + countDataInGroup;
+            sumBarge = maxbarge - countDataInGroup * 2;
+            let qGroup = sumBarge;
             groupData = [
               {
                 id: generateIdSubGroupBarge,
@@ -871,8 +828,6 @@ function handleDragEnd(event) {
             selectedGroup = generateIdSubGroupBarge;
             // countItemBarge = countItemBarge + 1;
           }
-          var startDateItem = itemObj[index].start;
-          var endDateItem = itemObj[index].end;
 
           items.update({
             id: newItem_dropped.id,
@@ -885,22 +840,12 @@ function handleDragEnd(event) {
             end: endDateItem
           });
         } else {
-          items.remove({
-            id: newItem_dropped.id,
-            subgroup: 2,
-            subgroupOrder: 2,
-            groupChild: newItem_dropped.group,
-            groupParent: groupParent,
-            group: selectedGroup,
-            start: startDateItem,
-            end: endDateItem
-          });
-          maxIdForNewItem--;
+          singleDeletItem(newItem_dropped.id);
         }
       } else {
         // klo masukin crane
-        let convertStartToEnd = itemObj[index].end;
-        let differentTime = diffDateTime(itemObj[index].start, itemObj[index].end);
+        let convertStartToEnd = allObjItem(indexItem).end;
+        let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
 
         let endDateItem = increaseDate(convertStartToEnd, differentTime);
 
@@ -908,7 +853,7 @@ function handleDragEnd(event) {
           id: newItem_dropped.id,
           subgroup: 2,
           subgroupOrder: 2,
-          groupChild: newItem_dropped.group,
+          groupChild: '',
           groupParent: groupParent,
           group: selectedGroup,
           start: convertStartToEnd,
@@ -921,19 +866,10 @@ function handleDragEnd(event) {
       // klo select placenya gk di group 1 atau 0
 
       if (newItem_dropped.className == 'crane') {
-        timeline1.itemsData.remove({
-          id: newItem_dropped.id,
-          subgroup: 1,
-          subgroupOrder: 1,
-          groupParent: groupParent,
-          group: selectedGroup,
-          start: startDateItem,
-          end: endDateItem
-        });
-        maxIdForNewItem--;
+        singleDeletItem(newItem_dropped.id);
       } else {
-        let convertStartToEnd = itemObj[index].end;
-        let differentTime = diffDateTime(itemObj[index].start, itemObj[index].end);
+        let convertStartToEnd = allObjItem(indexItem).end;
+        let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
 
         let endDateItem = increaseDate(convertStartToEnd, differentTime);
 
@@ -957,14 +893,22 @@ function handleDragEnd(event) {
     infoDragged(newItem_dropped);
 
     timeline1.setSelection(-1);
+    lookItemCrane(event.target.id);
   } else {
-    console.log('ItemDropNull');
     maxIdForNewItem--;
   }
 }
 
+function lookItemCrane(idItem) {
+  let newItem_dropped = allObjItem(idItem);
+  let selectedGroup = newItem_dropped.group; // tempat item tersebut diletakan
+
+  let indexItem = findIndexItem(selectedGroup);
+  let selectedParent = findThatParent(indexItem);
+}
+
 function infoDragged(newItem_dropped) {
-  // var html = "<b>id: </b>" + newItem_dropped.id + "<br>";
+  // let html = "<b>id: </b>" + newItem_dropped.id + "<br>";
   // html += "<b>content: </b>" + newItem_dropped.content + "<br>";
   // html += "<b>Group: </b>" + newItem_dropped.group + "<br>";
   // html += "<b>start: </b>" + newItem_dropped.start + "<br>";
@@ -973,20 +917,25 @@ function infoDragged(newItem_dropped) {
 
   console.log(timeline1.itemsData.get());
   console.log('dataItem');
-  console.log(groups.get());
+  console.log(allGroupItem());
   console.log('--------222');
+}
+
+function singleDeletItem(itemId) {
+  items.remove({ id: itemId });
+  maxIdForNewItem--;
 }
 
 function diffDateTime(startDate, endDate) {
   let date1 = new Date(startDate);
   let date2 = new Date(endDate);
-  var res = Math.abs(date1 - date2) / 1000;
+  let res = Math.abs(date1 - date2) / 1000;
 
   // get total days between two dates
-  var days = Math.floor(res / 86400);
-  var hours = Math.floor(res / 3600) % 24;
-  var minutes = Math.floor(res / 60) % 60;
-  var seconds = res % 60;
+  let days = Math.floor(res / 86400);
+  let hours = Math.floor(res / 3600) % 24;
+  let minutes = Math.floor(res / 60) % 60;
+  let seconds = res % 60;
 
   let differentTime = { d: days, h: hours, m: minutes, s: seconds };
 
@@ -994,35 +943,40 @@ function diffDateTime(startDate, endDate) {
 }
 
 function increaseDate(endDate, differentTime) {
-  var today = moment(endDate);
+  let today = moment(endDate);
   let tomorrow = moment(today)
     .add(differentTime.d, 'days')
     .add(differentTime.h, 'hours')
     .add(differentTime.m, 'minutes')
     .add(differentTime.s, 'seconds');
-  // console.log(tomorrow.format('YYYY-MM-DD hh:mm:ss'));
-  // console.log('tomorrow');
+  // tomorrow.format('YYYY-MM-DD hh:mm:ss');
   return tomorrow;
 }
 
 function findIndexItem(selectedGroup) {
-  return allObjItem.findIndex(x => x.group == selectedGroup);
+  return allObjItem().findIndex(x => x.group == selectedGroup);
 }
 
 function findThatParent(indexItem) {
-  var selectedParent = allObjItem[indexItem].groupParent;
+  let selectedParent = allObjItem(indexItem).groupParent;
   return selectedParent;
+}
+function filterGroup(selectedParent) {
+  let itemFilter = allGroupItem().filter(function(e) {
+    return e.nestedInGroup === selectedParent ? e : '';
+  });
+  return itemFilter;
 }
 
 function countItemInsideTheGroup(selectedParent) {
-  let itemInsideVessel = _.countBy(allObjItem, function(num) {
+  let itemInsideVessel = _.countBy(allObjItem(), function(num) {
     return num.groupParent == selectedParent ? num.className : '';
   });
   return itemInsideVessel;
 }
 
-var itemCrane = document.getElementById('dropCrane');
-var itemBarge = document.getElementById('dropBarge');
+let itemCrane = document.getElementById('dropCrane');
+let itemBarge = document.getElementById('dropBarge');
 itemCrane.addEventListener('dragstart', handleDragStart.bind(this), false);
 itemBarge.addEventListener('dragstart', handleDragStart.bind(this), false);
 itemCrane.addEventListener('dragend', handleDragEnd.bind(this), false);
@@ -1051,10 +1005,10 @@ function showDropDownBarge() {
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
   if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName('dropdown-content');
-    var i;
+    let dropdowns = document.getElementsByClassName('dropdown-content');
+    let i;
     for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
+      let openDropdown = dropdowns[i];
       if (openDropdown.classList.contains('show')) {
         openDropdown.classList.remove('show');
       }
@@ -1071,8 +1025,7 @@ let dataDropDown = [
   { id: 23, name: 'Barge B2', typeClass: 'Barge' }
 ];
 $.each(dataDropDown, function(index, value) {
-  console.log(value);
-  var newHTML =
+  let newHTML =
     '<a href="#" class="dropDown' +
     value.typeClass +
     '" data-id="' +
@@ -1084,22 +1037,21 @@ $.each(dataDropDown, function(index, value) {
     '">' +
     value.name +
     '</a>';
-  console.log('#divDropdown' + value.typeClass);
   $('#divDropdown' + value.typeClass).append(newHTML);
 });
 
 // $(".dropDownCrane").on("click", function() {
 $('.dropdown-content a').on('click', function() {
-  var dataId = $(this).attr('data-id');
-  var classType = $(this).attr('data-classType');
-  var dataName = $(this).attr('data-item');
+  let dataId = $(this).attr('data-id');
+  let classType = $(this).attr('data-classType');
+  let dataName = $(this).attr('data-item');
   $('#drop' + classType).text(dataName);
 });
 
 // $("#cranec").data("dataObj", { id: 16, name: "craneC" });
 // let dataCraneC = $("#cranec").data("dataObj");
 
-// var filterByGroup = itemObj.filter(function(element, i, array) {
-//     var onlyDateInThisGroup = element.groupParent === lookTheirParent ? element : '';
+// let filterByGroup = allObjItem.filter(function(element, i, array) {
+//     let onlyDateInThisGroup = element.groupParent === lookTheirParent ? element : '';
 //     return onlyDateInThisGroup;
 // });
