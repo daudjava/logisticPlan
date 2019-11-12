@@ -1,6 +1,6 @@
 .vis-timeline {
   border: 2px solid rgba(153, 149, 149, 0.699);
-  font-family: purisa, "comic sans", cursive;
+  font-family: purisa, 'comic sans', cursive;
   font-size: 10pt;
   margin-top: 10px;
 }
@@ -116,7 +116,7 @@
   display: grid;
   padding: 0px;
   row-gap: 5px;
-  column-gap: 110px;
+  column-gap: 90px;
   margin-right: 20px;
   margin-top: -25px;
 }

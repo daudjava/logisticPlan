@@ -17,11 +17,12 @@ let sumBarge = 0;
 let idSubGroupCrane = 1;
 let idSubGroupBarge = 1;
 
-let arrayItem = [
+let dataItem = [
   {
     id: 1,
-    vesselNo: 'A',
-    text: 'Vessel',
+    productNo: 'A-01',
+    product: 'Product A',
+    name: 'Vessel',
     groupContent: 1,
     startDate: '2019-10-21 12:00:00',
     endDate: '2019-10-24 00:00:00',
@@ -31,8 +32,9 @@ let arrayItem = [
   },
   {
     id: '1A',
-    vesselNo: '',
-    text: 'Actual Vessel A',
+    productNo: 'A-01',
+    product: 'Product A',
+    name: 'Vessel',
     groupContent: 1,
     startDate: '2019-10-21 12:00:00',
     endDate: '2019-10-24 00:00:00',
@@ -42,8 +44,9 @@ let arrayItem = [
   },
   {
     id: 2,
-    vesselNo: 'B',
-    text: 'Vessel',
+    productNo: 'B-01',
+    product: 'Product B',
+    name: 'Vessel',
     groupContent: 2,
     startDate: '2019-10-23 00:00:00',
     endDate: '2019-10-25 12:00:00',
@@ -53,8 +56,9 @@ let arrayItem = [
   },
   {
     id: 3,
-    vesselNo: 'C',
-    text: 'Vessel',
+    productNo: 'C-01',
+    product: 'Product C',
+    name: 'Vessel',
     groupContent: 3,
     startDate: '2019-10-25 00:00:00',
     endDate: '2019-10-28 00:00:00',
@@ -64,8 +68,9 @@ let arrayItem = [
   },
   {
     id: 4,
-    vesselNo: 'D',
-    text: 'Vessel',
+    productNo: 'D-01',
+    product: 'Product D',
+    name: 'Vessel',
     groupContent: 4,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
@@ -75,8 +80,9 @@ let arrayItem = [
   },
   {
     id: '4A',
-    vesselNo: 'D',
-    text: 'Actual Vessel',
+    productNo: 'D-01',
+    product: 'Product D',
+    name: 'Vessel',
     groupContent: 4,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
@@ -86,8 +92,9 @@ let arrayItem = [
   },
   {
     id: 5,
-    vesselNo: 'E',
-    text: 'Vessel',
+    productNo: 'E-01',
+    product: 'Product E',
+    name: 'Vessel',
     groupContent: 5,
     startDate: '2019-10-30 00:00:00',
     endDate: '2019-10-31 00:00:00',
@@ -97,8 +104,8 @@ let arrayItem = [
   },
   {
     id: 6,
-    vesselNo: '',
-    text: 'Crane',
+    loadingRate: 30,
+    name: 'Crane',
     groupContent: 1,
     startDate: '2019-10-21 12:00:00',
     endDate: '2019-10-24 00:00:00',
@@ -109,8 +116,9 @@ let arrayItem = [
   },
   {
     id: 7,
-    vesselNo: '',
-    text: 'Barge',
+    capacity: 20,
+    name: 'Barge',
+    product: 'Product A',
     groupContent: 1,
     startDate: '2019-10-21 12:00:00',
     endDate: '2019-10-24 00:00:00',
@@ -121,8 +129,8 @@ let arrayItem = [
   },
   {
     id: 8,
-    vesselNo: '',
-    text: 'Crane',
+    loadingRate: 50,
+    name: 'Crane',
     groupContent: 4,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
@@ -133,8 +141,9 @@ let arrayItem = [
   },
   {
     id: 9,
-    vesselNo: '',
-    text: 'Barge',
+    capacity: 40,
+    name: 'Barge',
+    product: 'Product D',
     groupContent: 4,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
@@ -145,8 +154,8 @@ let arrayItem = [
   },
   {
     id: 10,
-    vesselNo: '',
-    text: 'Crane',
+    loadingRate: 50,
+    name: 'Crane',
     groupContent: 4,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
@@ -157,8 +166,9 @@ let arrayItem = [
   },
   {
     id: 11,
-    vesselNo: '',
-    text: 'Barge',
+    capacity: 40,
+    name: 'Barge',
+    product: 'Product D',
     groupContent: 4,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
@@ -200,16 +210,27 @@ let options = {
   groupOrder: function(a, b) {
     return b.orderGroup - a.orderGroup;
   },
-  onUpdate: function(item, callback) {
-    prettyPrompt('Update item', 'Edit items text:', item.content, function(value) {
-      if (value) {
-        item.content = value;
-        callback(item); // send back adjusted item
-      } else {
-        callback(null); // cancel updating the item
-      }
-    });
-  },
+  // onUpdate: function(item, callback) {
+  //   prettyPrompt('Update item', 'Edit items text:', item.content, function(value) {
+  //     if (value) {
+  //       item.content = value;
+  //       callback(item); // send back adjusted item
+  //     } else {
+  //       callback(null); // cancel updating the item
+  //     }
+  //   });
+  // },
+  // onAdd: function(item, callback) {
+  //   addCranePopup(item, callback);
+  //   // prettyPrompt('Add item', 'Enter text content for new item:', item.content, function(value) {
+  //   //   if (value) {
+  //   //     item.content = value;
+  //   //     callback(item); // send back adjusted new item
+  //   //   } else {
+  //   //     callback(null); // cancel item creation
+  //   //   }
+  //   // });
+  // },
   // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
   onMove: function(item, callback) {
     //when resize item
@@ -218,28 +239,20 @@ let options = {
     showPopOverItem(item);
   },
   onRemove: function(item, callback) {
-    prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
-      if (ok) {
-        deleteItem(item);
+    removeConfirm(item, callback);
+    // prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
+    //   if (ok) {
 
-        callback(item); // send back adjusted new item
-
-        updateActualVessel(item.groupParent);
-
-        $('div.popover:visible').popover('hide');
-
-        console.log(allObjItem());
-        console.log('allObjItemAfterDelet');
-      } else {
-        callback(null); // cancel deletion
-      }
-    });
+    //   } else {
+    //     callback(null); // cancel deletion
+    //   }
+    // });
   }
 };
 
 let timeline1 = new vis.Timeline(container, items, groups, options);
 
-let numberOfItems = arrayItem.length;
+let numberOfItems = dataItem.length;
 // let allObjItem = timeline1.itemsData.get();
 // const allObjItem = index => {
 //   return timeline1.itemsData.get();
@@ -281,23 +294,28 @@ for (let i = 1; i < numberOfGroups; i++) {
 }
 
 for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
-  if (arrayItem[indexItem].subgroup == 0) {
+  if (dataItem[indexItem].subgroup == 0) {
     // klo dia parent
     items.add({
       id: indexItem,
-      className: arrayItem[indexItem].className,
-      group: arrayItem[indexItem].groupContent,
+      productNo: dataItem[indexItem].productNo,
+      product: dataItem[indexItem].product,
+      name: dataItem[indexItem].name,
+      loadingRate: dataItem[indexItem].loadingRate,
+      capacity: dataItem[indexItem].capacity,
+      className: dataItem[indexItem].className,
+      group: dataItem[indexItem].groupContent,
       groupChild: '',
-      groupParent: arrayItem[indexItem].groupContent,
-      subgroup: arrayItem[indexItem].subgroup,
-      subgroupOrder: arrayItem[indexItem].subgroupOrder,
-      start: arrayItem[indexItem].startDate, //'2019-10-21 00:00:00'
-      end: arrayItem[indexItem].endDate,
-      content: arrayItem[indexItem].text + ' ' + arrayItem[indexItem].vesselNo
+      groupParent: dataItem[indexItem].groupContent,
+      start: dataItem[indexItem].startDate, //'2019-10-21 00:00:00'
+      end: dataItem[indexItem].endDate,
+      subgroup: dataItem[indexItem].subgroup,
+      subgroupOrder: dataItem[indexItem].subgroupOrder,
+      content: dataItem[indexItem].name + ' ' + dataItem[indexItem].productNo
     });
   } else {
     // add child Group
-    createGroup(arrayItem, indexItem); // buat dulu groupnya
+    createGroup(dataItem, indexItem); // buat dulu groupnya
   }
 }
 
@@ -355,18 +373,24 @@ function createGroup(itemSelected, indexItem) {
 }
 
 function addGroupData(itemSelected, idItem, indexItem, groupSub) {
+  let textContent2 = dataItem[indexItem].loadingRate != undefined ? dataItem[indexItem].loadingRate : dataItem[indexItem].capacity;
+  let textContent1 = itemSelected.product != undefined ? itemSelected.product : itemSelected.name;
   items.add({
     id: indexItem,
+    productNo: itemSelected.productNo,
+    product: itemSelected.product,
+    name: itemSelected.name,
+    loadingRate: itemSelected.loadingRate,
+    capacity: itemSelected.capacity,
     className: itemSelected.className,
     group: idItem,
     groupChild: groupSub,
-
     groupParent: itemSelected.groupContent,
-    subgroup: itemSelected.subgroup,
-    subgroupOrder: itemSelected.subgroupOrder,
     start: itemSelected.startDate, //'2019-10-21 00:00:00'
     end: itemSelected.endDate,
-    content: itemSelected.text + ' ' + arrayItem[indexItem].vesselNo,
+    subgroup: itemSelected.subgroup,
+    subgroupOrder: itemSelected.subgroupOrder,
+    content: textContent1 + ' ' + textContent2,
     editable: { updateTime: true, updateGroup: false, remove: true }
   });
 }
@@ -376,30 +400,78 @@ function customOrder(a, b) {
   return a.itemIndex - b.itemIndex;
 }
 
-function prettyConfirm(title, text, callback) {
-  swal(
-    {
-      title: title,
-      text: text,
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#DD6B55'
-    },
-    callback
-  );
+function removeConfirm(item, callback) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then(result => {
+    if (result.value) {
+      Swal.fire('Deleted!', item.name + ' has been deleted.', 'success');
+      deleteItem(item);
+
+      callback(item); // send back adjusted new item
+
+      updateActualVessel(item.groupParent);
+
+      $('div.popover:visible').popover('hide');
+
+      console.log(allObjItem());
+      console.log('allObjItemAfterDelet');
+    } else {
+      callback(null); // cancel deletion
+    }
+  });
 }
 
-function prettyPrompt(title, text, inputValue, callback) {
-  swal(
-    {
-      title: title,
-      text: text,
-      type: 'input',
-      showCancelButton: true,
-      inputValue: inputValue
-    },
-    callback
-  );
+// function prettyPrompt(title, text, inputValue, callback) {
+//   swal(
+//     {
+//       title: title,
+//       // : text,,
+//       text: '<select><option value="volvo">Volvo</option><option value="audi">Audi</option></select>',
+//       type: 'input',
+//       showCancelButton: true
+//     },
+//     callback
+//   );
+// }
+
+function addCranePopup(item) {
+  let inputOption = {
+    '700 T/Hr': 'Loading Rate : 700 T/Hr',
+    '890 T/Hr': 'Loading Rate : 890 T/Hr',
+    '990 T/Hr': 'Loading Rate : 990 T/Hr'
+  };
+  Swal.fire({
+    title: 'Select Outage Tier',
+    input: 'select',
+    inputOptions: inputOption,
+    inputPlaceholder: 'Select Loading Rate...',
+    showCancelButton: true,
+    inputValidator: function(value) {
+      return new Promise(function(resolve, reject) {
+        if (value !== '') {
+          resolve();
+        } else {
+          resolve('You need to select a Tier');
+        }
+      });
+    }
+  }).then(function(result) {
+    if (result.value) {
+      Swal.fire({
+        html: 'You selected: ' + result.value
+      });
+      return result.value;
+    } else {
+      return;
+    }
+  });
 }
 
 function runscript(object) {
@@ -609,7 +681,7 @@ function showPopOverItem(itemSelected) {
         let itemId = $('#itemId').val();
         let objUpdate = {
           id: itemId,
-          contex: itemName,
+          content: itemName,
           start: newStartDate,
           end: newEndDate
         };
@@ -627,7 +699,8 @@ function showPopOverItem(itemSelected) {
 let getMaxId = numberOfItems;
 let itemAddCrane = 1;
 let itemAddBarge = 1;
-let maxIdForNewItem = allObjItem().reduce((max, arrayItem) => (arrayItem.id > max ? arrayItem.id : max), arrayItem[0].id) + 1;
+let maxIdForNewItem = allObjItem().reduce((max, item) => (item.id > max ? item.id : max), allObjItem()[0].id) + 1;
+// const maxIdForNewItem = allObjItem().reduce((acc, pilot) => acc + pilot.id, 0);
 function handleDragStart(event) {
   let sg = 0;
   let sgo = 0;
@@ -690,15 +763,16 @@ let groupData = [];
 function handleDragEnd(event) {
   if (allObjItem(event.target.id) != null) {
     let newItem_dropped = allObjItem(event.target.id);
+    console.log(addCranePopup(newItem_dropped));
     let selectedGroup = newItem_dropped.group; // tempat item tersebut diletakan
 
     let indexItem = findIndexItem(selectedGroup);
     let selectedParent = findThatParent(indexItem);
 
-    let countItemData = countItemInsideTheGroup(selectedParent);
+    // let countItemData = countItemInsideTheGroup(selectedParent);
 
-    let groupParent = selectedParent; //group parent item tersebut
-    let groupParentNow = groupParent;
+    // let groupParent = selectedParent; //group parent item tersebut
+    // let groupParentNow = groupParent;
 
     let whereItemPlaced = allObjItem(indexItem).subgroup;
 
@@ -707,25 +781,24 @@ function handleDragEnd(event) {
     let startDateItem = allObjItem(indexItem).start;
     let endDateItem = allObjItem(indexItem).end;
 
-    let filterData = filterGroup(selectedGroup);
-    let countDataInGroup = filterData.length;
-    console.log(countDataInGroup);
-    console.log('filterData');
-    if (groupParentBefore != groupParentNow) {
-      counterDropCrane(0);
-      sumCrane = 0;
-      sumBarge = 0;
-      countItemCrane = 1;
-      groupData = [];
-      let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
-      countItemCrane = detectItemCrane + countItemCrane;
-      generateIdSubGroupCrane = '';
-      generateIdSubGroupBarge = '';
-    } else {
-      counterDropCrane(1);
-      groupData = groupData;
-      countItemCrane = countItemCrane;
-    }
+    let filterGroupCrane = filterGroup(selectedParent);
+    let countCraneInGroup = filterGroupCrane.length + 1;
+
+    // if (groupParentBefore != groupParentNow) {
+    //   counterDropCrane(0);
+    //   sumCrane = 0;
+    //   sumBarge = 0;
+    //   countItemCrane = 1;
+    //   groupData = [];
+    //   let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
+    //   countItemCrane = detectItemCrane + countItemCrane;
+    //   generateIdSubGroupCrane = '';
+    //   generateIdSubGroupBarge = '';
+    // } else {
+    //   counterDropCrane(1);
+    //   groupData = groupData;
+    //   countItemCrane = countItemCrane;
+    // }
 
     console.log(counterDropCrane());
     console.log('increaseItem');
@@ -740,155 +813,168 @@ function handleDragEnd(event) {
 
         if (isThereActualItem == undefined) {
           // belum ada barge dan crane
-
           items.add({
             id: maxIdForNewItem,
+            productNo: newItem_dropped.productNo,
+            product: newItem_dropped.product,
+            name: newItem_dropped.name,
+            loadingRate: newItem_dropped.loadingRate,
+            capacity: newItem_dropped.capacity,
             className: 'actual',
-            group: groupParent,
+            group: selectedParent,
             groupChild: '',
-            groupParent: groupParent,
-            subgroup: 0,
-            subgroupOrder: 0,
+            groupParent: selectedParent,
             start: startDateItem, //'2019-10-21 00:00:00'
             end: endDateItem,
+            subgroup: 0,
+            subgroupOrder: 0,
             content: 'Vessel New'
           });
           maxIdForNewItem++;
         }
 
-        if (countItemCrane > maxCraneItem) {
-          singleDeletItem(newItem_dropped.id);
-        } else {
-          if (!groupSelect.isSubGroup) {
-            // klo dia taroh di parent
-            let generateIdSubGroupCrane = selectedGroup + 'C' + countDataInGroup;
-            sumCrane = maxCrane - countDataInGroup * 2;
-            let qGroup = sumCrane;
-            groupData = [
-              {
-                id: generateIdSubGroupCrane,
-                content: 'Crane ',
-                isSubGroup: true,
-                orderGroup: qGroup
-              }
-            ];
-            groupSelect.nestedGroups.push(generateIdSubGroupCrane);
+        // if (countItemCrane > maxCraneItem) {
+        //   singleDeletItem(newItem_dropped.id);
+        // } else {
+        if (!groupSelect.isSubGroup) {
+          // klo dia taroh di parent
+          let generateIdSubGroupCrane = selectedGroup + 'C' + countCraneInGroup;
+          sumCrane = maxCrane - countCraneInGroup * 2;
+          let qGroup = sumCrane;
+          groupData = [
+            {
+              id: generateIdSubGroupCrane,
+              content: 'crane',
+              isSubGroup: true,
+              orderGroup: qGroup
+            }
+          ];
+          groupSelect.nestedGroups.push(generateIdSubGroupCrane);
 
-            groups.add(groupData);
-            selectedGroup = generateIdSubGroupCrane;
-            countItemCrane = countItemCrane + 1; // berkurang 2
-          }
-
-          items.update({
-            id: newItem_dropped.id,
-            subgroup: 1,
-            subgroupOrder: 1,
-            groupChild: '',
-            groupParent: groupParent,
-            group: selectedGroup,
-            start: startDateItem,
-            end: endDateItem
-          });
+          groups.add(groupData);
+          selectedGroup = generateIdSubGroupCrane;
+          // countItemCrane = countItemCrane + 1; // berkurang 2
         }
+        items.update({
+          id: newItem_dropped.id,
+          group: selectedGroup,
+          groupChild: '',
+          groupParent: selectedParent,
+          start: startDateItem,
+          end: endDateItem,
+          subgroup: 1,
+          subgroupOrder: 1
+        });
+        // }
       } else {
         // klo taroh crane di child
         singleDeletItem(newItem_dropped.id);
       }
-    } else if (whereItemPlaced == 1) {
-      // group crane
-
-      let countChildItem = _.countBy(allObjItem(), function(num) {
-        return num.groupChild == selectedGroup ? num.className : '';
-      });
-      let countBargeItemInCraneGroup = countChildItem.barge;
-
-      let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
-
-      if (newItem_dropped.className == 'barge') {
-        // klo masukin barge
-        if (countBargeItemInCraneGroup == undefined) {
-          // belum ada barge pada crane
-          let parentGroup = groupSelect.nestedInGroup;
-          let parentSelect = allGroupItem(parentGroup); //get parent group
-          if (groupSelect.isSubGroup) {
-            //harus taroh di child
-            let generateIdSubGroupBarge = parentGroup + 'B' + countDataInGroup;
-            sumBarge = maxbarge - countDataInGroup * 2;
-            let qGroup = sumBarge;
-            groupData = [
-              {
-                id: generateIdSubGroupBarge,
-                content: 'Barge ',
-                isSubGroup: true,
-                orderGroup: qGroup
-              }
-            ];
-            parentSelect.nestedGroups.push(generateIdSubGroupBarge);
-            groups.add(groupData);
-            selectedGroup = generateIdSubGroupBarge;
-            // countItemBarge = countItemBarge + 1;
-          }
-
-          items.update({
-            id: newItem_dropped.id,
-            subgroup: 2,
-            subgroupOrder: 2,
-            groupChild: newItem_dropped.group,
-            groupParent: groupParent,
-            group: selectedGroup,
-            start: startDateItem,
-            end: endDateItem
-          });
-        } else {
-          singleDeletItem(newItem_dropped.id);
-        }
-      } else {
-        // klo masukin crane
-        let convertStartToEnd = allObjItem(indexItem).end;
-        let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
-
-        let endDateItem = increaseDate(convertStartToEnd, differentTime);
-
-        items.update({
-          id: newItem_dropped.id,
-          subgroup: 2,
-          subgroupOrder: 2,
-          groupChild: '',
-          groupParent: groupParent,
-          group: selectedGroup,
-          start: convertStartToEnd,
-          end: endDateItem
-        });
-
-        updateActualVessel(groupParent);
-      }
-    } else {
-      // klo select placenya gk di group 1 atau 0
-
-      if (newItem_dropped.className == 'crane') {
-        singleDeletItem(newItem_dropped.id);
-      } else {
-        let convertStartToEnd = allObjItem(indexItem).end;
-        let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
-
-        let endDateItem = increaseDate(convertStartToEnd, differentTime);
-
-        timeline1.itemsData.update({
-          id: newItem_dropped.id,
-          subgroup: 2,
-          subgroupOrder: 2,
-          groupChild: newItem_dropped.group,
-          groupParent: groupParent,
-          group: selectedGroup,
-          start: convertStartToEnd,
-          end: endDateItem
-        });
-        updateActualVessel(groupParent);
-      }
     }
+    // else if (whereItemPlaced == 1) {
+    //   // group crane
 
-    groupParentBefore = groupParent;
-    groupBefore = groupChild;
+    //   console.log(allObjItem());
+    //   console.log(selectedGroup);
+    //   console.log('itemFilter');
+    //   let itemFilter = allObjItem().filter(function(e) {
+    //     return e.groupChild === selectedGroup && e.className === 'barge' ? e : '';
+    //   });
+    //   console.log(itemFilter);
+    //   console.log('itemFilter');
+
+    //   let countChildItem = _.countBy(allObjItem(), function(num) {
+    //     return num.groupChild == selectedGroup ? num.className : '';
+    //   });
+    //   let countBargeItemInCraneGroup = countChildItem.barge;
+
+    //   let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
+
+    //   if (newItem_dropped.className == 'barge') {
+    //     // klo masukin barge
+    //     if (countBargeItemInCraneGroup == undefined) {
+    //       // belum ada barge pada crane
+    //       let parentGroup = groupSelect.nestedInGroup;
+    //       let parentSelect = allGroupItem(parentGroup); //get parent group
+    //       if (groupSelect.isSubGroup) {
+    //         //harus taroh di child
+    //         let generateIdSubGroupBarge = parentGroup + 'B' + countDataInGroup;
+    //         sumBarge = maxbarge - countDataInGroup * 2;
+    //         let qGroup = sumBarge;
+    //         groupData = [
+    //           {
+    //             id: generateIdSubGroupBarge,
+    //             content: 'barge',
+    //             isSubGroup: true,
+    //             orderGroup: qGroup
+    //           }
+    //         ];
+    //         parentSelect.nestedGroups.push(generateIdSubGroupBarge);
+    //         groups.add(groupData);
+    //         selectedGroup = generateIdSubGroupBarge;
+    //         // countItemBarge = countItemBarge + 1;
+    //       }
+
+    //       items.update({
+    //         id: newItem_dropped.id,
+    //         subgroup: 2,
+    //         subgroupOrder: 2,
+    //         groupChild: newItem_dropped.group,
+    //         groupParent: groupParent,
+    //         group: selectedGroup,
+    //         start: startDateItem,
+    //         end: endDateItem
+    //       });
+    //     } else {
+    //       singleDeletItem(newItem_dropped.id);
+    //     }
+    //   } else {
+    //     // klo masukin crane
+    //     let convertStartToEnd = allObjItem(indexItem).end;
+    //     let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
+
+    //     let endDateItem = increaseDate(convertStartToEnd, differentTime);
+
+    //     items.update({
+    //       id: newItem_dropped.id,
+    //       subgroup: 2,
+    //       subgroupOrder: 2,
+    //       groupChild: '',
+    //       groupParent: groupParent,
+    //       group: selectedGroup,
+    //       start: convertStartToEnd,
+    //       end: endDateItem
+    //     });
+
+    //     updateActualVessel(groupParent);
+    //   }
+    // } else {
+    //   // klo select placenya gk di group 1 atau 0
+
+    //   if (newItem_dropped.className == 'crane') {
+    //     singleDeletItem(newItem_dropped.id);
+    //   } else {
+    //     let convertStartToEnd = allObjItem(indexItem).end;
+    //     let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
+
+    //     let endDateItem = increaseDate(convertStartToEnd, differentTime);
+
+    //     timeline1.itemsData.update({
+    //       id: newItem_dropped.id,
+    //       subgroup: 2,
+    //       subgroupOrder: 2,
+    //       groupChild: newItem_dropped.group,
+    //       groupParent: groupParent,
+    //       group: selectedGroup,
+    //       start: convertStartToEnd,
+    //       end: endDateItem
+    //     });
+    //     updateActualVessel(groupParent);
+    //   }
+    // }
+
+    // groupParentBefore = groupParent;
+    // groupBefore = groupChild;
 
     infoDragged(newItem_dropped);
 
@@ -963,7 +1049,7 @@ function findThatParent(indexItem) {
 }
 function filterGroup(selectedParent) {
   let itemFilter = allGroupItem().filter(function(e) {
-    return e.nestedInGroup === selectedParent ? e : '';
+    return e.nestedInGroup === selectedParent && e.content === 'crane' ? e : '';
   });
   return itemFilter;
 }
@@ -982,71 +1068,73 @@ itemBarge.addEventListener('dragstart', handleDragStart.bind(this), false);
 itemCrane.addEventListener('dragend', handleDragEnd.bind(this), false);
 itemBarge.addEventListener('dragend', handleDragEnd.bind(this), false);
 
-//----------------------------------Option Select----------------------
-// $("#dropDownCrane").on("click", function() {
-//   $("#divDropdownCrane").toggle("show");
+console.log(allObjItem());
+console.log('Load Awal');
+// //----------------------------------Option Select----------------------
+// // $("#dropDownCrane").on("click", function() {
+// //   $("#divDropdownCrane").toggle("show");
+// // });
+
+// // $("#dropDownBarge").on("click", function() {
+// //   $("#divDropdownBarge").toggle("show");
+// // });
+// // $("#divDropdownCrane").on("click", function(event) {
+// //   event.stopPropagation();
+// // });
+
+// function showDropDownCrane() {
+//   document.getElementById('divDropdownCrane').classList.toggle('show');
+// }
+
+// function showDropDownBarge() {
+//   document.getElementById('divDropdownBarge').classList.toggle('show');
+// }
+
+// // Close the dropdown if the user clicks outside of it
+// window.onclick = function(event) {
+//   if (!event.target.matches('.dropbtn')) {
+//     let dropdowns = document.getElementsByClassName('dropdown-content');
+//     let i;
+//     for (i = 0; i < dropdowns.length; i++) {
+//       let openDropdown = dropdowns[i];
+//       if (openDropdown.classList.contains('show')) {
+//         openDropdown.classList.remove('show');
+//       }
+//     }
+//   }
+// };
+
+// let dataDropDown = [
+//   { id: 11, name: 'Crane A', typeClass: 'Crane' },
+//   { id: 12, name: 'Crane Keala Marga Nasa', typeClass: 'Crane' },
+//   { id: 13, name: 'Crane A2', typeClass: 'Crane' },
+//   { id: 21, name: 'Barge B', typeClass: 'Barge' },
+//   { id: 22, name: 'Barge B1', typeClass: 'Barge' },
+//   { id: 23, name: 'Barge B2', typeClass: 'Barge' }
+// ];
+// $.each(dataDropDown, function(index, value) {
+//   let newHTML =
+//     '<a href="#" class="dropDown' +
+//     value.typeClass +
+//     '" data-id="' +
+//     value.id +
+//     '" data-item="' +
+//     value.name +
+//     '" data-classType="' +
+//     value.typeClass +
+//     '">' +
+//     value.name +
+//     '</a>';
+//   $('#divDropdown' + value.typeClass).append(newHTML);
 // });
 
-// $("#dropDownBarge").on("click", function() {
-//   $("#divDropdownBarge").toggle("show");
+// // $(".dropDownCrane").on("click", function() {
+// $('.dropdown-content a').on('click', function() {
+//   let dataId = $(this).attr('data-id');
+//   let classType = $(this).attr('data-classType');
+//   let dataName = $(this).attr('data-item');
+//   $('#drop' + classType).text(dataName);
 // });
-// $("#divDropdownCrane").on("click", function(event) {
-//   event.stopPropagation();
-// });
-
-function showDropDownCrane() {
-  document.getElementById('divDropdownCrane').classList.toggle('show');
-}
-
-function showDropDownBarge() {
-  document.getElementById('divDropdownBarge').classList.toggle('show');
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    let dropdowns = document.getElementsByClassName('dropdown-content');
-    let i;
-    for (i = 0; i < dropdowns.length; i++) {
-      let openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-};
-
-let dataDropDown = [
-  { id: 11, name: 'Crane A', typeClass: 'Crane' },
-  { id: 12, name: 'Crane Keala Marga Nasa', typeClass: 'Crane' },
-  { id: 13, name: 'Crane A2', typeClass: 'Crane' },
-  { id: 21, name: 'Barge B', typeClass: 'Barge' },
-  { id: 22, name: 'Barge B1', typeClass: 'Barge' },
-  { id: 23, name: 'Barge B2', typeClass: 'Barge' }
-];
-$.each(dataDropDown, function(index, value) {
-  let newHTML =
-    '<a href="#" class="dropDown' +
-    value.typeClass +
-    '" data-id="' +
-    value.id +
-    '" data-item="' +
-    value.name +
-    '" data-classType="' +
-    value.typeClass +
-    '">' +
-    value.name +
-    '</a>';
-  $('#divDropdown' + value.typeClass).append(newHTML);
-});
-
-// $(".dropDownCrane").on("click", function() {
-$('.dropdown-content a').on('click', function() {
-  let dataId = $(this).attr('data-id');
-  let classType = $(this).attr('data-classType');
-  let dataName = $(this).attr('data-item');
-  $('#drop' + classType).text(dataName);
-});
 
 // $("#cranec").data("dataObj", { id: 16, name: "craneC" });
 // let dataCraneC = $("#cranec").data("dataObj");
