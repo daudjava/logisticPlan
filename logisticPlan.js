@@ -400,6 +400,15 @@ function customOrder(a, b) {
   return a.itemIndex - b.itemIndex;
 }
 
+function alertInfo(item) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'Data crane lebih dari 3!'
+    // footer: '<a href>Why do I have this issue?</a>'
+  });
+}
+
 function removeConfirm(item, callback) {
   Swal.fire({
     title: 'Are you sure?',
@@ -440,39 +449,6 @@ function removeConfirm(item, callback) {
 //     callback
 //   );
 // }
-
-function addCranePopup(item) {
-  let inputOption = {
-    '700 T/Hr': 'Loading Rate : 700 T/Hr',
-    '890 T/Hr': 'Loading Rate : 890 T/Hr',
-    '990 T/Hr': 'Loading Rate : 990 T/Hr'
-  };
-  Swal.fire({
-    title: 'Select Outage Tier',
-    input: 'select',
-    inputOptions: inputOption,
-    inputPlaceholder: 'Select Loading Rate...',
-    showCancelButton: true,
-    inputValidator: function(value) {
-      return new Promise(function(resolve, reject) {
-        if (value !== '') {
-          resolve();
-        } else {
-          resolve('You need to select a Tier');
-        }
-      });
-    }
-  }).then(function(result) {
-    if (result.value) {
-      Swal.fire({
-        html: 'You selected: ' + result.value
-      });
-      return result.value;
-    } else {
-      return;
-    }
-  });
-}
 
 function runscript(object) {
   object.querySelector('.insider').style.color = 'red';
@@ -763,226 +739,320 @@ let groupData = [];
 function handleDragEnd(event) {
   if (allObjItem(event.target.id) != null) {
     let newItem_dropped = allObjItem(event.target.id);
-    console.log(addCranePopup(newItem_dropped));
     let selectedGroup = newItem_dropped.group; // tempat item tersebut diletakan
-
+    let classNameItem = newItem_dropped.className;
     let indexItem = findIndexItem(selectedGroup);
     let selectedParent = findThatParent(indexItem);
-
-    // let countItemData = countItemInsideTheGroup(selectedParent);
-
-    // let groupParent = selectedParent; //group parent item tersebut
-    // let groupParentNow = groupParent;
-
     let whereItemPlaced = allObjItem(indexItem).subgroup;
-
     let groupSelect = allGroupItem(selectedGroup); //item berada di group mana
 
     let startDateItem = allObjItem(indexItem).start;
     let endDateItem = allObjItem(indexItem).end;
 
     let filterGroupCrane = filterGroup(selectedParent);
-    let countCraneInGroup = filterGroupCrane.length + 1;
+    let countItemInGroup = filterGroupCrane.length + 1;
 
-    // if (groupParentBefore != groupParentNow) {
-    //   counterDropCrane(0);
-    //   sumCrane = 0;
-    //   sumBarge = 0;
-    //   countItemCrane = 1;
-    //   groupData = [];
-    //   let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
-    //   countItemCrane = detectItemCrane + countItemCrane;
-    //   generateIdSubGroupCrane = '';
-    //   generateIdSubGroupBarge = '';
-    // } else {
-    //   counterDropCrane(1);
-    //   groupData = groupData;
-    //   countItemCrane = countItemCrane;
-    // }
+    let dataParsing = {
+      newItem_dropped: newItem_dropped,
+      selectedGroup: selectedGroup,
+      indexItem: indexItem,
+      selectedParent: selectedParent,
+      groupSelect: groupSelect,
+      startDateItem: startDateItem,
+      endDateItem: endDateItem,
+      countItemInGroup: countItemInGroup
+    };
 
-    console.log(counterDropCrane());
-    console.log('increaseItem');
-    if (whereItemPlaced == 0) {
-      // group vessel
-
-      if (newItem_dropped.className == 'crane') {
-        let findActualItem = _.countBy(allObjItem(), function(num) {
-          return num.groupParent == selectedParent ? num.className : '';
-        });
-        let isThereActualItem = findActualItem.actual;
-
-        if (isThereActualItem == undefined) {
-          // belum ada barge dan crane
-          items.add({
-            id: maxIdForNewItem,
-            productNo: newItem_dropped.productNo,
-            product: newItem_dropped.product,
-            name: newItem_dropped.name,
-            loadingRate: newItem_dropped.loadingRate,
-            capacity: newItem_dropped.capacity,
-            className: 'actual',
-            group: selectedParent,
-            groupChild: '',
-            groupParent: selectedParent,
-            start: startDateItem, //'2019-10-21 00:00:00'
-            end: endDateItem,
-            subgroup: 0,
-            subgroupOrder: 0,
-            content: 'Vessel New'
-          });
-          maxIdForNewItem++;
-        }
-
-        // if (countItemCrane > maxCraneItem) {
-        //   singleDeletItem(newItem_dropped.id);
-        // } else {
-        if (!groupSelect.isSubGroup) {
-          // klo dia taroh di parent
-          let generateIdSubGroupCrane = selectedGroup + 'C' + countCraneInGroup;
-          sumCrane = maxCrane - countCraneInGroup * 2;
-          let qGroup = sumCrane;
-          groupData = [
-            {
-              id: generateIdSubGroupCrane,
-              content: 'crane',
-              isSubGroup: true,
-              orderGroup: qGroup
-            }
-          ];
-          groupSelect.nestedGroups.push(generateIdSubGroupCrane);
-
-          groups.add(groupData);
-          selectedGroup = generateIdSubGroupCrane;
-          // countItemCrane = countItemCrane + 1; // berkurang 2
-        }
-        items.update({
-          id: newItem_dropped.id,
-          group: selectedGroup,
-          groupChild: '',
-          groupParent: selectedParent,
-          start: startDateItem,
-          end: endDateItem,
-          subgroup: 1,
-          subgroupOrder: 1
-        });
-        // }
+    if (whereItemPlaced == 0 && classNameItem == 'crane') {
+      if (countItemInGroup <= 3) {
+        showDialogOption(dataParsing, addDataCrane);
       } else {
-        // klo taroh crane di child
+        alertInfo(newItem_dropped);
         singleDeletItem(newItem_dropped.id);
       }
+    } else if (whereItemPlaced == 1) {
+      if (classNameItem == 'crane') {
+        showDialogOption(dataParsing, addSubCrane);
+      }
+      if (classNameItem == 'barge') {
+        let dataA = sampleInput();
+        dataA.then(alert);
+        console.log(dataA);
+        console.log('dataA');
+        // if (dataA) {
+        //   showDialogOption(dataParsing, addSubCrane);
+        // } else {
+        // }
+      }
+    } else {
+      singleDeletItem(newItem_dropped.id);
     }
-    // else if (whereItemPlaced == 1) {
-    //   // group crane
-
-    //   console.log(allObjItem());
-    //   console.log(selectedGroup);
-    //   console.log('itemFilter');
-    //   let itemFilter = allObjItem().filter(function(e) {
-    //     return e.groupChild === selectedGroup && e.className === 'barge' ? e : '';
-    //   });
-    //   console.log(itemFilter);
-    //   console.log('itemFilter');
-
-    //   let countChildItem = _.countBy(allObjItem(), function(num) {
-    //     return num.groupChild == selectedGroup ? num.className : '';
-    //   });
-    //   let countBargeItemInCraneGroup = countChildItem.barge;
-
-    //   let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
-
-    //   if (newItem_dropped.className == 'barge') {
-    //     // klo masukin barge
-    //     if (countBargeItemInCraneGroup == undefined) {
-    //       // belum ada barge pada crane
-    //       let parentGroup = groupSelect.nestedInGroup;
-    //       let parentSelect = allGroupItem(parentGroup); //get parent group
-    //       if (groupSelect.isSubGroup) {
-    //         //harus taroh di child
-    //         let generateIdSubGroupBarge = parentGroup + 'B' + countDataInGroup;
-    //         sumBarge = maxbarge - countDataInGroup * 2;
-    //         let qGroup = sumBarge;
-    //         groupData = [
-    //           {
-    //             id: generateIdSubGroupBarge,
-    //             content: 'barge',
-    //             isSubGroup: true,
-    //             orderGroup: qGroup
-    //           }
-    //         ];
-    //         parentSelect.nestedGroups.push(generateIdSubGroupBarge);
-    //         groups.add(groupData);
-    //         selectedGroup = generateIdSubGroupBarge;
-    //         // countItemBarge = countItemBarge + 1;
-    //       }
-
-    //       items.update({
-    //         id: newItem_dropped.id,
-    //         subgroup: 2,
-    //         subgroupOrder: 2,
-    //         groupChild: newItem_dropped.group,
-    //         groupParent: groupParent,
-    //         group: selectedGroup,
-    //         start: startDateItem,
-    //         end: endDateItem
-    //       });
-    //     } else {
-    //       singleDeletItem(newItem_dropped.id);
-    //     }
-    //   } else {
-    //     // klo masukin crane
-    //     let convertStartToEnd = allObjItem(indexItem).end;
-    //     let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
-
-    //     let endDateItem = increaseDate(convertStartToEnd, differentTime);
-
-    //     items.update({
-    //       id: newItem_dropped.id,
-    //       subgroup: 2,
-    //       subgroupOrder: 2,
-    //       groupChild: '',
-    //       groupParent: groupParent,
-    //       group: selectedGroup,
-    //       start: convertStartToEnd,
-    //       end: endDateItem
-    //     });
-
-    //     updateActualVessel(groupParent);
-    //   }
-    // } else {
-    //   // klo select placenya gk di group 1 atau 0
-
-    //   if (newItem_dropped.className == 'crane') {
-    //     singleDeletItem(newItem_dropped.id);
-    //   } else {
-    //     let convertStartToEnd = allObjItem(indexItem).end;
-    //     let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
-
-    //     let endDateItem = increaseDate(convertStartToEnd, differentTime);
-
-    //     timeline1.itemsData.update({
-    //       id: newItem_dropped.id,
-    //       subgroup: 2,
-    //       subgroupOrder: 2,
-    //       groupChild: newItem_dropped.group,
-    //       groupParent: groupParent,
-    //       group: selectedGroup,
-    //       start: convertStartToEnd,
-    //       end: endDateItem
-    //     });
-    //     updateActualVessel(groupParent);
-    //   }
-    // }
-
-    // groupParentBefore = groupParent;
-    // groupBefore = groupChild;
 
     infoDragged(newItem_dropped);
 
     timeline1.setSelection(-1);
-    lookItemCrane(event.target.id);
+    lookItemCrane(newItem_dropped.id);
   } else {
     maxIdForNewItem--;
   }
+}
+
+let sampleInput = async () => {
+  const { value: formValues } = await Swal.fire({
+    title: 'Multiple inputs',
+    html: '<input id="swal-input1" class="swal2-input">' + '<input id="swal-input2" class="swal2-input">',
+    focusConfirm: false,
+    preConfirm: () => {
+      return [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value];
+    }
+  });
+
+  if (formValues) {
+    Swal.fire(JSON.stringify(formValues));
+  }
+};
+
+async function inputBarge() {
+  const { value: formValues } = await Swal.fire({
+    title: 'Multiple inputs',
+    html: '<input id="swal-input1" class="swal2-input">' + '<input id="swal-input2" class="swal2-input">',
+    focusConfirm: false,
+    preConfirm: () => {
+      return [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value];
+    }
+  });
+
+  if (formValues) {
+    Swal.fire(JSON.stringify(formValues));
+  }
+}
+
+function showDialogOption(dataParsing, callback) {
+  let inputOption = {
+    '700 T/Hr': 'Loading Rate : 700 T/Hr',
+    '890 T/Hr': 'Loading Rate : 890 T/Hr',
+    '990 T/Hr': 'Loading Rate : 990 T/Hr'
+  };
+  Swal.fire({
+    title: 'Select Outage Tier',
+    input: 'select',
+    inputOptions: inputOption,
+    inputPlaceholder: 'Select Loading Rate...',
+    showCancelButton: true,
+    inputValidator: function(value) {
+      return new Promise(function(resolve, reject) {
+        if (value !== '') {
+          resolve();
+        } else {
+          resolve('You need to select a Tier');
+        }
+      });
+    }
+  }).then(function(result) {
+    if (result.value) {
+      Swal.fire({
+        html: 'You selected: ' + result.value
+      });
+      dataParsing.loadingRate = result.value;
+      callback(dataParsing);
+    } else {
+      singleDeletItem(dataParsing.newItem_dropped.id);
+    }
+  });
+}
+
+function addSubCrane(dataParsing) {
+  // klo masukin crane
+  let dataOnThisLine = getThisGroup(dataParsing.selectedGroup, dataParsing.selectedParent);
+  let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
+  let convertStartToEnd = lastDataOnThisLine.end;
+  let differentTime = diffDateTime(lastDataOnThisLine.start, lastDataOnThisLine.end);
+  let endDateItem = increaseDate(convertStartToEnd, differentTime);
+
+  items.update({
+    id: dataParsing.newItem_dropped.id,
+    subgroup: 2,
+    subgroupOrder: 2,
+    groupChild: '',
+    groupParent: dataParsing.selectedParent,
+    group: dataParsing.selectedGroup,
+    start: convertStartToEnd,
+    end: endDateItem
+  });
+
+  updateActualVessel(dataParsing.selectedParent);
+}
+
+function addDataCrane(dataParsing) {
+  let findActualItem = _.countBy(allObjItem(), function(num) {
+    return num.groupParent == dataParsing.selectedParent ? num.className : '';
+  });
+  let isThereActualItem = findActualItem.actual;
+
+  if (isThereActualItem == undefined) {
+    // belum ada barge dan crane
+    items.add({
+      id: maxIdForNewItem,
+      productNo: dataParsing.newItem_dropped.productNo,
+      product: dataParsing.newItem_dropped.product,
+      name: dataParsing.newItem_dropped.name,
+      loadingRate: dataParsing.newItem_dropped.loadingRate,
+      capacity: dataParsing.newItem_dropped.capacity,
+      className: 'actual',
+      group: dataParsing.selectedParent,
+      groupChild: '',
+      groupParent: dataParsing.selectedParent,
+      start: dataParsing.startDateItem, //'2019-10-21 00:00:00'
+      end: dataParsing.endDateItem,
+      subgroup: 0,
+      subgroupOrder: 0,
+      content: 'Vessel New'
+    });
+    maxIdForNewItem++;
+  }
+
+  if (!dataParsing.groupSelect.isSubGroup) {
+    // klo dia taroh di parent
+    let generateIdSubGroupCrane = dataParsing.selectedGroup + 'C' + dataParsing.countItemInGroup;
+    sumCrane = maxCrane - dataParsing.countItemInGroup * 2;
+    let qGroup = sumCrane;
+    groupData = [
+      {
+        id: generateIdSubGroupCrane,
+        content: 'crane',
+        isSubGroup: true,
+        orderGroup: qGroup
+      }
+    ];
+    dataParsing.groupSelect.nestedGroups.push(generateIdSubGroupCrane);
+
+    groups.add(groupData);
+    dataParsing.selectedGroup = generateIdSubGroupCrane;
+    // countItemCrane = countItemCrane + 1; // berkurang 2
+  }
+  items.update({
+    id: dataParsing.newItem_dropped.id,
+    group: dataParsing.selectedGroup,
+    groupChild: '',
+    groupParent: dataParsing.selectedParent,
+    start: dataParsing.startDateItem,
+    end: dataParsing.endDateItem,
+    subgroup: 1,
+    subgroupOrder: 1
+  });
+}
+
+function dropItem(event) {
+  // let countItemData = countItemInsideTheGroup(selectedParent);
+
+  // let groupParent = selectedParent; //group parent item tersebut
+  // let groupParentNow = groupParent;
+
+  // if (groupParentBefore != groupParentNow) {
+  //   counterDropCrane(0);
+  //   sumCrane = 0;
+  //   sumBarge = 0;
+  //   countItemCrane = 1;
+  //   groupData = [];
+  //   let detectItemCrane = countItemData.crane != undefined ? countItemData.crane : 0;
+  //   countItemCrane = detectItemCrane + countItemCrane;
+  //   generateIdSubGroupCrane = '';
+  //   generateIdSubGroupBarge = '';
+  // } else {
+  //   counterDropCrane(1);
+  //   groupData = groupData;
+  //   countItemCrane = countItemCrane;
+  // }
+
+  console.log(counterDropCrane());
+  console.log('increaseItem');
+
+  // else if (whereItemPlaced == 1) {
+  //   // group crane
+
+  //   console.log(allObjItem());
+  //   console.log(selectedGroup);
+  //   console.log('itemFilter');
+  //   let itemFilter = allObjItem().filter(function(e) {
+  //     return e.groupChild === selectedGroup && e.className === 'barge' ? e : '';
+  //   });
+  //   console.log(itemFilter);
+  //   console.log('itemFilter');
+
+  //   let countChildItem = _.countBy(allObjItem(), function(num) {
+  //     return num.groupChild == selectedGroup ? num.className : '';
+  //   });
+  //   let countBargeItemInCraneGroup = countChildItem.barge;
+
+  //   let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
+
+  //   if (newItem_dropped.className == 'barge') {
+  //     // klo masukin barge
+  //     if (countBargeItemInCraneGroup == undefined) {
+  //       // belum ada barge pada crane
+  //       let parentGroup = groupSelect.nestedInGroup;
+  //       let parentSelect = allGroupItem(parentGroup); //get parent group
+  //       if (groupSelect.isSubGroup) {
+  //         //harus taroh di child
+  //         let generateIdSubGroupBarge = parentGroup + 'B' + countDataInGroup;
+  //         sumBarge = maxbarge - countDataInGroup * 2;
+  //         let qGroup = sumBarge;
+  //         groupData = [
+  //           {
+  //             id: generateIdSubGroupBarge,
+  //             content: 'barge',
+  //             isSubGroup: true,
+  //             orderGroup: qGroup
+  //           }
+  //         ];
+  //         parentSelect.nestedGroups.push(generateIdSubGroupBarge);
+  //         groups.add(groupData);
+  //         selectedGroup = generateIdSubGroupBarge;
+  //         // countItemBarge = countItemBarge + 1;
+  //       }
+
+  //       items.update({
+  //         id: newItem_dropped.id,
+  //         subgroup: 2,
+  //         subgroupOrder: 2,
+  //         groupChild: newItem_dropped.group,
+  //         groupParent: groupParent,
+  //         group: selectedGroup,
+  //         start: startDateItem,
+  //         end: endDateItem
+  //       });
+  //     } else {
+  //       singleDeletItem(newItem_dropped.id);
+  //     }
+  //   } else {
+
+  // } else {
+  //   // klo select placenya gk di group 1 atau 0
+
+  //   if (newItem_dropped.className == 'crane') {
+  //     singleDeletItem(newItem_dropped.id);
+  //   } else {
+  //     let convertStartToEnd = allObjItem(indexItem).end;
+  //     let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
+
+  //     let endDateItem = increaseDate(convertStartToEnd, differentTime);
+
+  //     timeline1.itemsData.update({
+  //       id: newItem_dropped.id,
+  //       subgroup: 2,
+  //       subgroupOrder: 2,
+  //       groupChild: newItem_dropped.group,
+  //       groupParent: groupParent,
+  //       group: selectedGroup,
+  //       start: convertStartToEnd,
+  //       end: endDateItem
+  //     });
+  //     updateActualVessel(groupParent);
+  //   }
+  // }
+
+  // groupParentBefore = groupParent;
+  // groupBefore = groupChild;
 }
 
 function lookItemCrane(idItem) {
@@ -1002,9 +1072,9 @@ function infoDragged(newItem_dropped) {
   // document.getElementById("output").innerHTML = html;
 
   console.log(timeline1.itemsData.get());
-  console.log('dataItem');
+  console.log('Data Item All');
   console.log(allGroupItem());
-  console.log('--------222');
+  console.log('Group Item All');
 }
 
 function singleDeletItem(itemId) {
@@ -1050,6 +1120,13 @@ function findThatParent(indexItem) {
 function filterGroup(selectedParent) {
   let itemFilter = allGroupItem().filter(function(e) {
     return e.nestedInGroup === selectedParent && e.content === 'crane' ? e : '';
+  });
+  return itemFilter;
+}
+
+function getThisGroup(selectedGroup, selectedParent) {
+  let itemFilter = allObjItem().filter(function(e) {
+    return e.group === selectedGroup && e.groupParent === selectedParent ? e : '';
   });
   return itemFilter;
 }
