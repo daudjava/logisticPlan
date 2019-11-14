@@ -104,9 +104,10 @@ let dataItem = [
   },
   {
     id: 6,
-    loadingRate: 30,
+    loadingRate: 330,
     name: 'Crane',
     groupContent: 1,
+    parentId: 1,
     startDate: '2019-10-21 12:00:00',
     endDate: '2019-10-24 00:00:00',
     className: 'crane',
@@ -120,6 +121,7 @@ let dataItem = [
     name: 'Barge',
     product: 'Product A',
     groupContent: 1,
+    parentId: 6,
     startDate: '2019-10-21 12:00:00',
     endDate: '2019-10-24 00:00:00',
     className: 'barge',
@@ -129,9 +131,10 @@ let dataItem = [
   },
   {
     id: 8,
-    loadingRate: 50,
+    loadingRate: 570,
     name: 'Crane',
     groupContent: 4,
+    parentId: 5,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
     className: 'crane',
@@ -145,6 +148,7 @@ let dataItem = [
     name: 'Barge',
     product: 'Product D',
     groupContent: 4,
+    parentId: 8,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
     className: 'barge',
@@ -154,9 +158,10 @@ let dataItem = [
   },
   {
     id: 10,
-    loadingRate: 50,
+    loadingRate: 980,
     name: 'Crane',
     groupContent: 4,
+    parentId: 5,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
     className: 'crane',
@@ -170,6 +175,7 @@ let dataItem = [
     name: 'Barge',
     product: 'Product D',
     groupContent: 4,
+    parentId: 10,
     startDate: '2019-10-28 00:00:00',
     endDate: '2019-10-29 12:00:00',
     className: 'barge',
@@ -383,6 +389,7 @@ function addGroupData(itemSelected, idItem, indexItem, groupSub) {
     loadingRate: itemSelected.loadingRate,
     capacity: itemSelected.capacity,
     className: itemSelected.className,
+    parentId: itemSelected.parentId,
     group: idItem,
     groupChild: groupSub,
     groupParent: itemSelected.groupContent,
@@ -743,6 +750,7 @@ function handleDragEnd(event) {
     let classNameItem = newItem_dropped.className;
     let indexItem = findIndexItem(selectedGroup);
     let selectedParent = findThatParent(indexItem);
+    let selectedId = parentId(selectedParent);
     let whereItemPlaced = allObjItem(indexItem).subgroup;
     let groupSelect = allGroupItem(selectedGroup); //item berada di group mana
 
@@ -751,9 +759,11 @@ function handleDragEnd(event) {
 
     let filterGroupCrane = filterGroup(selectedParent);
     let countItemInGroup = filterGroupCrane.length + 1;
-
+    console.log(selectedId);
+    console.log('selectedId');
     let dataParsing = {
       newItem_dropped: newItem_dropped,
+      parentId: selectedId,
       selectedGroup: selectedGroup,
       indexItem: indexItem,
       selectedParent: selectedParent,
@@ -775,63 +785,111 @@ function handleDragEnd(event) {
         showDialogOption(dataParsing, addSubCrane);
       }
       if (classNameItem == 'barge') {
-        let dataA = sampleInput();
-        dataA.then(alert);
-        console.log(dataA);
-        console.log('dataA');
-        // if (dataA) {
-        //   showDialogOption(dataParsing, addSubCrane);
-        // } else {
-        // }
+        selectOptionBarge(dataParsing, addDataBarge);
       }
     } else {
       singleDeletItem(newItem_dropped.id);
     }
-
-    infoDragged(newItem_dropped);
-
-    timeline1.setSelection(-1);
-    lookItemCrane(newItem_dropped.id);
   } else {
     maxIdForNewItem--;
   }
 }
 
-let sampleInput = async () => {
-  const { value: formValues } = await Swal.fire({
-    title: 'Multiple inputs',
-    html: '<input id="swal-input1" class="swal2-input">' + '<input id="swal-input2" class="swal2-input">',
-    focusConfirm: false,
-    preConfirm: () => {
-      return [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value];
-    }
+function addDataBarge(dataParsing) {
+  // belum ada barge pada crane
+  let parentGroup = dataParsing.groupSelect.nestedInGroup;
+
+  let parentSelect = allGroupItem(parentGroup); //get parent group
+
+  let dataOnThisLine = getAllCrane(dataParsing.selectedGroup, dataParsing.selectedParent);
+
+  if (!dataOnThisLine.length) {
+    //harus taroh di child
+    let generateIdSubGroupBarge = parentGroup + 'B' + dataParsing.countItemInGroup;
+    sumBarge = maxbarge - dataParsing.countItemInGroup * 2;
+    let qGroup = sumBarge;
+    groupData = [
+      {
+        id: generateIdSubGroupBarge,
+        content: 'barge',
+        isSubGroup: true,
+        orderGroup: qGroup
+      }
+    ];
+    parentSelect.nestedGroups.push(generateIdSubGroupBarge);
+    groups.add(groupData);
+    dataParsing.selectedGroup = generateIdSubGroupBarge;
+    // countItemBarge = countItemBarge + 1;
+  } else {
+    dataParsing.selectedGroup = dataOnThisLine[0].group;
+    // dataParsing.parentId = dataParsing.newItem_dropped.indexItem;
+  }
+
+  let dateTimeParent = allObjItem(parseInt(dataParsing.parentId));
+  let newDateStart = dateTimeParent.start;
+  let newDateEnd = dateTimeParent.end;
+  console.log(dateTimeParent);
+  console.log('dateTimeParent');
+
+  items.update({
+    id: dataParsing.newItem_dropped.id,
+    subgroup: 2,
+    subgroupOrder: 2,
+    groupChild: dataParsing.newItem_dropped.group,
+    groupParent: dataParsing.selectedParent,
+    parentId: parseInt(dataParsing.parentId),
+    group: dataParsing.selectedGroup,
+    start: newDateStart,
+    end: newDateEnd
   });
 
-  if (formValues) {
-    Swal.fire(JSON.stringify(formValues));
-  }
-};
+  infoDragged(dataParsing.newItem_dropped);
 
-async function inputBarge() {
-  const { value: formValues } = await Swal.fire({
-    title: 'Multiple inputs',
-    html: '<input id="swal-input1" class="swal2-input">' + '<input id="swal-input2" class="swal2-input">',
-    focusConfirm: false,
-    preConfirm: () => {
-      return [document.getElementById('swal-input1').value, document.getElementById('swal-input2').value];
-    }
+  timeline1.setSelection(-1);
+  lookItemCrane(dataParsing.newItem_dropped.id);
+}
+
+function selectOptionBarge(dataParsing, callback) {
+  let dataOnThisLine = getThisGroup(dataParsing.selectedGroup, dataParsing.selectedParent);
+
+  let inputOption = {};
+  $.each(dataOnThisLine, function(index, value) {
+    inputOption[value.id] = value.content;
   });
 
-  if (formValues) {
-    Swal.fire(JSON.stringify(formValues));
-  }
+  Swal.fire({
+    title: 'Select Outage Tier',
+    input: 'select',
+    inputOptions: inputOption,
+    inputPlaceholder: 'Select Loading Rate...',
+    showCancelButton: true,
+    inputValidator: function(value) {
+      return new Promise(function(resolve, reject) {
+        if (value !== '') {
+          resolve();
+        } else {
+          resolve('You need to select a Tier');
+        }
+      });
+    }
+  }).then(function(result) {
+    if (result.value) {
+      // Swal.fire({
+      //   html: 'You selected: ' + result.value
+      // });
+      dataParsing.parentId = result.value;
+      callback(dataParsing);
+    } else {
+      singleDeletItem(dataParsing.newItem_dropped.id);
+    }
+  });
 }
 
 function showDialogOption(dataParsing, callback) {
   let inputOption = {
-    '700 T/Hr': 'Loading Rate : 700 T/Hr',
-    '890 T/Hr': 'Loading Rate : 890 T/Hr',
-    '990 T/Hr': 'Loading Rate : 990 T/Hr'
+    '700': 'Loading Rate : 700 T/Hr',
+    '890': 'Loading Rate : 890 T/Hr',
+    '990': 'Loading Rate : 990 T/Hr'
   };
   Swal.fire({
     title: 'Select Outage Tier',
@@ -850,9 +908,9 @@ function showDialogOption(dataParsing, callback) {
     }
   }).then(function(result) {
     if (result.value) {
-      Swal.fire({
-        html: 'You selected: ' + result.value
-      });
+      // Swal.fire({
+      //   html: 'You selected: ' + result.value
+      // });
       dataParsing.loadingRate = result.value;
       callback(dataParsing);
     } else {
@@ -871,16 +929,24 @@ function addSubCrane(dataParsing) {
 
   items.update({
     id: dataParsing.newItem_dropped.id,
+    loadingRate: dataParsing.loadingRate,
     subgroup: 2,
     subgroupOrder: 2,
     groupChild: '',
+    parentId: dataParsing.parentId,
     groupParent: dataParsing.selectedParent,
     group: dataParsing.selectedGroup,
     start: convertStartToEnd,
-    end: endDateItem
+    end: endDateItem,
+    content: dataParsing.newItem_dropped.content + ' ' + dataParsing.loadingRate
   });
 
   updateActualVessel(dataParsing.selectedParent);
+
+  infoDragged(dataParsing.newItem_dropped);
+
+  timeline1.setSelection(-1);
+  lookItemCrane(dataParsing.newItem_dropped.id);
 }
 
 function addDataCrane(dataParsing) {
@@ -908,6 +974,7 @@ function addDataCrane(dataParsing) {
       subgroupOrder: 0,
       content: 'Vessel New'
     });
+    dataParsing.parentId = maxIdForNewItem;
     maxIdForNewItem++;
   }
 
@@ -930,16 +997,26 @@ function addDataCrane(dataParsing) {
     dataParsing.selectedGroup = generateIdSubGroupCrane;
     // countItemCrane = countItemCrane + 1; // berkurang 2
   }
+
+  console.log(dataParsing.selectedParent);
+  console.log('dataParsing.selectedParent');
   items.update({
     id: dataParsing.newItem_dropped.id,
     group: dataParsing.selectedGroup,
     groupChild: '',
+    parentId: dataParsing.parentId,
     groupParent: dataParsing.selectedParent,
     start: dataParsing.startDateItem,
     end: dataParsing.endDateItem,
     subgroup: 1,
-    subgroupOrder: 1
+    subgroupOrder: 1,
+    content: dataParsing.newItem_dropped.content + ' ' + dataParsing.loadingRate
   });
+
+  infoDragged(dataParsing.newItem_dropped);
+
+  timeline1.setSelection(-1);
+  lookItemCrane(dataParsing.newItem_dropped.id);
 }
 
 function dropItem(event) {
@@ -987,40 +1064,7 @@ function dropItem(event) {
   //   let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
 
   //   if (newItem_dropped.className == 'barge') {
-  //     // klo masukin barge
-  //     if (countBargeItemInCraneGroup == undefined) {
-  //       // belum ada barge pada crane
-  //       let parentGroup = groupSelect.nestedInGroup;
-  //       let parentSelect = allGroupItem(parentGroup); //get parent group
-  //       if (groupSelect.isSubGroup) {
-  //         //harus taroh di child
-  //         let generateIdSubGroupBarge = parentGroup + 'B' + countDataInGroup;
-  //         sumBarge = maxbarge - countDataInGroup * 2;
-  //         let qGroup = sumBarge;
-  //         groupData = [
-  //           {
-  //             id: generateIdSubGroupBarge,
-  //             content: 'barge',
-  //             isSubGroup: true,
-  //             orderGroup: qGroup
-  //           }
-  //         ];
-  //         parentSelect.nestedGroups.push(generateIdSubGroupBarge);
-  //         groups.add(groupData);
-  //         selectedGroup = generateIdSubGroupBarge;
-  //         // countItemBarge = countItemBarge + 1;
-  //       }
 
-  //       items.update({
-  //         id: newItem_dropped.id,
-  //         subgroup: 2,
-  //         subgroupOrder: 2,
-  //         groupChild: newItem_dropped.group,
-  //         groupParent: groupParent,
-  //         group: selectedGroup,
-  //         start: startDateItem,
-  //         end: endDateItem
-  //       });
   //     } else {
   //       singleDeletItem(newItem_dropped.id);
   //     }
@@ -1113,6 +1157,12 @@ function findIndexItem(selectedGroup) {
   return allObjItem().findIndex(x => x.group == selectedGroup);
 }
 
+function parentId(selectedParent) {
+  let indexParent = allObjItem().findIndex(x => x.groupParent == selectedParent);
+  let paretId = allObjItem(indexParent).id;
+  return paretId;
+}
+
 function findThatParent(indexItem) {
   let selectedParent = allObjItem(indexItem).groupParent;
   return selectedParent;
@@ -1120,6 +1170,13 @@ function findThatParent(indexItem) {
 function filterGroup(selectedParent) {
   let itemFilter = allGroupItem().filter(function(e) {
     return e.nestedInGroup === selectedParent && e.content === 'crane' ? e : '';
+  });
+  return itemFilter;
+}
+
+function getAllCrane(selectedGroup, selectedParent) {
+  let itemFilter = allObjItem().filter(function(e) {
+    return e.groupChild === selectedGroup && e.groupParent === selectedParent ? e : '';
   });
   return itemFilter;
 }
