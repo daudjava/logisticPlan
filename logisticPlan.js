@@ -1066,8 +1066,8 @@ function addSubCrane(dataParsing) {
   // klo masukin crane
   let dataOnThisLine = getThisGroup(dataParsing.selectedGroup, dataParsing.selectedParent);
   let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
-  let convertStartToEnd = lastDataOnThisLine.completeLoading;
-  let differentTime = diffDateTime(lastDataOnThisLine.commanceLoading, lastDataOnThisLine.completeLoading);
+  let convertStartToEnd = lastDataOnThisLine.end;
+  let differentTime = diffDateTime(lastDataOnThisLine.start, lastDataOnThisLine.end);
   let endDateItem = increaseDate(convertStartToEnd, differentTime);
 
   console.log(lastDataOnThisLine);
@@ -1076,8 +1076,8 @@ function addSubCrane(dataParsing) {
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
     loadingRate: dataParsing.newItem_dropped.loadingRate,
-    commanceLoading: dataParsing.newItem_dropped.commanceLoading,
-    completeLoading: dataParsing.newItem_dropped.completeLoading,
+    commanceLoading: convertStartToEnd,
+    completeLoading: endDateItem,
     loadingRate: dataParsing.loadingRate,
     subgroup: 2,
     subgroupOrder: 2,
