@@ -896,8 +896,6 @@ function handleDragEnd(event) {
 
     let filterGroupCrane = filterGroup(selectedParent);
     let countItemInGroup = filterGroupCrane.length + 1;
-    console.log(selectedId);
-    console.log('selectedId');
     let dataParsing = {
       newItem_dropped: newItem_dropped,
       parentId: selectedId,
@@ -905,8 +903,6 @@ function handleDragEnd(event) {
       indexItem: indexItem,
       selectedParent: selectedParent,
       groupSelect: groupSelect,
-      startDateItem: startDateItem,
-      endDateItem: endDateItem,
       countItemInGroup: countItemInGroup
     };
 
@@ -965,8 +961,6 @@ function addDataBarge(dataParsing) {
   let dateTimeParent = allObjItem(parseInt(dataParsing.parentId));
   let newDateStart = dateTimeParent.commanceLoading;
   let newDateEnd = dateTimeParent.completeLoading;
-  console.log(dateTimeParent);
-  console.log('dateTimeParent');
 
   items.update({
     id: dataParsing.newItem_dropped.id,
@@ -1036,9 +1030,9 @@ function selectOptionBarge(dataParsing, callback) {
 
 function showDialogOption(dataParsing, callback) {
   let inputOption = {
-    '700': 'Loading Rate : 700 T/Hr',
-    '890': 'Loading Rate : 890 T/Hr',
-    '990': 'Loading Rate : 990 T/Hr'
+    '700 T/Hr': 'Loading Rate : 700 T/Hr',
+    '890 T/Hr': 'Loading Rate : 890 T/Hr',
+    '990 T/Hr': 'Loading Rate : 990 T/Hr'
   };
   Swal.fire({
     title: 'Select Outage Tier',
@@ -1076,6 +1070,8 @@ function addSubCrane(dataParsing) {
   let differentTime = diffDateTime(lastDataOnThisLine.commanceLoading, lastDataOnThisLine.completeLoading);
   let endDateItem = increaseDate(convertStartToEnd, differentTime);
 
+  console.log(lastDataOnThisLine);
+  console.log('lastDataOnThisLine');
   items.update({
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
