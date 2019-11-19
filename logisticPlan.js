@@ -27,7 +27,7 @@ let dataItem = [
     laycanEnd: '2019-10-24 00:00:00',
     duration: '96 hrs',
     productNo: 'A-01',
-    product: 'A1000',
+    product: 'A4000',
     tonnage: '17000 T',
     customer: 'xxx Corp.',
     demurageRate: 'B',
@@ -50,7 +50,7 @@ let dataItem = [
     laycanEnd: '2019-10-24 00:00:00',
     duration: '96 hrs',
     productNo: 'A-01',
-    product: 'A1000',
+    product: 'A4000',
     tonnage: '17000 T',
     customer: 'xxx Corp.',
     demurageRate: 'B',
@@ -119,7 +119,7 @@ let dataItem = [
     laycanEnd: '2019-10-29 12:00:00',
     duration: '96 hrs',
     productNo: 'D-01',
-    product: 'D1000',
+    product: 'D4000',
     tonnage: '17000 T',
     customer: 'xxx Corp.',
     demurageRate: 'B',
@@ -142,7 +142,7 @@ let dataItem = [
     laycanEnd: '2019-10-29 12:00:00',
     duration: '96 hrs',
     productNo: 'D-01',
-    product: 'D1000',
+    product: 'D4000',
     tonnage: '17000 T',
     customer: 'xxx Corp.',
     demurageRate: 'B',
@@ -182,7 +182,7 @@ let dataItem = [
   {
     id: 6,
     loadToVessel: '8000 T',
-    loadingRate: '750 T/Hr',
+    loadingRate: '200 T/Hr',
     commanceLoading: '2019-10-21 12:00:00',
     completeLoading: '2019-10-24 00:00:00',
     name: 'Crane',
@@ -198,7 +198,7 @@ let dataItem = [
   {
     id: 7,
     barge: 'A',
-    capacity: '8900 T',
+    capacity: '890 T',
     estimationReady: '',
     cycle: 1,
     position: 'Trisakti',
@@ -302,7 +302,7 @@ let dataItem = [
 ];
 
 let options = {
-  height: '95%',
+  height: '99%',
   min: new Date(2019, 9, 1), // lower limit of visible range
   max: new Date(2019, 12, 1), // upper limit of visible range
   // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
@@ -418,6 +418,7 @@ for (let i = 1; i < numberOfGroups; i++) {
 for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
   if (dataItem[indexItem].subgroup == 0) {
     // klo dia parent
+    let contentText = dataItem[indexItem].className == 'actual' ? ' ' : dataItem[indexItem].name + ' ' + dataItem[indexItem].tonnage;
     items.add({
       id: indexItem,
       vesselSize: dataItem[indexItem].vesselSize,
@@ -444,7 +445,7 @@ for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
       end: dataItem[indexItem].laycanEnd,
       subgroup: dataItem[indexItem].subgroup,
       subgroupOrder: dataItem[indexItem].subgroupOrder,
-      content: dataItem[indexItem].name + ' ' + dataItem[indexItem].tonnage
+      content: contentText
     });
   } else {
     // add child Group
@@ -602,7 +603,6 @@ function updateActualVessel(groupParent) {
   // let newItem_dropped = timeline1.itemsData.get(item.id);
   let lookTheirParent = groupParent;
   // let allObjItem = timeline1.itemsData.get();
-  // console.log(allObjItem());
   let index = allObjItem().findIndex(x => x.group === lookTheirParent && x.className === 'actual');
   if (index > 0) {
     //klo actualnya udh di hapus
@@ -891,8 +891,10 @@ function handleDragEnd(event) {
     let whereItemPlaced = allObjItem(indexItem).subgroup;
     let groupSelect = allGroupItem(selectedGroup); //item berada di group mana
 
-    let startDateItem = allObjItem(indexItem).start;
-    let endDateItem = allObjItem(indexItem).end;
+    // let startDateItem = allObjItem(indexItem).start;
+    // let endDateItem = allObjItem(indexItem).end;
+    let dataParent = allObjItem(indexItem);
+    let topParent = allObjItem(selectedParent);
 
     let filterGroupCrane = filterGroup(selectedParent);
     let countItemInGroup = filterGroupCrane.length + 1;
@@ -903,6 +905,8 @@ function handleDragEnd(event) {
       indexItem: indexItem,
       selectedParent: selectedParent,
       groupSelect: groupSelect,
+      dataParent: dataParent,
+      topParent: topParent,
       countItemInGroup: countItemInGroup
     };
 
@@ -918,7 +922,7 @@ function handleDragEnd(event) {
         showDialogOption(dataParsing, addSubCrane);
       }
       if (classNameItem == 'barge') {
-        selectOptionBarge(dataParsing, addDataBarge);
+        showCurrentCrane(dataParsing, showDialogOptionBarge);
       }
     } else {
       singleDeletItem(newItem_dropped.id);
@@ -928,13 +932,59 @@ function handleDragEnd(event) {
   }
 }
 
+function showDialogOptionBarge(dataParsing) {
+  selectOptionBarge(dataParsing, addDataBarge);
+}
+
+function selectOptionBarge(dataParsing, callback) {
+  let inputOption = {
+    '200 T': '200 T',
+    '300 T': '300 T',
+    '500 T': '500 T'
+  };
+  Swal.fire({
+    title: 'Select Outage Tier',
+    input: 'select',
+    inputOptions: inputOption,
+    inputPlaceholder: 'Select Loading Rate...',
+    showCancelButton: true,
+    inputValidator: function(value) {
+      return new Promise(function(resolve, reject) {
+        if (value !== '') {
+          resolve();
+        } else {
+          resolve('You need to select a Tier');
+        }
+      });
+    }
+  }).then(function(result) {
+    if (result.value) {
+      // Swal.fire({
+      //   html: 'You selected: ' + result.value
+      // });
+      dataParsing.bargeVolume = getOnlyNumber(result.value)[0];
+      callback(dataParsing);
+    } else {
+      singleDeletItem(dataParsing.newItem_dropped.id);
+    }
+  });
+}
+
 function addDataBarge(dataParsing) {
+  console.log(dataParsing);
+  console.log('dataParsingOnBarge');
   // belum ada barge pada crane
   let parentGroup = dataParsing.groupSelect.nestedInGroup;
 
   let parentSelect = allGroupItem(parentGroup); //get parent group
 
   let dataOnThisLine = getAllCrane(dataParsing.selectedGroup, dataParsing.selectedParent);
+  let dateTimeParent = allObjItem(parseInt(dataParsing.parentId));
+  let newDateStart = dateTimeParent.start;
+  let newDateEnd = dateTimeParent.end;
+
+  let countDayBarge = dataParsing.bargeVolume / dataParsing.loadingRate;
+  let differentTime = {};
 
   if (!dataOnThisLine.length) {
     //harus taroh di child
@@ -952,20 +1002,33 @@ function addDataBarge(dataParsing) {
     parentSelect.nestedGroups.push(generateIdSubGroupBarge);
     groups.add(groupData);
     dataParsing.selectedGroup = generateIdSubGroupBarge;
+    console.log('ififififififififififififififif');
+
+    differentTime.h = countDayBarge * 24;
+    newDateEnd = increaseDate(newDateStart, differentTime);
     // countItemBarge = countItemBarge + 1;
   } else {
     dataParsing.selectedGroup = dataOnThisLine[0].group;
     // dataParsing.parentId = dataParsing.newItem_dropped.indexItem;
+    console.log('elseelseelseelseelseelseelseelseelseelse');
+
+    let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
+    let convertStartToEnd = lastDataOnThisLine.end;
+
+    if (countDayBarge != NaN) {
+      newDateStart = convertStartToEnd;
+      differentTime.h = countDayBarge * 24;
+      newDateEnd = increaseDate(newDateStart, differentTime);
+    }
   }
 
-  let dateTimeParent = allObjItem(parseInt(dataParsing.parentId));
-  let newDateStart = dateTimeParent.commanceLoading;
-  let newDateEnd = dateTimeParent.completeLoading;
+  console.log(countDayBarge);
+  console.log('countDayBargecountDayBarge');
 
   items.update({
     id: dataParsing.newItem_dropped.id,
     barge: dataParsing.newItem_dropped.barge,
-    capacity: dataParsing.newItem_dropped.capacity,
+    capacity: dataParsing.bargeVolume + ' T',
     estimationReady: dataParsing.newItem_dropped.estimationReady,
     cycle: dataParsing.newItem_dropped.cycle,
     position: dataParsing.newItem_dropped.position,
@@ -983,7 +1046,8 @@ function addDataBarge(dataParsing) {
     parentId: parseInt(dataParsing.parentId),
     group: dataParsing.selectedGroup,
     start: newDateStart,
-    end: newDateEnd
+    end: newDateEnd,
+    content: dataParsing.topParent.product + ' ' + dataParsing.bargeVolume + ' T'
   });
 
   infoDragged(dataParsing.newItem_dropped);
@@ -992,12 +1056,12 @@ function addDataBarge(dataParsing) {
   lookItemCrane(dataParsing.newItem_dropped.id);
 }
 
-function selectOptionBarge(dataParsing, callback) {
+function showCurrentCrane(dataParsing, callback) {
   let dataOnThisLine = getThisGroup(dataParsing.selectedGroup, dataParsing.selectedParent);
 
   let inputOption = {};
   $.each(dataOnThisLine, function(index, value) {
-    inputOption[value.id] = value.content;
+    inputOption[value.id + '/' + value.loadingRate] = value.content;
   });
 
   Swal.fire({
@@ -1020,7 +1084,12 @@ function selectOptionBarge(dataParsing, callback) {
       // Swal.fire({
       //   html: 'You selected: ' + result.value
       // });
-      dataParsing.parentId = result.value;
+      let dataId = getOnlyNumber(result.value)[0];
+      let dataLodaingRate = getOnlyNumber(result.value)[1];
+      console.log(result.value);
+      console.log('result');
+      dataParsing.parentId = dataId;
+      dataParsing.loadingRate = dataLodaingRate;
       callback(dataParsing);
     } else {
       singleDeletItem(dataParsing.newItem_dropped.id);
@@ -1028,11 +1097,15 @@ function selectOptionBarge(dataParsing, callback) {
   });
 }
 
+let getOnlyNumber = string => {
+  return string.match(/\d+/g).map(Number);
+};
+
 function showDialogOption(dataParsing, callback) {
   let inputOption = {
-    '700 T/Hr': 'Loading Rate : 700 T/Hr',
-    '890 T/Hr': 'Loading Rate : 890 T/Hr',
-    '990 T/Hr': 'Loading Rate : 990 T/Hr'
+    '100 T/Hr': 'Loading Rate : 100 T/Hr',
+    '500 T/Hr': 'Loading Rate : 500 T/Hr',
+    '750 T/Hr': 'Loading Rate : 750 T/Hr'
   };
   Swal.fire({
     title: 'Select Outage Tier',
@@ -1070,8 +1143,6 @@ function addSubCrane(dataParsing) {
   let differentTime = diffDateTime(lastDataOnThisLine.start, lastDataOnThisLine.end);
   let endDateItem = increaseDate(convertStartToEnd, differentTime);
 
-  console.log(lastDataOnThisLine);
-  console.log('lastDataOnThisLine');
   items.update({
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
@@ -1128,11 +1199,12 @@ function addDataCrane(dataParsing) {
       group: dataParsing.selectedParent,
       groupChild: '',
       groupParent: dataParsing.selectedParent,
-      start: dataParsing.laycanStart, //'2019-10-21 00:00:00'
-      end: dataParsing.laycanEnd,
+      start: dataParsing.dataParent.start, //'2019-10-21 00:00:00'
+      end: dataParsing.dataParent.end,
       subgroup: 0,
       subgroupOrder: 0,
-      content: 'Vessel New'
+      // content: dataParsing.dataParent.content
+      content: ''
     });
     dataParsing.parentId = maxIdForNewItem;
     maxIdForNewItem++;
@@ -1161,15 +1233,15 @@ function addDataCrane(dataParsing) {
   items.update({
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
-    loadingRate: dataParsing.newItem_dropped.loadingRate,
+    loadingRate: dataParsing.loadingRate,
     commanceLoading: dataParsing.newItem_dropped.commanceLoading,
     completeLoading: dataParsing.newItem_dropped.completeLoading,
     group: dataParsing.selectedGroup,
     groupChild: '',
     parentId: dataParsing.parentId,
     groupParent: dataParsing.selectedParent,
-    start: dataParsing.commanceLoading,
-    end: dataParsing.completeLoading,
+    start: dataParsing.dataParent.start,
+    end: dataParsing.dataParent.end,
     subgroup: 1,
     subgroupOrder: 1,
     content: dataParsing.newItem_dropped.content + ' ' + dataParsing.loadingRate
@@ -1183,10 +1255,8 @@ function addDataCrane(dataParsing) {
 
 function dropItem(event) {
   // let countItemData = countItemInsideTheGroup(selectedParent);
-
   // let groupParent = selectedParent; //group parent item tersebut
   // let groupParentNow = groupParent;
-
   // if (groupParentBefore != groupParentNow) {
   //   counterDropCrane(0);
   //   sumCrane = 0;
@@ -1202,13 +1272,8 @@ function dropItem(event) {
   //   groupData = groupData;
   //   countItemCrane = countItemCrane;
   // }
-
-  console.log(counterDropCrane());
-  console.log('increaseItem');
-
   // else if (whereItemPlaced == 1) {
   //   // group crane
-
   //   console.log(allObjItem());
   //   console.log(selectedGroup);
   //   console.log('itemFilter');
@@ -1217,32 +1282,24 @@ function dropItem(event) {
   //   });
   //   console.log(itemFilter);
   //   console.log('itemFilter');
-
   //   let countChildItem = _.countBy(allObjItem(), function(num) {
   //     return num.groupChild == selectedGroup ? num.className : '';
   //   });
   //   let countBargeItemInCraneGroup = countChildItem.barge;
-
   //   let getGroupSelected = selectedGroup.substr(selectedGroup.length - 1); // => "1"
-
   //   if (newItem_dropped.className == 'barge') {
-
   //     } else {
   //       singleDeletItem(newItem_dropped.id);
   //     }
   //   } else {
-
   // } else {
   //   // klo select placenya gk di group 1 atau 0
-
   //   if (newItem_dropped.className == 'crane') {
   //     singleDeletItem(newItem_dropped.id);
   //   } else {
   //     let convertStartToEnd = allObjItem(indexItem).end;
   //     let differentTime = diffDateTime(allObjItem(indexItem).start, allObjItem(indexItem).end);
-
   //     let endDateItem = increaseDate(convertStartToEnd, differentTime);
-
   //     timeline1.itemsData.update({
   //       id: newItem_dropped.id,
   //       subgroup: 2,
@@ -1256,7 +1313,6 @@ function dropItem(event) {
   //     updateActualVessel(groupParent);
   //   }
   // }
-
   // groupParentBefore = groupParent;
   // groupBefore = groupChild;
 }
@@ -1305,6 +1361,8 @@ function diffDateTime(startDate, endDate) {
 }
 
 function increaseDate(endDate, differentTime) {
+  console.log(differentTime);
+  console.log('differentTime');
   let today = moment(endDate);
   let tomorrow = moment(today)
     .add(differentTime.d, 'days')
@@ -1366,6 +1424,44 @@ itemBarge.addEventListener('dragend', handleDragEnd.bind(this), false);
 
 console.log(allObjItem());
 console.log('Load Awal');
+
+function getDataCrane() {
+  var result = null;
+  var scriptUrl = '../getCrane';
+  $.ajax({
+    url: scriptUrl,
+    type: 'get',
+    dataType: 'json',
+    async: false,
+    success: function(data) {
+      result = data;
+    },
+    error: function(xhr, status, error) {
+      alert(status);
+      return;
+    }
+  });
+  return result;
+}
+
+function viewTriggerLaycan(json) {
+  $.ajax({
+    type: 'POST',
+    url: '../runLaycanUploader',
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    data: JSON.stringify(json),
+    success: function(result, status, xhr) {
+      if (result == 'Success') {
+        alert('Success Upload Laycan');
+      }
+    },
+    error: function(xhr, status, error) {
+      alert(status);
+      return;
+    }
+  });
+}
 // //----------------------------------Option Select----------------------
 // // $("#dropDownCrane").on("click", function() {
 // //   $("#divDropdownCrane").toggle("show");
