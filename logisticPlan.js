@@ -988,8 +988,10 @@ function addDataBarge(dataParsing) {
 
   if (!dataOnThisLine.length) {
     //harus taroh di child
-    let generateIdSubGroupBarge = parentGroup + 'B' + dataParsing.countItemInGroup;
-    sumBarge = maxbarge - dataParsing.countItemInGroup * 2;
+    // let generateIdSubGroupBarge = parentGroup + 'B' + dataParsing.countItemInGroup;
+    let getLastChar = dataParsing.groupSelect.id[dataParsing.groupSelect.id.length - 1];
+    sumBarge = maxbarge - getLastChar * 2;
+    let generateIdSubGroupBarge = dataParsing.groupSelect.id.replace('C', 'B');
     let qGroup = sumBarge;
     groupData = [
       {
@@ -1002,12 +1004,16 @@ function addDataBarge(dataParsing) {
     parentSelect.nestedGroups.push(generateIdSubGroupBarge);
     groups.add(groupData);
     dataParsing.selectedGroup = generateIdSubGroupBarge;
+    dataParsing.newBarge = true;
     console.log('ififififififififififififififif');
 
-    differentTime.h = countDayBarge * 24;
-    newDateEnd = increaseDate(newDateStart, differentTime);
+    // differentTime.h = countDayBarge * 24;
+
+    // dataParsing.durationBarge = countDayBarge * 24;
+    // newDateEnd = increaseDate(newDateStart, differentTime);
     // countItemBarge = countItemBarge + 1;
   } else {
+    dataParsing.newBarge = false;
     dataParsing.selectedGroup = dataOnThisLine[0].group;
     // dataParsing.parentId = dataParsing.newItem_dropped.indexItem;
     console.log('elseelseelseelseelseelseelseelseelseelse');
@@ -1015,16 +1021,22 @@ function addDataBarge(dataParsing) {
     let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
     let convertStartToEnd = lastDataOnThisLine.end;
 
-    if (countDayBarge != NaN) {
-      newDateStart = convertStartToEnd;
-      differentTime.h = countDayBarge * 24;
-      newDateEnd = increaseDate(newDateStart, differentTime);
-    }
+    newDateStart = dataParsing.dataParent.start;
+
+    // newDateStart = convertStartToEnd;
+    // if (countDayBarge != NaN) {
+    // differentTime.h = countDayBarge * 24;
+    // dataParsing.durationBarge = countDayBarge * 24;
+    // newDateEnd = increaseDate(newDateStart, differentTime);
+    // }
   }
 
-  console.log(countDayBarge);
-  console.log('countDayBargecountDayBarge');
+  differentTime.h = countDayBarge * 24;
+  dataParsing.durationBarge = countDayBarge * 24;
+  newDateEnd = increaseDate(newDateStart, differentTime);
 
+  console.log(dataParsing);
+  console.log('dataParsing');
   items.update({
     id: dataParsing.newItem_dropped.id,
     barge: dataParsing.newItem_dropped.barge,
@@ -1051,9 +1063,121 @@ function addDataBarge(dataParsing) {
   });
 
   infoDragged(dataParsing.newItem_dropped);
-
+  updateCrane(dataParsing);
   timeline1.setSelection(-1);
   lookItemCrane(dataParsing.newItem_dropped.id);
+}
+
+function updateCrane(dataParsing) {
+  let dataOnThisLine = getAllCraneOnSameGroup(dataParsing.dataParent.group, dataParsing.selectedParent);
+
+  let currentIndex = dataOnThisLine.findIndex(x => x.id === dataParsing.parentId);
+
+  let differentTime = {};
+  differentTime.h = dataParsing.durationBarge;
+  for (let i = 0; i < dataOnThisLine.length; i++) {
+    console.log(i + ' : ' + currentIndex);
+    console.log('currentIndex');
+    if (i == currentIndex) {
+      // update data crane yang sama dengan index
+      if (dataParsing.newBarge) {
+        //pertama kli masukin bargenya baru dibuat
+        idCraneUpdate = dataOnThisLine[i].id;
+        convertNewStart = dataOnThisLine[i].start;
+        newDateEnd = increaseDate(convertNewStart, differentTime);
+        console.log(dataOnThisLine[i].id);
+        console.log('if1111111111');
+      } else {
+        //klo barge sudah ada
+        idCraneUpdate = dataOnThisLine[i].id;
+        convertNewStart = dataOnThisLine[i].start;
+        newDateEnd = increaseDate(dataOnThisLine[i].end, differentTime);
+        console.log(dataOnThisLine[i].id);
+        console.log('else1111111111');
+
+        items.update({
+          id: dataParsing.newItem_dropped.id,
+          start: dataOnThisLine[i].end,
+          end: newDateEnd
+        });
+      }
+
+      items.update({
+        id: idCraneUpdate,
+        start: convertNewStart,
+        end: newDateEnd
+      });
+    } else if (i > currentIndex) {
+      // update data crane setelah index
+      if (dataParsing.newBarge) {
+        //pertama kli masukin bargenya baru dibuat
+        idCraneUpdate = dataOnThisLine[i].id;
+        convertNewStart = dataOnThisLine[i].start;
+        newDateEnd = increaseDate(convertNewStart, differentTime);
+        console.log(dataOnThisLine[i].id);
+        console.log('if2222222222222');
+      } else {
+        //klo barge sudah ada
+        idCraneUpdate = dataOnThisLine[i].id;
+        convertNewStart = increaseDate(dataOnThisLine[i].start, differentTime);
+        newDateEnd = increaseDate(dataOnThisLine[i].end, differentTime);
+        console.log(dataOnThisLine[i].id);
+        console.log('else222222222222');
+      }
+
+      items.update({
+        id: idCraneUpdate,
+        start: convertNewStart,
+        end: newDateEnd
+      });
+    }
+  }
+
+  //   let convertNewStart = '';
+  //   let newDateEnd = '';
+  //   let idCraneUpdate = dataOnThisLine[i].id;
+  //   if (i != 0) {
+  //     //bukan data awal
+  //     let newDateStart = dataOnThisLine[i - 1].end;
+  //     convertNewStart = increaseDate(newDateStart, differentTime);
+  //     newDateEnd = increaseDate(dataOnThisLine[i].end, differentTime);
+  //   } else {
+  //     idCraneUpdate = dataParsing.parentId;
+  //     // klo data pertama
+  //     if (dataParsing.newBarge) {
+  //       convertNewStart = dataOnThisLine[i].start;
+  //       newDateEnd = increaseDate(dataOnThisLine[i].start, differentTime);
+  //     } else {
+  //       convertNewStart = dataOnThisLine[i].start;
+  //       newDateEnd = increaseDate(dataOnThisLine[i].end, differentTime);
+  //     }
+  //   }
+
+  //   console.log(idCraneUpdate);
+  //   console.log('idCraneUpdate');
+
+  updateActualVessel(dataParsing.selectedParent);
+  // let lookTheirParent = groupParent;
+  // let index = allObjItem().findIndex(x => x.group === lookTheirParent && x.className === 'actual');
+
+  // if (index > 0) {
+  //   let mapMaxDateEnd = allObjItem()
+  //     .map(function(e) {
+  //       return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : '';
+  //     })
+  //     .sort()
+  //     .reverse();
+  //   let mapMaxDateStart = allObjItem()
+  //     .map(function(e) {
+  //       return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.start : '';
+  //     })
+  //     .sort()
+  //     .reverse();
+
+  //   let maxEndDate = max_date(mapMaxDateEnd);
+  //   let maxStartDate = min_date(mapMaxDateStart);
+
+  // }
 }
 
 function showCurrentCrane(dataParsing, callback) {
@@ -1361,8 +1485,6 @@ function diffDateTime(startDate, endDate) {
 }
 
 function increaseDate(endDate, differentTime) {
-  console.log(differentTime);
-  console.log('differentTime');
   let today = moment(endDate);
   let tomorrow = moment(today)
     .add(differentTime.d, 'days')
@@ -1390,6 +1512,13 @@ function findThatParent(indexItem) {
 function filterGroup(selectedParent) {
   let itemFilter = allGroupItem().filter(function(e) {
     return e.nestedInGroup === selectedParent && e.content === 'crane' ? e : '';
+  });
+  return itemFilter;
+}
+
+function getAllCraneOnSameGroup(selectedGroup, selectedParent) {
+  let itemFilter = allObjItem().filter(function(e) {
+    return e.group === selectedGroup && e.groupParent === selectedParent ? e : '';
   });
   return itemFilter;
 }
