@@ -357,8 +357,17 @@ let options = {
     callback(item); // send back adjusted new item
     updateActualVessel(item.groupParent);
     showPopOverItem(item);
+
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
   },
   onRemove: function(item, callback) {
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
     removeConfirm(item, callback);
     // prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
     //   if (ok) {
@@ -409,8 +418,24 @@ let options2 = {
     console.log('Data Item All');
     console.log(allGroupItem());
     console.log('Group Item All');
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
   },
   onRemove: function(item, callback) {
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
     removeConfirm(item, callback);
   }
 };
+
+const container = document.getElementById('mytimeline');
+const container2 = document.getElementById('mytimeline2');
+if (container != null) {
+  var timeline1 = new vis.Timeline(container, items, groups, options);
+} else {
+  var timeline2 = new vis.Timeline(container2, items, groups, options2);
+}

@@ -1,6 +1,3 @@
-const container2 = document.getElementById('mytimeline2');
-var timeline2 = new vis.Timeline(container2, items, groups, options2);
-
 let numberOfItems = dataItem.length;
 numberOfGroups = 3;
 const allObjItem = function(indexItem) {
@@ -1138,6 +1135,26 @@ console.log('Load Awal');
 
 console.log(allGroupItem());
 console.log('Group Item All');
+
+localStorage.setItem('item_added_to_cart', 0);
+function itemAddedToCart() {
+  let userParsing = {};
+  userParsing.id = window.localStorage.getItem('id');
+  userParsing.start = window.localStorage.getItem('start');
+  userParsing.end = window.localStorage.getItem('end');
+  console.log(userParsing);
+  console.log('userLoad');
+  updateTimline(userParsing);
+}
+
+function updateTimline(userParsing) {
+  items.update({
+    id: userParsing.id,
+    start: userParsing.start,
+    end: userParsing.end
+  });
+}
+window.addEventListener('storage', itemAddedToCart);
 
 function getDataCrane() {
   var result = null;
