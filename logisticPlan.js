@@ -850,11 +850,59 @@ let getOnlyNumber = string => {
 };
 
 function showDialogOption(dataParsing, callback) {
-  let inputOption = {
-    '100 T/Hr': 'Loading Rate : 100 T/Hr',
-    '500 T/Hr': 'Loading Rate : 500 T/Hr',
-    '750 T/Hr': 'Loading Rate : 750 T/Hr'
-  };
+  // let inputOption = {
+  //   '100 T/Hr': 'Loading Rate : 100 T/Hr',
+  //   '500 T/Hr': 'Loading Rate : 500 T/Hr',
+  //   '750 T/Hr': 'Loading Rate : 750 T/Hr'
+  // };
+  let arrayDataCrane = [
+    {
+      FLEET_ID: '234',
+      FLEET_TYPE: 'crane',
+      FLEET_NAME: 'AL9',
+      LOAD_RATE: '19440,34',
+      COMPANY_ID: '7',
+      PRIORITY: '2'
+    },
+    {
+      FLEET_ID: '235',
+      FLEET_TYPE: 'crane',
+      FLEET_NAME: 'FTU',
+      LOAD_RATE: '48800,00',
+      COMPANY_ID: '4',
+      PRIORITY: '1'
+    },
+    {
+      FLEET_ID: '236',
+      FLEET_TYPE: 'crane',
+      FLEET_NAME: 'IA',
+      LOAD_RATE: '17340,00',
+      COMPANY_ID: '4',
+      PRIORITY: '1'
+    },
+    {
+      FLEET_ID: '238',
+      FLEET_TYPE: 'crane',
+      FLEET_NAME: 'IC',
+      LOAD_RATE: '23817,07',
+      COMPANY_ID: '4',
+      PRIORITY: '1'
+    },
+    {
+      FLEET_ID: '237',
+      FLEET_TYPE: 'crane',
+      FLEET_NAME: 'RD',
+      LOAD_RATE: '23817,07',
+      COMPANY_ID: '2',
+      PRIORITY: '1'
+    }
+  ];
+
+  let inputOption = {};
+  $.each(arrayDataCrane, function(index, value) {
+    inputOption[value.FLEET_ID + '/' + value.LOAD_RATE] = 'Loading Rate : ' + value.LOAD_RATE + ' T/Hr';
+  });
+
   Swal.fire({
     title: 'Select Outage Tier',
     input: 'select',
@@ -884,24 +932,30 @@ function showDialogOption(dataParsing, callback) {
 }
 
 function addSubCrane(dataParsing) {
+  console.log(dataParsing);
+  console.log('dataParsing');
   // klo masukin crane
   let dataOnThisLine = getThisGroup(dataParsing.selectedGroup, dataParsing.selectedParent);
   let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
   let convertStartToEnd = lastDataOnThisLine.end;
   let differentTime = diffDateTime(lastDataOnThisLine.start, lastDataOnThisLine.end);
   let endDateItem = increaseDate(convertStartToEnd, differentTime);
+  let idSelectedCrane = getOnlyNumber(dataParsing.parentId)[0];
+  let idLoadingRate = getOnlyNumber(dataParsing.loadingRate)[1];
 
+  console.log(getOnlyNumber(dataParsing.parentId));
+  console.log('getOnlyNumber');
   items.update({
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
     loadingRate: dataParsing.newItem_dropped.loadingRate,
     commanceLoading: convertStartToEnd,
     completeLoading: endDateItem,
-    loadingRate: dataParsing.loadingRate,
+    loadingRate: idLoadingRate,
     subgroup: 2,
     subgroupOrder: 2,
     groupChild: '',
-    parentId: dataParsing.parentId,
+    parentId: idSelectedCrane,
     groupParent: dataParsing.selectedParent,
     group: dataParsing.selectedGroup,
     start: convertStartToEnd,
