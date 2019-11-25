@@ -40,44 +40,60 @@ for (let i = 1; i < numberOfGroups; i++) {
 }
 
 for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
-  if (dataItem[indexItem].subgroup == 0) {
+  if ((dataItem[indexItem].CLASS_NAME = 'EXPECTED')) {
+    // dataItem[indexItem].VESSEL_SIZE != '' ? (dataItem[indexItem].CLASS_NAME = 'expected') : (dataItem[indexItem].CLASS_NAME = 'actual');
+    dataItem[indexItem].SUB_GROUP = 0;
+    dataItem[indexItem].SUB_ORDER_GROUP = 0;
     // klo dia parent
-    let contentText = dataItem[indexItem].className == 'actual' ? ' ' : dataItem[indexItem].name + ' ' + dataItem[indexItem].tonnage;
+    let contentText =
+      dataItem[indexItem].CLASS_NAME == 'ACTUAL' ? ' ' : dataItem[indexItem].VESSEL_NAME + ' ' + dataItem[indexItem].FORECAST_DRAFT_TONNAGE;
     items.add({
       id: indexItem,
-      vesselSize: dataItem[indexItem].vesselSize,
-      typeVessel: dataItem[indexItem].typeVessel,
-      lcStatus: dataItem[indexItem].lcStatus,
-      laycanStart: dataItem[indexItem].laycanStart,
-      laycanEnd: dataItem[indexItem].laycanEnd,
-      duration: dataItem[indexItem].duration,
-      productNo: dataItem[indexItem].productNo,
-      product: dataItem[indexItem].product,
-      tonnage: dataItem[indexItem].tonnage,
-      customer: dataItem[indexItem].customer,
-      demurageRate: dataItem[indexItem].demurageRate,
-      arriveAtTaboneo: dataItem[indexItem].arriveAtTaboneo,
-      eta: dataItem[indexItem].eta,
-      name: dataItem[indexItem].name,
-      loadingRate: dataItem[indexItem].loadingRate,
-      capacity: dataItem[indexItem].capacity,
-      className: dataItem[indexItem].className,
-      group: dataItem[indexItem].groupContent,
+      vesselSize: dataItem[indexItem].VESSEL_SIZE,
+      typeVessel: dataItem[indexItem].VESSEL_TYPE,
+      lcStatus: dataItem[indexItem].LC_STATUS,
+      laycanStart: dataItem[indexItem].LAYSTART,
+      laycanEnd: dataItem[indexItem].LAYSTOP,
+      duration: dataItem[indexItem].DURATION,
+      productNo: dataItem[indexItem].PRODUCT_ID,
+      product: dataItem[indexItem].PRODUCT_NAME,
+      tonnage: dataItem[indexItem].FORECAST_DRAFT_TONNAGE,
+      customer: dataItem[indexItem].CUSTOMER_NAME,
+      demurageRate: dataItem[indexItem].DEMURAGE_RATE,
+      arriveAtTaboneo: dataItem[indexItem].ARRIVE_TABONEO,
+      eta: dataItem[indexItem].ETA,
+      name: dataItem[indexItem].VESSEL_NAME,
+      className: dataItem[indexItem].CLASS_NAME,
+      group: dataItem[indexItem].VESSELID,
       groupChild: '',
-      groupParent: dataItem[indexItem].groupContent,
-      start: dataItem[indexItem].laycanStart, //'2019-10-21 00:00:00'
-      end: dataItem[indexItem].laycanEnd,
-      subgroup: dataItem[indexItem].subgroup,
-      subgroupOrder: dataItem[indexItem].subgroupOrder,
+      groupParent: dataItem[indexItem].VESSELID,
+      start: dataItem[indexItem].LAYSTART, //'2019-10-21 00:00:00'
+      end: dataItem[indexItem].LAYSTOP,
+      subgroup: dataItem[indexItem].SUB_GROUP,
+      subgroupOrder: dataItem[indexItem].SUB_ORDER_GROUP,
       content: contentText
     });
-  } else {
+  } else if ((dataItem[indexItem].CLASS_NAME = 'BARGE')) {
     // add child Group
     createGroup(dataItem, indexItem); // buat dulu groupnya
   }
+
+  console.log(allObjItem(indexItem));
+  console.log('allObjItem()' + indexItem);
 }
 
+// timeline1.setOptions({ start: '2019-11-25 00:00:00' });
+// timeline1.setOptions({ end: '2019-12-02 00:00:00' });
+// timeline.setOptions({
+//   height: '500px',
+//   orientation: {
+//     axis: 'top',
+//     item: 'top'
+//   }
+// });
+
 function createGroup(itemSelected, indexItem) {
+  console.log('else else');
   itemSelected = itemSelected[indexItem];
   let selectedGroup = itemSelected.groupContent;
   let groupNow = selectedGroup;
@@ -227,7 +243,7 @@ function updateActualVessel(groupParent) {
   // let newItem_dropped = timeline1.itemsData.get(item.id);
   let lookTheirParent = groupParent;
   // let allObjItem = timeline1.itemsData.get();
-  let index = allObjItem().findIndex(x => x.group === lookTheirParent && x.className === 'actual');
+  let index = allObjItem().findIndex(x => x.group === lookTheirParent && x.className === 'ACTUAL');
   if (index > 0) {
     //klo actualnya udh di hapus
     let mapMaxDateEnd = allObjItem()
@@ -299,7 +315,7 @@ function deleteItem(item) {
         statementDelet =
           e.groupChild == selectedParent.group ||
           e.group == selectedParent.group ||
-          (e.group == selectedParent.groupParent && e.className == 'actual');
+          (e.group == selectedParent.groupParent && e.className == 'ACTUAL');
       }
     }
     return statementDelet ? e : '';
@@ -313,7 +329,7 @@ function deleteItem(item) {
       firstItemClick.popover('hide');
       let itemGroup = element.groupParent;
       items.remove({ id: element.id });
-      if (element.className !== 'actual') {
+      if (element.className !== 'ACTUAL') {
         groups.remove({ id: element.group });
       }
     });
@@ -997,7 +1013,7 @@ function addDataCrane(dataParsing) {
       name: dataParsing.newItem_dropped.name,
       loadingRate: dataParsing.newItem_dropped.loadingRate,
       capacity: dataParsing.newItem_dropped.capacity,
-      className: 'actual',
+      className: 'ACTUAL',
       group: dataParsing.selectedParent,
       groupChild: '',
       groupParent: dataParsing.selectedParent,
@@ -1241,6 +1257,11 @@ function itemAddedToCart() {
   console.log(userParsing);
   console.log('userLoad');
   updateTimline(userParsing);
+}
+
+window.onbeforeunload = closingCode;
+function closingCode() {
+  return window.localStorage.clear();
 }
 
 function updateTimline(userParsing) {

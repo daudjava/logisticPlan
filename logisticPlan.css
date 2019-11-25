@@ -9,7 +9,7 @@
   margin-top: 10px;
 }
 
-.vis-item.actual {
+.vis-item.ACTUAL {
   background-color: #fc1f1f;
   border-color: darkred;
   color: black;
@@ -23,7 +23,7 @@
   height: 30px;
 }
 
-.vis-item.expected {
+.vis-item.EXPECTED {
   background-color: transparent;
   border-style: dashed !important;
   z-index: 10;

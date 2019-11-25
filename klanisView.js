@@ -1147,6 +1147,11 @@ function itemAddedToCart() {
   updateTimline(userParsing);
 }
 
+window.onbeforeunload = closingCode;
+function closingCode() {
+  return window.localStorage.clear();
+}
+
 function updateTimline(userParsing) {
   items.update({
     id: userParsing.id,
