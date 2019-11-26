@@ -77,9 +77,6 @@ for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
     // add child Group
     createGroup(dataItem, indexItem); // buat dulu groupnya
   }
-
-  console.log(allObjItem(indexItem));
-  console.log('allObjItem()' + indexItem);
 }
 
 // timeline1.setOptions({ start: '2019-11-25 00:00:00' });
@@ -578,9 +575,9 @@ function showDialogOptionBarge(dataParsing) {
 
 function selectOptionBarge(dataParsing, callback) {
   let inputOption = {
-    '200 T': '200 T',
-    '300 T': '300 T',
-    '500 T': '500 T'
+    '100000 T': '100000 T',
+    '300000 T': '300000 T',
+    '500000 T': '500000 T'
   };
   Swal.fire({
     title: 'Select Outage Tier',
@@ -611,8 +608,6 @@ function selectOptionBarge(dataParsing, callback) {
 }
 
 function addDataBarge(dataParsing) {
-  console.log(dataParsing);
-  console.log('dataParsingOnBarge');
   // belum ada barge pada crane
   let parentGroup = dataParsing.groupSelect.nestedInGroup;
 
@@ -625,8 +620,8 @@ function addDataBarge(dataParsing) {
 
   let countDayBarge = dataParsing.bargeVolume / dataParsing.loadingRate;
   let differentTime = {};
-
   if (!dataOnThisLine.length) {
+    console.log('ififififififififififififififif');
     //harus taroh di child
     // let generateIdSubGroupBarge = parentGroup + 'B' + dataParsing.countItemInGroup;
     let getLastChar = dataParsing.groupSelect.id[dataParsing.groupSelect.id.length - 1];
@@ -645,38 +640,26 @@ function addDataBarge(dataParsing) {
     groups.add(groupData);
     dataParsing.selectedGroup = generateIdSubGroupBarge;
     dataParsing.newBarge = true;
-    console.log('ififififififififififififififif');
-
-    // differentTime.h = countDayBarge * 24;
-
-    // dataParsing.durationBarge = countDayBarge * 24;
-    // newDateEnd = increaseDate(newDateStart, differentTime);
-    // countItemBarge = countItemBarge + 1;
   } else {
-    dataParsing.newBarge = false;
-    dataParsing.selectedGroup = dataOnThisLine[0].group;
-    // dataParsing.parentId = dataParsing.newItem_dropped.indexItem;
     console.log('elseelseelseelseelseelseelseelseelseelse');
+    dataParsing.newBarge = false;
 
-    let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
-    let convertStartToEnd = lastDataOnThisLine.end;
+    let dataBargeOnThisGroup = dataOnThisLine[dataOnThisLine.length - 1];
+    dataParsing.selectedGroup = dataOnThisLine[0].group;
 
-    newDateStart = dataParsing.dataParent.start;
+    // let lastDataOnThisLine = dataOnThisLine[dataOnThisLine.length - 1];
+    // let convertStartToEnd = lastDataOnThisLine.end;
 
-    // newDateStart = convertStartToEnd;
-    // if (countDayBarge != NaN) {
-    // differentTime.h = countDayBarge * 24;
-    // dataParsing.durationBarge = countDayBarge * 24;
-    // newDateEnd = increaseDate(newDateStart, differentTime);
-    // }
+    newDateStart = dataBargeOnThisGroup.end;
   }
 
   differentTime.h = countDayBarge * 24;
   dataParsing.durationBarge = countDayBarge * 24;
+
   newDateEnd = increaseDate(newDateStart, differentTime);
 
   console.log(dataParsing);
-  console.log('dataParsing');
+  console.log('dataParsingdataParsingdataParsingBeforeUpdateBarge');
   items.update({
     id: dataParsing.newItem_dropped.id,
     barge: dataParsing.newItem_dropped.barge,
@@ -711,8 +694,12 @@ function addDataBarge(dataParsing) {
 function updateCrane(dataParsing) {
   let dataOnThisLine = getAllCraneOnSameGroup(dataParsing.dataParent.group, dataParsing.selectedParent);
 
+  console.log(dataParsing.parentId);
+  console.log('dataParsing.parentId');
   let currentIndex = dataOnThisLine.findIndex(x => x.id === dataParsing.parentId);
-
+  let selectedCrane = currentIndex;
+  console.log(selectedCrane);
+  console.log('selectedCrane');
   let differentTime = {};
   differentTime.h = dataParsing.durationBarge;
   for (let i = 0; i < dataOnThisLine.length; i++) {
@@ -773,51 +760,7 @@ function updateCrane(dataParsing) {
     }
   }
 
-  //   let convertNewStart = '';
-  //   let newDateEnd = '';
-  //   let idCraneUpdate = dataOnThisLine[i].id;
-  //   if (i != 0) {
-  //     //bukan data awal
-  //     let newDateStart = dataOnThisLine[i - 1].end;
-  //     convertNewStart = increaseDate(newDateStart, differentTime);
-  //     newDateEnd = increaseDate(dataOnThisLine[i].end, differentTime);
-  //   } else {
-  //     idCraneUpdate = dataParsing.parentId;
-  //     // klo data pertama
-  //     if (dataParsing.newBarge) {
-  //       convertNewStart = dataOnThisLine[i].start;
-  //       newDateEnd = increaseDate(dataOnThisLine[i].start, differentTime);
-  //     } else {
-  //       convertNewStart = dataOnThisLine[i].start;
-  //       newDateEnd = increaseDate(dataOnThisLine[i].end, differentTime);
-  //     }
-  //   }
-
-  //   console.log(idCraneUpdate);
-  //   console.log('idCraneUpdate');
-
   updateActualVessel(dataParsing.selectedParent);
-  // let lookTheirParent = groupParent;
-  // let index = allObjItem().findIndex(x => x.group === lookTheirParent && x.className === 'actual');
-
-  // if (index > 0) {
-  //   let mapMaxDateEnd = allObjItem()
-  //     .map(function(e) {
-  //       return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.end : '';
-  //     })
-  //     .sort()
-  //     .reverse();
-  //   let mapMaxDateStart = allObjItem()
-  //     .map(function(e) {
-  //       return e.groupParent === lookTheirParent && e.subgroup !== 0 ? e.start : '';
-  //     })
-  //     .sort()
-  //     .reverse();
-
-  //   let maxEndDate = max_date(mapMaxDateEnd);
-  //   let maxStartDate = min_date(mapMaxDateStart);
-
-  // }
 }
 
 function showCurrentCrane(dataParsing, callback) {
@@ -848,8 +791,12 @@ function showCurrentCrane(dataParsing, callback) {
       // Swal.fire({
       //   html: 'You selected: ' + result.value
       // });
-      let dataId = getOnlyNumber(result.value)[0];
-      let dataLodaingRate = getOnlyNumber(result.value)[1];
+      let getArrRate = getOnlyNumber(result.value);
+      let dataId = getArrRate[0];
+      let dataLodaingRate = getArrRate[1];
+      if (dataLodaingRate[2]) {
+        dataLodaingRate = dataLodaingRate + '.' + getArrRate[2];
+      }
       console.log(result.value);
       console.log('result');
       dataParsing.parentId = dataId;
@@ -862,7 +809,8 @@ function showCurrentCrane(dataParsing, callback) {
 }
 
 let getOnlyNumber = string => {
-  return string.match(/\d+/g).map(Number);
+  // return string.match(/\d+/g).map(Number);
+  return string.match(/\d+/g);
 };
 
 function showDialogOption(dataParsing, callback) {
@@ -956,11 +904,18 @@ function addSubCrane(dataParsing) {
   let convertStartToEnd = lastDataOnThisLine.end;
   let differentTime = diffDateTime(lastDataOnThisLine.start, lastDataOnThisLine.end);
   let endDateItem = increaseDate(convertStartToEnd, differentTime);
-  let idSelectedCrane = getOnlyNumber(dataParsing.parentId)[0];
-  let idLoadingRate = getOnlyNumber(dataParsing.loadingRate)[1];
 
-  console.log(getOnlyNumber(dataParsing.parentId));
-  console.log('getOnlyNumber');
+  let arrLoadingRate = getOnlyNumber(dataParsing.loadingRate);
+  console.log(arrLoadingRate);
+  console.log('getOnlyNumber(dataParsing.parentId)');
+  // let idSelectedCrane = getOnlyNumber(dataParsing.parentId)[0];
+  let craneId = arrLoadingRate[0];
+  let idLoadingRate = arrLoadingRate[1];
+  if (arrLoadingRate[2]) {
+    let comaRate = arrLoadingRate[2];
+    idLoadingRate = idLoadingRate + '.' + comaRate;
+  }
+
   items.update({
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
@@ -971,12 +926,13 @@ function addSubCrane(dataParsing) {
     subgroup: 2,
     subgroupOrder: 2,
     groupChild: '',
-    parentId: idSelectedCrane,
+    parentId: dataParsing.parentId,
     groupParent: dataParsing.selectedParent,
     group: dataParsing.selectedGroup,
+    craneId: craneId,
     start: convertStartToEnd,
     end: endDateItem,
-    content: dataParsing.newItem_dropped.content + ' ' + dataParsing.loadingRate
+    content: dataParsing.newItem_dropped.content + ' ' + idLoadingRate
   });
 
   updateActualVessel(dataParsing.selectedParent);
@@ -1027,7 +983,8 @@ function addDataCrane(dataParsing) {
     dataParsing.parentId = maxIdForNewItem;
     maxIdForNewItem++;
   }
-
+  console.log(dataParsing);
+  console.log('dataParsing');
   if (!dataParsing.groupSelect.isSubGroup) {
     // klo dia taroh di parent
     let generateIdSubGroupCrane = dataParsing.selectedGroup + 'C' + dataParsing.countItemInGroup;
@@ -1047,22 +1004,30 @@ function addDataCrane(dataParsing) {
     dataParsing.selectedGroup = generateIdSubGroupCrane;
     // countItemCrane = countItemCrane + 1; // berkurang 2
   }
+  let arrLoadingRate = getOnlyNumber(dataParsing.loadingRate);
+  let craneId = arrLoadingRate[0];
+  let loadingRate = arrLoadingRate[1];
+  if (arrLoadingRate[2]) {
+    let comaRate = arrLoadingRate[2];
+    loadingRate = loadingRate + '.' + comaRate;
+  }
 
   items.update({
     id: dataParsing.newItem_dropped.id,
     loadToVessel: dataParsing.newItem_dropped.loadToVessel,
-    loadingRate: dataParsing.loadingRate,
+    loadingRate: loadingRate,
     commanceLoading: dataParsing.newItem_dropped.commanceLoading,
     completeLoading: dataParsing.newItem_dropped.completeLoading,
     group: dataParsing.selectedGroup,
     groupChild: '',
     parentId: dataParsing.parentId,
     groupParent: dataParsing.selectedParent,
+    craneId: craneId,
     start: dataParsing.dataParent.start,
     end: dataParsing.dataParent.end,
     subgroup: 1,
     subgroupOrder: 1,
-    content: dataParsing.newItem_dropped.content + ' ' + dataParsing.loadingRate
+    content: dataParsing.newItem_dropped.content + ' ' + loadingRate
   });
 
   infoDragged(dataParsing.newItem_dropped);
@@ -1205,7 +1170,7 @@ function findThatParent(indexItem) {
 }
 function filterGroup(selectedParent) {
   let itemFilter = allGroupItem().filter(function(e) {
-    return e.nestedInGroup === selectedParent && e.content === 'crane' ? e : '';
+    return e.nestedInGroup == selectedParent && e.content == 'crane' ? e : '';
   });
   return itemFilter;
 }
