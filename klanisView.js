@@ -442,44 +442,41 @@ function showPopOverItem(itemSelected) {
 let getMaxId = numberOfItems;
 let itemAddCrane = 1;
 let itemAddBarge = 1;
-let maxIdForNewItem = allObjItem().reduce((max, item) => (item.id > max ? item.id : max), allObjItem()[0].id) + 1;
+// let maxIdForNewItem = allObjItem().reduce((max, item) => (item.id > max ? item.id : max), allObjItem()[0].id) + 1;
 // const maxIdForNewItem = allObjItem().reduce((acc, pilot) => acc + pilot.id, 0);
 function handleDragStart(event) {
-  let sg = 0;
-  let sgo = 0;
-  let color = event.target.attributes['data-id'].value;
-  event.dataTransfer.effectAllowed = 'move';
-
-  if (color == 'crane') {
-    sg = itemAddCrane;
-    sgo = itemAddCrane;
-  } else {
-    sg = itemAddBarge;
-    sgo = itemAddBarge;
-  }
-
-  let item = {
-    id: maxIdForNewItem,
-    type: 'range',
-    className: color,
-    subgroup: sg,
-    subgroupOrder: sgo,
-    groupParent: 0,
-    domObj: event.target,
-    content: event.target.innerHTML.trim(),
-    editable: { updateTime: true, updateGroup: false, remove: true }
-  };
-
-  event.target.id = maxIdForNewItem;
-
-  event.dataTransfer.setData('text', JSON.stringify(item));
-  if (color == 'crane') {
-    itemAddCrane = itemAddCrane + 1;
-  } else {
-    itemAddBarge = itemAddBarge + 1;
-  }
-  getMaxId = getMaxId + 1;
-  maxIdForNewItem = maxIdForNewItem + 1;
+  console.log('dragStart');
+  // let sg = 0;
+  // let sgo = 0;
+  // let color = event.target.attributes['data-id'].value;
+  // event.dataTransfer.effectAllowed = 'move';
+  // if (color == 'crane') {
+  //   sg = itemAddCrane;
+  //   sgo = itemAddCrane;
+  // } else {
+  //   sg = itemAddBarge;
+  //   sgo = itemAddBarge;
+  // }
+  // let item = {
+  //   id: maxIdForNewItem,
+  //   type: 'range',
+  //   className: color,
+  //   subgroup: sg,
+  //   subgroupOrder: sgo,
+  //   groupParent: 0,
+  //   domObj: event.target,
+  //   content: event.target.innerHTML.trim(),
+  //   editable: { updateTime: true, updateGroup: false, remove: true }
+  // };
+  // event.target.id = maxIdForNewItem;
+  // event.dataTransfer.setData('text', JSON.stringify(item));
+  // if (color == 'crane') {
+  //   itemAddCrane = itemAddCrane + 1;
+  // } else {
+  //   itemAddBarge = itemAddBarge + 1;
+  // }
+  // getMaxId = getMaxId + 1;
+  // maxIdForNewItem = maxIdForNewItem + 1;
 }
 
 var counterDropCrane = (function() {
@@ -1123,12 +1120,35 @@ function countItemInsideTheGroup(selectedParent) {
   return itemInsideVessel;
 }
 
-let itemCrane = document.getElementById('dropCrane');
-let itemBarge = document.getElementById('dropBarge');
+// let itemCrane = document.getElementById('dropCrane');
+let itemBarge = document.getElementById('barge1');
+let itemBarge2 = document.getElementById('barge2');
+// let itemBarge = document.getElementsByClassName('bargeQueue');
+// let allBarge = document.querySelector(".example");
+
 // itemCrane.addEventListener('dragstart', handleDragStart.bind(this), false);
-// itemBarge.addEventListener('dragstart', handleDragStart.bind(this), false);
+itemBarge.addEventListener('dragstart', handleDragStartBarge.bind(this), false);
 // itemCrane.addEventListener('dragend', handleDragEnd.bind(this), false);
-// itemBarge.addEventListener('dragend', handleDragEnd.bind(this), false);
+itemBarge.addEventListener('dragend', handleDragEndBarge.bind(this), false);
+itemBarge2.addEventListener('dragend', handleDragEndBarge.bind(this), false);
+
+function handleDragStartBarge(event) {
+  console.log(event.dataTransfer.dropEffect);
+  console.log('dragStart');
+}
+
+function handleDragEndBarge(event) {
+  console.log('dragENd');
+  if (event.dataTransfer.dropEffect !== 'none') {
+    // $(this).remove();
+    $('#barge1')
+      .draggable()
+      .remove();
+    // $('#barge1')
+    //   .draggable()
+    //   .css('position', 'absolute');
+  }
+}
 
 console.log(allObjItem());
 console.log('Load Awal');

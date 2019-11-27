@@ -37,10 +37,38 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet" />
   </head>
-
+  <style>
+    #div1,
+    #div2 {
+      float: left;
+      width: 100px;
+      height: 35px;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid black;
+    }
+  </style>
   <body>
     <div class="container-fluid content welcome-bg">
       <div class="welcome">
+        <h1 style="text-align:center;color:black;">
+          Queue List Barge
+        </h1>
+        <div class="container horizontal-scrollable">
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item bargeQueue" id="barge1" draggable="true">
+              Barge 1
+            </li>
+            <li class="list-group-item bargeQueue" id="barge2" draggable="true">
+              Barge 2
+            </li>
+            <li draggable="true" class="list-group-item bargeQueue" id="barge3">
+              Barge 3
+            </li>
+          </ul>
+        </div>
+        <br />
+        <br />
         <div id="mytimeline2">
           <div class="textLeftTimeline">
             <strong>Klanis View</strong>
@@ -51,22 +79,24 @@
     </div>
 
     <!-- Scripts -->
+    <script src="dist/vis-timeline-graph2d.min.js"></script>
     <script src="./jquery-3.4.1.min.js"></script>
     <script src="./bootstrap.bundle.min.js"></script>
     <script src="./jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="./custom.js"></script>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 
-    <script src="dist/vis-timeline-graph2d.min.js"></script>
     <script type="text/javascript" src="variableData.js"></script>
     <script type="text/javascript" src="klanisView.js"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"
     ></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   </body>
 </html>

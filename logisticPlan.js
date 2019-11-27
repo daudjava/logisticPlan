@@ -1210,6 +1210,10 @@ itemBarge.addEventListener('dragstart', handleDragStart.bind(this), false);
 itemCrane.addEventListener('dragend', handleDragEnd.bind(this), false);
 itemBarge.addEventListener('dragend', handleDragEnd.bind(this), false);
 
+$('.saveBtv').click(function() {
+  console.log(allObjItem());
+});
+
 console.log(allObjItem());
 console.log('Load Awal');
 
