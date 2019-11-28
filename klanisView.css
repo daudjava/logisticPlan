@@ -1,0 +1,240 @@
+/* create a custom sized dot at the bottom of the red item */
+/* create a custom sized dot at the bottom of the red item */
+/* create a custom sized dot at the bottom of the red item */
+/* tinggi setiap baris */
+.vis-timeline {
+  border: 2px solid rgba(153, 149, 149, 0.699);
+  font-family: purisa, "comic sans", cursive;
+  font-size: 10pt;
+  margin-top: 10px;
+}
+
+.vis-item.ACTUAL {
+  background-color: #fc1f1f;
+  border-color: darkred;
+  color: black;
+  text-align: right;
+  font-family: monospace;
+  -webkit-box-shadow: 0 0 5px gray;
+          box-shadow: 0 0 5px gray;
+  margin-top: 4px;
+  font-size: 12pt;
+  pointer-events: none;
+  height: 30px;
+}
+
+.vis-item.EXPECTED {
+  background-color: transparent;
+  border-style: dashed !important;
+  z-index: 10;
+  text-align: center;
+  border-color: black;
+  height: 40px;
+  margin-top: 0px;
+  padding-top: 5px;
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.vis-item.crane {
+  background-color: rgba(0, 47, 255, 0.671);
+  border-color: #002fff;
+  color: black;
+  text-align: center;
+  font-family: monospace;
+  font-size: 10pt;
+  -webkit-box-shadow: 0 0 5px gray;
+          box-shadow: 0 0 5px gray;
+}
+
+.vis-item.barge {
+  background-color: rgba(238, 255, 0, 0.671);
+  border-color: #ffd900;
+  color: black;
+  text-align: center;
+  font-family: monospace;
+  font-size: 10pt;
+  -webkit-box-shadow: 0 0 5px gray;
+          box-shadow: 0 0 5px gray;
+}
+
+.vis-label .vis-inner {
+  height: auto;
+  width: auto;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+}
+
+.vis-item .vis-item-overflow {
+  background-color: rgba(238, 255, 0, 0.671);
+  border-color: #ffd900;
+  color: black;
+  text-align: center;
+  font-family: monospace;
+  font-size: 10pt;
+  -webkit-box-shadow: 0 0 5px gray;
+          box-shadow: 0 0 5px gray;
+}
+
+.vis-nested-group {
+  background-color: transparent;
+}
+
+.vis-group-level-unknown-but-gte1 {
+  border: 1px solid #757575;
+}
+
+.vis-labelset .vis-label.red {
+  background-color: transparent;
+}
+
+#dropCrane {
+  position: absolute;
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+#dropBarge {
+  position: absolute;
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+#mytimeline {
+  width: 100%;
+  position: relative;
+}
+
+.textLeftTimeline {
+  position: absolute;
+  top: -28px;
+  left: 0;
+  margin-right: 70px;
+  z-index: 9999;
+  font-size: 25px;
+}
+
+.menuVisTimeline {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 70px;
+  z-index: 9999;
+}
+
+.grid-container {
+  display: -ms-grid;
+  display: grid;
+  padding: 0px;
+  row-gap: 5px;
+  -webkit-column-gap: 90px;
+          column-gap: 90px;
+  margin-right: 20px;
+  margin-top: -25px;
+}
+
+.grid-item {
+  text-align: center;
+}
+
+.item1 {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1 / span 2;
+  -ms-grid-row: 1;
+  grid-row: 1;
+}
+
+li.item {
+  list-style: none;
+  width: 100px;
+  color: #1a1a1a;
+  background-color: #d5ddf6;
+  border: 1px solid #97b0f8;
+  border-radius: 2px;
+  margin-bottom: 5px;
+  padding: 5px 12px;
+}
+
+li.item:before {
+  font-family: Arial, sans-serif;
+  display: inline-block;
+  font-size: inherit;
+  cursor: move;
+}
+
+.items-panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.popover {
+  max-width: 100%;
+  border-radius: 6px;
+  border: none;
+  -webkit-box-shadow: 0 0 6px 1px #eee;
+          box-shadow: 0 0 6px 1px #eee;
+  border: 1px solid rgba(168, 168, 168, 0.8);
+}
+
+#div-popup-box {
+  font-size: 14px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown a:hover {
+  background-color: #ddd;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.show {
+  display: block;
+}
+
+.swal2-container {
+  z-index: 2060;
+}
+
+.linkKlanis {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  margin-right: 0px;
+  z-index: 9999;
+}
+
+.saveBtv {
+  bottom: -23px;
+  left: 0px;
+  margin-left: 20px;
+  position: absolute;
+  z-index: 9999;
+  font-size: 25px;
+}
+/*# sourceMappingURL=klanisView.css.map */

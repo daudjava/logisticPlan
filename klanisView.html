@@ -30,7 +30,7 @@
 
     <script src="sweetalert2.all.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="logisticPlan.css" />
+    <link rel="stylesheet" type="text/css" href="klanisView.css" />
 
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css" />
@@ -55,17 +55,7 @@
           Queue List Barge
         </h1>
         <div class="container horizontal-scrollable">
-          <ul class="list-group list-group-horizontal">
-            <li class="list-group-item bargeQueue" id="barge1" draggable="true">
-              Barge 1
-            </li>
-            <li class="list-group-item bargeQueue" id="barge2" draggable="true">
-              Barge 2
-            </li>
-            <li draggable="true" class="list-group-item bargeQueue" id="barge3">
-              Barge 3
-            </li>
-          </ul>
+          <ul class="list-group list-group-horizontal" id="bargeList"></ul>
         </div>
         <br />
         <br />

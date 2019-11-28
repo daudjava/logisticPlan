@@ -385,8 +385,10 @@ let options2 = {
   showCurrentTime: true,
   stack: true,
   stackSubgroups: true,
-  start: '2019-10-21 00:00', //'2019-10-21 00:00:00'
-  end: '2019-10-31 12:00',
+  // start: '2019-10-21 00:00', //'2019-10-21 00:00:00'
+  // end: '2019-10-31 12:00',
+  start: today,
+  end: nextWeek,
   editable: true,
   verticalScroll: true,
   zoomKey: 'ctrlKey',

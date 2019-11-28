@@ -1121,32 +1121,46 @@ function countItemInsideTheGroup(selectedParent) {
 }
 
 // let itemCrane = document.getElementById('dropCrane');
-let itemBarge = document.getElementById('barge1');
-let itemBarge2 = document.getElementById('barge2');
 // let itemBarge = document.getElementsByClassName('bargeQueue');
 // let allBarge = document.querySelector(".example");
 
 // itemCrane.addEventListener('dragstart', handleDragStart.bind(this), false);
-itemBarge.addEventListener('dragstart', handleDragStartBarge.bind(this), false);
 // itemCrane.addEventListener('dragend', handleDragEnd.bind(this), false);
-itemBarge.addEventListener('dragend', handleDragEndBarge.bind(this), false);
-itemBarge2.addEventListener('dragend', handleDragEndBarge.bind(this), false);
 
+// function getDataBarge() {}
+window.addEventListener('storage', getDataBarge);
+
+// let countDataParse = getDataBarge();
+
+// console.log(userParsing);
+// console.log('userParsing');
 function handleDragStartBarge(event) {
   console.log(event.dataTransfer.dropEffect);
   console.log('dragStart');
 }
 
-function handleDragEndBarge(event) {
-  console.log('dragENd');
+function handleDragEndBarge(event, index) {
+  let allArrData = getDataBarge();
+  let bargeId = event.target.id;
+  let indexNo = $('#' + bargeId).data('no');
+  let userParsing = allArrData[indexNo];
+  console.log(allArrData);
+  console.log('allArrData');
+  console.log(userParsing.newDateEnd);
+  console.log('newDateEnd');
+
   if (event.dataTransfer.dropEffect !== 'none') {
     // $(this).remove();
-    $('#barge1')
+    $('#' + bargeId)
       .draggable()
       .remove();
     // $('#barge1')
     //   .draggable()
     //   .css('position', 'absolute');
+    // addOnlyBarge(dataBarge);
+    // itemAddedToCart();
+
+    updateTimline(userParsing);
   }
 }
 
@@ -1157,14 +1171,30 @@ console.log(allGroupItem());
 console.log('Group Item All');
 
 localStorage.setItem('item_added_to_cart', 0);
-function itemAddedToCart() {
-  let userParsing = {};
-  userParsing.id = window.localStorage.getItem('id');
-  userParsing.start = window.localStorage.getItem('start');
-  userParsing.end = window.localStorage.getItem('end');
-  console.log(userParsing);
-  console.log('userLoad');
-  updateTimline(userParsing);
+function getDataBarge() {
+  if (JSON.parse(localStorage.getItem('dataParsing')) != null) {
+    let userParsing = JSON.parse(localStorage.getItem('dataParsing'));
+    let countBarge = userParsing.length;
+    console.log(userParsing.length);
+    console.log('getDataBarge');
+    createObjBarge(countBarge);
+    return userParsing;
+  } else {
+    return;
+  }
+}
+
+function createObjBarge(countBarge) {
+  $('#bargeList').empty();
+  for (let i = 0; i < countBarge; i++) {
+    let indexNo = i;
+    let htmlBarge =
+      '<li class="list-group-item bargeQueue" id="barge' + indexNo + '" draggable="true" data-no="' + indexNo + '">Barge' + (indexNo + 1) + '</li>';
+    $('#bargeList').append(htmlBarge);
+    let itemBarge = document.getElementById('barge' + indexNo);
+    itemBarge.addEventListener('dragstart', handleDragStartBarge.bind(this), false);
+    itemBarge.addEventListener('dragend', handleDragEndBarge.bind(this), false);
+  }
 }
 
 window.onbeforeunload = closingCode;
@@ -1172,14 +1202,35 @@ function closingCode() {
   return window.localStorage.clear();
 }
 
-function updateTimline(userParsing) {
+function updateTimline(stringParsing) {
+  let dataParsing = stringParsing.dataParsing;
+  console.log(dataParsing);
+  console.log('dataParsing');
   items.update({
-    id: userParsing.id,
-    start: userParsing.start,
-    end: userParsing.end
+    id: dataParsing.newItem_dropped.id,
+    barge: dataParsing.newItem_dropped.barge,
+    capacity: dataParsing.bargeVolume + ' T',
+    estimationReady: dataParsing.newItem_dropped.estimationReady,
+    cycle: dataParsing.newItem_dropped.cycle,
+    position: dataParsing.newItem_dropped.position,
+    product: dataParsing.newItem_dropped.product,
+    availableAtKlanis: dataParsing.newItem_dropped.availableAtKlanis,
+    arriveAtTaboneo: dataParsing.newItem_dropped.arriveAtTaboneo,
+    loadToVessel: dataParsing.newItem_dropped.loadToVessel,
+    remainingCargo: dataParsing.newItem_dropped.remainingCargo,
+    commanceLoading: dataParsing.newItem_dropped.commanceLoading,
+    completeLoading: dataParsing.newItem_dropped.completeLoading,
+    subgroup: 2,
+    subgroupOrder: 2,
+    group: 1,
+    groupChild: dataParsing.newItem_dropped.group,
+    groupParent: dataParsing.selectedParent,
+    parentId: parseInt(dataParsing.parentId),
+    start: stringParsing.newDateStart,
+    end: stringParsing.newDateEnd,
+    content: dataParsing.topParent.product + ' ' + dataParsing.bargeVolume + ' T'
   });
 }
-window.addEventListener('storage', itemAddedToCart);
 
 function getDataCrane() {
   var result = null;

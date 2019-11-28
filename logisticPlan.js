@@ -606,7 +606,7 @@ function selectOptionBarge(dataParsing, callback) {
     }
   });
 }
-
+let arrayObjBarge = [];
 function addDataBarge(dataParsing) {
   // belum ada barge pada crane
   let parentGroup = dataParsing.groupSelect.nestedInGroup;
@@ -684,11 +684,26 @@ function addDataBarge(dataParsing) {
     end: newDateEnd,
     content: dataParsing.topParent.product + ' ' + dataParsing.bargeVolume + ' T'
   });
+  let objCraneParse = {};
+  objCraneParse.dataParsing = dataParsing;
+  objCraneParse.newDateStart = newDateStart;
+  objCraneParse.newDateEnd = newDateEnd;
+  arrayObjBarge.push(objCraneParse);
+  parseBargeObj(arrayObjBarge);
 
   infoDragged(dataParsing.newItem_dropped);
   updateCrane(dataParsing);
   timeline1.setSelection(-1);
   lookItemCrane(dataParsing.newItem_dropped.id);
+}
+
+function parseBargeObj(arrayObjBarge) {
+  console.log(arrayObjBarge);
+  console.log('arrayObjBarge');
+  localStorage.setItem('item_added_to_cart', 1);
+  localStorage.setItem('dataParsing', JSON.stringify(arrayObjBarge));
+  // localStorage.setItem('start', newDateStart);
+  // localStorage.setItem('end', newDateEnd);
 }
 
 function updateCrane(dataParsing) {
