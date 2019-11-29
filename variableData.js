@@ -295,7 +295,7 @@ let nextWeek = moment()
   .day(9) // set 8 klo mau 1 minggu
   .format('YYYY-MM-DD hh:mm:ss');
 
-let options = {
+let taboneoViewOptions = {
   height: '99%',
   min: new Date(2019, 9, 1), // lower limit of visible range
   max: new Date(2019, 12, 1), // upper limit of visible range
@@ -376,7 +376,7 @@ let options = {
     // });
   }
 };
-let options2 = {
+let kelanisViewOptions = {
   min: new Date(2019, 9, 1), // lower limit of visible range
   max: new Date(2019, 12, 1), // upper limit of visible range
   // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
@@ -411,7 +411,7 @@ let options2 = {
   onMove: function(item, callback) {
     //when resize item
     callback(item); // send back adjusted new item
-    updateActualVessel(item.groupParent);
+    // updateActualVessel(item.groupParent);
     showPopOverItem(item);
 
     console.log(timeline2.itemsData.get());
@@ -435,7 +435,169 @@ let options2 = {
 const container = document.getElementById('mytimeline');
 const container2 = document.getElementById('mytimeline2');
 if (container != null) {
-  var timeline1 = new vis.Timeline(container, items, groups, options);
+  var timeline1 = new vis.Timeline(container, items, groups, taboneoViewOptions);
 } else {
-  var timeline2 = new vis.Timeline(container2, items, groups, options2);
+  var timeline2 = new vis.Timeline(container2, items, groups, kelanisViewOptions);
+}
+
+function alertInfo(item) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'Data crane lebih dari 3!'
+    // footer: '<a href>Why do I have this issue?</a>'
+  });
+}
+
+function showPopOverItem(itemSelected) {
+  let selectedIdItem = itemSelected.id;
+  let selectedContentItem = itemSelected.content;
+  let selectedStartItem = itemSelected.start;
+  let selectedEndItem = itemSelected.end;
+  // let stringClass = target.attributes.class.nodeValue;
+  // let itemDom = $("." + stringClass);
+  let firstItemClick = $('.vis-item-overflow');
+  // let secondItemClick = $(".vis-drag-center");
+
+  firstItemClick.on('click', function(e) {
+    firstItemClick.not(this).popover('hide');
+  });
+  firstItemClick
+    .popover({
+      placement: 'bottom',
+      html: true,
+      sanitize: false,
+      title: '<h3><strong>Item Information</strong> <a href="#" class="close" data-dismiss="alert" style="margin-top:-4px;">&times;</a></h3>',
+      // content: $("#myForm").html()
+      content:
+        '<div class="panel panel-primary" id="div-popup-box">' +
+        '<div class="panel-body">' +
+        '<div class="form-inline row" style="margin-bottom:5px;">' +
+        '<label for="colFormLabelLg" class="col-auto col-form-label col-form-label-sm font-weight-bold">Name :</label>' +
+        '<div class="col-auto">' +
+        '<input type="hidden" class="form-control" id="itemId" value="' +
+        '"/>' +
+        '<label class="form-check-label" id="itemName">' +
+        '</label>' +
+        '</div>' +
+        '</div>' +
+        '<div class="row">' +
+        '<div class="col-md-6">' +
+        '<div class="form-group">' +
+        '<label class="control-label">Start Date In Item</label>' +
+        '<input type="text" class="form-control" id="txtStartItem" readonly/>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-md-6">' +
+        '<div class="form-group">' +
+        '<label class="control-label">End Date In Item </label>' +
+        '<input type="text" class="form-control" id="txtEndItem" readonly/>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="row">' +
+        '<div class="col-sm-6">' +
+        '<label class="control-label font-weight-bold">Custom Start Date</label>' +
+        '<input type="text" class="form-control datetimepicker-input" id="edtStartDate" data-toggle="datetimepicker" data-target="#edtStartDate"/>' +
+        '</div>' +
+        '<div class="col-sm-6">' +
+        '<label class="control-label font-weight-bold">Custom End Date</label>' +
+        '<input type="text" class="form-control datetimepicker-input" id="edtEndDate" data-toggle="datetimepicker" data-target="#edtEndDate"/>' +
+        '</div>' +
+        '</div>' +
+        '<hr>' +
+        '<div class="row justify-content-between" style="margin-top:5px;margin-bottom:3px;margin-left:0px;">' +
+        '<div class="col-4">' +
+        '<input type="submit" class="btn btn-danger btn-lg" value="Cancel" />' +
+        '</div>' +
+        '<div class="col-4">' +
+        '<input type="submit" class="btn btn-primary btn-lg" value="Submit" />' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
+    })
+    .on('shown.bs.popover', function() {
+      $('#itemId').val(selectedIdItem);
+      $('#itemName').empty();
+      $('#itemName').append(selectedContentItem);
+      $('#txtStartItem').val(selectedStartItem);
+      $('#txtEndItem').val(selectedEndItem);
+      $('#edtStartDate').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        sideBySide: true
+        // date: moment(selectedStartItem, "YYYY-MM-DD HH:mm:ss")
+      });
+      $('#edtEndDate').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        sideBySide: true
+        // date: moment(selectedEndItem, "YYYY-MM-DD HH:mm:ss")
+      });
+      $('#edtStartDate').datetimepicker('date', moment(selectedStartItem, 'YYYY-MM-DD HH:mm:ss'));
+      $('#edtEndDate').datetimepicker('date', moment(selectedEndItem, 'YYYY-MM-DD HH:mm:ss'));
+    })
+    .on('click', function() {
+      $('.close').on('click', function() {
+        firstItemClick.popover('hide');
+        timeline1.setSelection(-1);
+      });
+      $('.btn-danger').click(function() {
+        firstItemClick.popover('hide');
+        timeline1.setSelection(-1);
+      });
+      $('.btn-primary').click(function() {
+        firstItemClick.popover('hide');
+        timeline1.setSelection(-1);
+        let newStartDate = $('#edtStartDate').val();
+        let newEndDate = $('#edtEndDate').val();
+        let itemName = $('#itemName').text();
+        let itemId = $('#itemId').val();
+        let objUpdate = {
+          id: itemId,
+          content: itemName,
+          start: newStartDate,
+          end: newEndDate
+        };
+        // $("#result").after("form submitted by " + JSON.stringify(objUpdate));
+        items.update(objUpdate);
+        updateActualVessel(objUpdate.groupParent);
+      });
+    });
+
+  firstItemClick.click(function(e) {
+    e.stopPropagation();
+  });
+}
+
+function removeConfirm(item, callback) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then(result => {
+    if (result.value) {
+      Swal.fire('Deleted!', item.name + ' has been deleted.', 'success');
+      deleteItem(item);
+
+      callback(item); // send back adjusted new item
+
+      updateActualVessel(item.groupParent);
+
+      $('div.popover:visible').popover('hide');
+
+      console.log(allObjItem());
+      console.log('allObjItemAfterDelet');
+    } else {
+      callback(null); // cancel deletion
+    }
+  });
+}
+
+function parseBargeObj(arrayObjBarge) {
+  localStorage.setItem('item_added_to_cart', 1);
+  localStorage.setItem('dataParsing', JSON.stringify(arrayObjBarge));
 }

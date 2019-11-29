@@ -9,45 +9,6 @@
   margin-top: 10px;
 }
 
-.vis-item.ACTUAL {
-  background-color: #fc1f1f;
-  border-color: darkred;
-  color: black;
-  text-align: right;
-  font-family: monospace;
-  -webkit-box-shadow: 0 0 5px gray;
-          box-shadow: 0 0 5px gray;
-  margin-top: 4px;
-  font-size: 12pt;
-  pointer-events: none;
-  height: 30px;
-}
-
-.vis-item.EXPECTED {
-  background-color: transparent;
-  border-style: dashed !important;
-  z-index: 10;
-  text-align: center;
-  border-color: black;
-  height: 40px;
-  margin-top: 0px;
-  padding-top: 5px;
-  pointer-events: none;
-  font-size: 12px;
-  line-height: 20px;
-}
-
-.vis-item.crane {
-  background-color: rgba(0, 47, 255, 0.671);
-  border-color: #002fff;
-  color: black;
-  text-align: center;
-  font-family: monospace;
-  font-size: 10pt;
-  -webkit-box-shadow: 0 0 5px gray;
-          box-shadow: 0 0 5px gray;
-}
-
 .vis-item.barge {
   background-color: rgba(238, 255, 0, 0.671);
   border-color: #ffd900;
@@ -60,7 +21,7 @@
 }
 
 .vis-label .vis-inner {
-  height: auto;
+  height: 120px;
   width: auto;
   padding-right: 8px !important;
   padding-left: 8px !important;

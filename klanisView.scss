@@ -25,40 +25,6 @@ $border_color_4: rgb(255, 217, 0);
   font-size: 10pt;
   margin-top: 10px;
 }
-.vis-item.ACTUAL {
-  background-color: $background_color_1;
-  border-color: $border_color_1;
-  color: $color_1;
-  text-align: right;
-  font-family: $font_family_2;
-  box-shadow: 0 0 5px gray;
-  margin-top: 4px;
-  font-size: 12pt;
-  pointer-events: none;
-  height: 30px;
-}
-.vis-item.EXPECTED {
-  background-color: $background_color_2;
-  border-style: dashed !important;
-  z-index: 10;
-  text-align: center;
-  border-color: $border_color_2;
-  height: 40px;
-  margin-top: 0px;
-  padding-top: 5px;
-  pointer-events: none;
-  font-size: 12px;
-  line-height: 20px;
-}
-.vis-item.crane {
-  background-color: $background_color_3;
-  border-color: $border_color_3;
-  color: $color_1;
-  text-align: center;
-  font-family: $font_family_2;
-  font-size: 10pt;
-  box-shadow: 0 0 5px gray;
-}
 .vis-item.barge {
   background-color: $background_color_4;
   border-color: $border_color_4;
@@ -70,7 +36,7 @@ $border_color_4: rgb(255, 217, 0);
 }
 .vis-label {
   .vis-inner {
-    height: auto;
+    height: 120px;
     width: auto;
     padding-right: 8px !important;
     padding-left: 8px !important;
