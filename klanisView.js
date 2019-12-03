@@ -15,9 +15,11 @@ console.log(allGroupItem());
 console.log('Group Item All');
 
 let userParsing = JSON.parse(localStorage.getItem('dataParsing'));
-let countBarge = userParsing.length;
+let countBarge = userParsing != null ? userParsing.length : false;
 if (countBarge) {
   createObjBarge(countBarge);
+} else {
+  // close();
 }
 
 //ketika ada perubahan data
@@ -50,40 +52,52 @@ function createObjBarge(countBarge) {
 }
 
 function handleDragStartBarge(event) {
-  console.log(event.dataTransfer.dropEffect);
-  console.log('dragStart');
-}
-
-function handleDragEndBarge(event, index) {
   let allArrData = getDataBarge();
   let bargeId = event.target.id;
   let indexNo = $('#' + bargeId).data('no');
   let userParsing = allArrData[indexNo];
+  let dataParsing = userParsing.dataParsing;
 
-  let selectedGroup = userParsing.dataParsing.newItem_dropped.group; // tempat item tersebut diletakan;
-  let indexItem = findIndexItem(selectedGroup);
+  console.log(dataParsing);
+  console.log('userParsingDataStart');
+  let item = {
+    id: dataParsing.newItem_dropped.id,
+    domObj: event.target,
+    content: event.target.innerHTML.trim(),
+    start: dataParsing.newItem_dropped.start,
+    end: dataParsing.newItem_dropped.end
+  };
+
+  console.log(item);
+  console.log('itemitemitemitemitem');
+  event.dataTransfer.setData('text', JSON.stringify(item));
+}
+
+function handleDragEndBarge(event) {
+  let allArrData = getDataBarge();
+  let bargeId = event.target.id;
+  let indexNo = $('#' + bargeId).data('no');
+  let userParsing = allArrData[indexNo];
+  userParsing.groupSelected = 1;
+
+  console.log(event);
+  console.log('allArrData');
+  // let selectedGroup = userParsing.dataParsing.newItem_dropped.group; // tempat item tersebut diletakan;
+  // let indexItem = findIndexItem(selectedGroup);
 
   // let whereItemPlaced = allObjItem(indexItem).subgroup;
-  console.log(allArrData);
-  console.log('allArrData');
-  console.log(selectedGroup);
-  console.log('selectedGroup');
-  console.log(indexItem);
-  console.log('indexItem');
 
-  if (event.dataTransfer.dropEffect !== 'none') {
-    $('#' + bargeId)
-      .draggable()
-      .remove();
+  // if (event.dataTransfer.dropEffect !== 'none') {
+  //   $('#' + bargeId)
+  //     .draggable()
+  //     .remove();
 
-    updateTimline(userParsing);
-  }
+  //   updateTimline(userParsing);
+  // }
 }
 
 function updateTimline(stringParsing) {
   let dataParsing = stringParsing.dataParsing;
-  console.log(dataParsing);
-  console.log('dataParsing');
   items.update({
     id: dataParsing.newItem_dropped.id,
     barge: dataParsing.newItem_dropped.barge,
@@ -100,7 +114,7 @@ function updateTimline(stringParsing) {
     completeLoading: dataParsing.newItem_dropped.completeLoading,
     subgroup: 2,
     subgroupOrder: 2,
-    group: 1,
+    group: dataParsing.groupSelected,
     groupChild: dataParsing.newItem_dropped.group,
     groupParent: dataParsing.selectedParent,
     parentId: parseInt(dataParsing.parentId),
@@ -108,6 +122,9 @@ function updateTimline(stringParsing) {
     end: stringParsing.newDateEnd,
     content: dataParsing.topParent.product + ' ' + dataParsing.bargeVolume + ' T'
   });
+
+  console.log(dataParsing);
+  console.log('dataParsing');
 }
 
 timeline2.on('doubleClick', function(properties) {
@@ -128,7 +145,7 @@ timeline2.on('select', function(properties) {
 
 for (let i = 1; i <= numberOfGroups; i += 2) {
   groups.add({
-    id: i,
+    id: 'Kelanis' + i,
     orderGroup: 8,
     isSubGroup: false,
     content: 'Klanis &nbsp;' + i
