@@ -59,10 +59,17 @@ function handleDragEndBarge(event, index) {
   let bargeId = event.target.id;
   let indexNo = $('#' + bargeId).data('no');
   let userParsing = allArrData[indexNo];
+
+  let selectedGroup = userParsing.dataParsing.newItem_dropped.group; // tempat item tersebut diletakan;
+  let indexItem = findIndexItem(selectedGroup);
+
+  // let whereItemPlaced = allObjItem(indexItem).subgroup;
   console.log(allArrData);
   console.log('allArrData');
-  console.log(userParsing.newDateEnd);
-  console.log('newDateEnd');
+  console.log(selectedGroup);
+  console.log('selectedGroup');
+  console.log(indexItem);
+  console.log('indexItem');
 
   if (event.dataTransfer.dropEffect !== 'none') {
     $('#' + bargeId)
