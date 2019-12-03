@@ -41,9 +41,35 @@
   <body>
     <div class="container-fluid content welcome-bg">
       <div class="welcome">
-        <h1>Testing</h1>
-        <h2>Local time</h2>
-        <div id="local"></div>
+        <div id="visualization"></div>
+
+        <div class="items-panel">
+          <div class="side">
+            <h3>Items:</h3>
+            <ul class="items">
+              <li draggable="true" class="item">
+                item 1 - box
+              </li>
+              <li draggable="true" class="item">
+                item 2 - point
+              </li>
+              <li draggable="true" class="item">
+                item 3 - range
+              </li>
+              <li draggable="true" class="item">
+                item 3 - range - fixed times - <br />
+                (start: now, end: now + 10 min)
+              </li>
+            </ul>
+          </div>
+
+          <div class="side">
+            <h3>Object with &quot;target:&apos;item&apos;&quot;:</h3>
+            <li draggable="true" class="object-item">
+              object with target:&apos;item&apos;
+            </li>
+          </div>
+        </div>
       </div>
     </div>
     <script>

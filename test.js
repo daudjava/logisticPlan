@@ -1,40 +1,97 @@
-localStorage.setItem('item_added_to_cart', 0);
-function itemAddedToCart() {
-  let userParsing = {};
-  userParsing.id = window.localStorage.getItem('id');
-  userParsing.start = window.localStorage.getItem('start');
-  //   userParsing.id = window.localStorage.getItem('end');
-  console.log(userParsing);
-  console.log('userLoad');
-  updateTimline(userParsing);
-}
-
-function updateTimline(userParsing) {
-  items.update({
-    id: userParsing.id,
-    start: userParsing.start
+// create groups
+var numberOfGroups = 3;
+var groups = new vis.DataSet();
+for (var i = 0; i < numberOfGroups; i++) {
+  groups.add({
+    id: i,
+    content: 'Truck&nbsp;' + i
   });
 }
-window.addEventListener('storage', itemAddedToCart);
 
-// // console.log(window.localStorage.getItem('user'));
+// create items
+var numberOfItems = 10;
+var items = new vis.DataSet();
 
-// console.log(items._data);
-// console.log('items');
+var itemsPerGroup = Math.round(numberOfItems / numberOfGroups);
 
-// const person = {
-//   name: 'Obaseki Nosa',
-//   location: 'Lagos'
-// };
+for (var truck = 0; truck < numberOfGroups; truck++) {
+  var date = new Date();
+  for (var order = 0; order < itemsPerGroup; order++) {
+    date.setHours(date.getHours() + 4 * (Math.random() < 0.2));
+    var start = new Date(date);
 
-// const el1 = document.getElementById('utc');
+    date.setHours(date.getHours() + 2 + Math.floor(Math.random() * 4));
+    var end = new Date(date);
 
-// const el2 = document.getElementById('local');
-// console.log(el1);
-// console.log('el1');
-// timelineUTC = new vis.Timeline(el1, items, option1);
-// timelineUTC.addCustomTime(customTime);
-// console.log(el2);
-// console.log('el2');
-// timelineLocal = new vis.Timeline(el2, items, option1);
-// timelineLocal.addCustomTime(customTime);
+    items.add({
+      id: order + itemsPerGroup * truck,
+      group: truck,
+      start: start,
+      end: end,
+      content: 'Order ' + order
+    });
+  }
+}
+
+// specify options
+var options = {
+  stack: true,
+  start: new Date(),
+  end: new Date(1000 * 60 * 60 * 24 + new Date().valueOf()),
+  editable: true,
+  orientation: 'top',
+  onDropObjectOnItem: function(objectData, item, callback) {
+    if (!item) {
+      return;
+    }
+    alert('dropped object with content: "' + objectData.content + '" to item: "' + item.content + '"');
+  }
+};
+
+// create a Timeline
+var container = document.getElementById('visualization');
+timeline1 = new vis.Timeline(container, items, groups, options);
+
+function handleDragStart(event) {
+  var dragSrcEl = event.target;
+
+  event.dataTransfer.effectAllowed = 'move';
+  var itemType = event.target.innerHTML.split('-')[1].trim();
+  var item = {
+    id: new Date(),
+    type: itemType,
+    content: event.target.innerHTML.split('-')[0].trim()
+  };
+
+  var isFixedTimes = event.target.innerHTML.split('-')[2] && event.target.innerHTML.split('-')[2].trim() == 'fixed times';
+  if (isFixedTimes) {
+    item.start = new Date();
+    item.end = new Date(1000 * 60 * 10 + new Date().valueOf());
+  }
+  event.dataTransfer.setData('text', JSON.stringify(item));
+}
+
+function handleObjectItemDragStart(event) {
+  var dragSrcEl = event.target;
+
+  event.dataTransfer.effectAllowed = 'move';
+  var objectItem = {
+    content: 'objectItemData',
+    target: 'item'
+  };
+  event.dataTransfer.setData('text', JSON.stringify(objectItem));
+}
+
+var items = document.querySelectorAll('.items .item');
+
+var objectItems = document.querySelectorAll('.object-item');
+
+for (var i = items.length - 1; i >= 0; i--) {
+  var item = items[i];
+  item.addEventListener('dragstart', handleDragStart.bind(this), false);
+}
+
+for (var i = objectItems.length - 1; i >= 0; i--) {
+  var objectItem = objectItems[i];
+  objectItem.addEventListener('dragstart', handleObjectItemDragStart.bind(this), false);
+}

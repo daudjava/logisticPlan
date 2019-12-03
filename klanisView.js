@@ -51,26 +51,41 @@ function createObjBarge(countBarge) {
   }
 }
 
+// let itemBarge0 = document.getElementById('barge0');
+// itemBarge0.addEventListener('dragstart', handleDragStartBarge.bind(this), false);
+
 function handleDragStartBarge(event) {
-  let allArrData = getDataBarge();
-  let bargeId = event.target.id;
-  let indexNo = $('#' + bargeId).data('no');
-  let userParsing = allArrData[indexNo];
-  let dataParsing = userParsing.dataParsing;
+  // let allArrData = getDataBarge();
+  // let bargeId = event.target.id;
+  // let indexNo = $('#' + bargeId).data('no');
+  // let userParsing = allArrData[indexNo];
+  // let dataParsing = userParsing.dataParsing;
 
-  console.log(dataParsing);
-  console.log('userParsingDataStart');
-  let item = {
-    id: dataParsing.newItem_dropped.id,
-    domObj: event.target,
-    content: event.target.innerHTML.trim(),
-    start: dataParsing.newItem_dropped.start,
-    end: dataParsing.newItem_dropped.end
-  };
+  // console.log(dataParsing);
+  // console.log('userParsingDataStart');
+  // let item = {
+  //   id: dataParsing.newItem_dropped.id,
+  //   domObj: event.target,
+  //   content: event.target.innerHTML.trim(),
+  //   start: dataParsing.newItem_dropped.start,
+  //   end: dataParsing.newItem_dropped.end
+  // };
 
-  console.log(item);
-  console.log('itemitemitemitemitem');
-  event.dataTransfer.setData('text', JSON.stringify(item));
+  // console.log(item);
+  // console.log('itemitemitemitemitem');
+  // event.dataTransfer.setData('text', JSON.stringify(item));
+  console.log('handleDragStartBarge');
+  // event.dataTransfer.effectAllowed = 'move';
+  // var dragSrcEl = event.target;
+
+  // var itemType = event.target.innerHTML.trim();
+  // var item = {
+  //   id: new Date(),
+  //   type: 'range',
+  //   content: event.target.innerHTML.trim()
+  // };
+
+  // event.dataTransfer.setData('text', JSON.stringify(item));
 }
 
 function handleDragEndBarge(event) {
@@ -152,38 +167,38 @@ for (let i = 1; i <= numberOfGroups; i += 2) {
   });
 }
 
-for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
-  if (dataItem[indexItem].subgroup == 2) {
-    let itemSelected = dataItem[indexItem];
-    let idItem = itemSelected.product != 'D4000' ? 1 : 3;
-    items.add({
-      id: indexItem,
-      productNo: itemSelected.productNo,
-      product: itemSelected.product,
-      loadingRate: itemSelected.loadingRate,
-      capacity: itemSelected.capacity,
-      barge: itemSelected.barge,
-      estimationReady: itemSelected.estimationReady,
-      cycle: itemSelected.cycle,
-      position: itemSelected.position,
-      availableAtKlanis: itemSelected.availableAtKlanis,
-      arriveAtTaboneo: itemSelected.arriveAtTaboneo,
-      loadToVessel: itemSelected.loadToVessel,
-      remainingCargo: itemSelected.remainingCargo,
-      commanceLoading: itemSelected.commanceLoading,
-      completeLoading: itemSelected.completeLoading,
-      name: itemSelected.name,
-      className: itemSelected.className,
-      parentId: itemSelected.parentId,
-      group: idItem,
-      groupChild: '',
-      groupParent: itemSelected.groupContent,
-      start: itemSelected.startDate, //'2019-10-21 00:00:00'
-      end: itemSelected.endDate,
-      subgroup: itemSelected.subgroup,
-      subgroupOrder: itemSelected.subgroupOrder,
-      content: itemSelected.product,
-      editable: { updateTime: true, updateGroup: false, remove: true }
-    });
-  }
-}
+// for (let indexItem = 0; indexItem < numberOfItems; indexItem++) {
+//   if (dataItem[indexItem].subgroup == 2) {
+//     let itemSelected = dataItem[indexItem];
+//     let idItem = itemSelected.product != 'D4000' ? 1 : 3;
+//     items.add({
+//       id: indexItem,
+//       productNo: itemSelected.productNo,
+//       product: itemSelected.product,
+//       loadingRate: itemSelected.loadingRate,
+//       capacity: itemSelected.capacity,
+//       barge: itemSelected.barge,
+//       estimationReady: itemSelected.estimationReady,
+//       cycle: itemSelected.cycle,
+//       position: itemSelected.position,
+//       availableAtKlanis: itemSelected.availableAtKlanis,
+//       arriveAtTaboneo: itemSelected.arriveAtTaboneo,
+//       loadToVessel: itemSelected.loadToVessel,
+//       remainingCargo: itemSelected.remainingCargo,
+//       commanceLoading: itemSelected.commanceLoading,
+//       completeLoading: itemSelected.completeLoading,
+//       name: itemSelected.name,
+//       className: itemSelected.className,
+//       parentId: itemSelected.parentId,
+//       group: idItem,
+//       groupChild: '',
+//       groupParent: itemSelected.groupContent,
+//       start: itemSelected.startDate, //'2019-10-21 00:00:00'
+//       end: itemSelected.endDate,
+//       subgroup: itemSelected.subgroup,
+//       subgroupOrder: itemSelected.subgroupOrder,
+//       content: itemSelected.product,
+//       editable: { updateTime: true, updateGroup: false, remove: true }
+//     });
+//   }
+// }

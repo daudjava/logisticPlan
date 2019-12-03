@@ -434,6 +434,8 @@ let kelanisViewOptions = {
 
 const container = document.getElementById('mytimeline');
 const container2 = document.getElementById('mytimeline2');
+console.log(container);
+console.log('container');
 if (container != null) {
   var timeline1 = new vis.Timeline(container, items, groups, taboneoViewOptions);
 } else {
