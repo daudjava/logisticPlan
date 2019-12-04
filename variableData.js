@@ -270,7 +270,9 @@ let vesselKosong = [
     CLASS_NAME: 'EXPECTED'
   }
 ];
-let dataItem = vesselKosong.concat(groupVessel);
+// let dataItem = vesselKosong.concat(groupVessel);
+let dataItem = vesselKosong;
+
 console.log(dataItem);
 console.log('dataItem');
 let today = moment()

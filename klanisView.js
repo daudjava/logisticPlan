@@ -156,16 +156,15 @@ function handleDragEndBarge(event) {
   console.log('allArrData');
   // let selectedGroup = userParsing.dataParsing.newItem_dropped.group; // tempat item tersebut diletakan;
   // let indexItem = findIndexItem(selectedGroup);
-
   // let whereItemPlaced = allObjItem(indexItem).subgroup;
 
-  // if (event.dataTransfer.dropEffect !== 'none') {
-  //   $('#' + bargeId)
-  //     .draggable()
-  //     .remove();
+  if (event.dataTransfer.dropEffect !== 'none') {
+    $('#' + bargeId)
+      .draggable()
+      .remove();
 
-  //   updateTimline(userParsing);
-  // }
+    updateTimline(userParsing);
+  }
 }
 
 function updateTimline(stringParsing) {
