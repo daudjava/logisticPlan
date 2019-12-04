@@ -1,5 +1,64 @@
-let numberOfItems = dataItem.length;
-numberOfGroups = 3;
+let groups = new vis.DataSet();
+
+let items = new vis.DataSet();
+
+let numberOfGroups = 3;
+
+let kelanisViewOptions = {
+  min: new Date(2019, 9, 1), // lower limit of visible range
+  max: new Date(2019, 12, 1), // upper limit of visible range
+  zoomMax: 1000 * 60 * 60 * 24 * 31 * 2, // about three months in milliseconds
+  locale: 'en',
+  showCurrentTime: true,
+  stack: true,
+  stackSubgroups: true,
+  start: today,
+  end: nextWeek,
+  editable: true,
+  verticalScroll: true,
+  zoomKey: 'ctrlKey',
+  orientation: 'top',
+  margin: {
+    item: {
+      horizontal: -1
+    }
+  },
+  itemsAlwaysDraggable: {
+    item: true,
+    range: true
+  },
+  loadingScreenTemplate: function() {
+    return '<br><h1>Loading...</h1>';
+  },
+  groupOrder: function(a, b) {
+    return b.orderGroup - a.orderGroup;
+  },
+  onMove: function(item, callback) {
+    callback(item); // send back adjusted new item
+    showPopOverItem(item);
+
+    console.log(timeline2.itemsData.get());
+    console.log('Data Item All');
+    console.log(allGroupItem());
+    console.log('Group Item All');
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
+  },
+  onRemove: function(item, callback) {
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
+    removeConfirm(item, callback);
+  }
+};
+
+const container2 = document.getElementById('mytimeline2');
+var timeline2 = new vis.Timeline(container2, items, groups, kelanisViewOptions);
+
+// let numberOfItems = dataItem.length;
 const allObjItem = function(indexItem) {
   return timeline2.itemsData.get(indexItem);
 };
@@ -7,12 +66,6 @@ const allObjItem = function(indexItem) {
 const allGroupItem = function(indexGroup) {
   return groups.get(indexGroup);
 };
-
-console.log(allObjItem());
-console.log('Load Awal');
-
-console.log(allGroupItem());
-console.log('Group Item All');
 
 let userParsing = JSON.parse(localStorage.getItem('dataParsing'));
 let countBarge = userParsing != null ? userParsing.length : false;
@@ -24,6 +77,10 @@ if (countBarge) {
 
 //ketika ada perubahan data
 window.addEventListener('storage', getDataBarge);
+
+console.log(getDataBarge());
+console.log('getDataBarge');
+
 localStorage.setItem('item_added_to_cart', 0);
 function getDataBarge() {
   if (JSON.parse(localStorage.getItem('dataParsing')) != null) {
@@ -78,14 +135,14 @@ function handleDragStartBarge(event) {
   // event.dataTransfer.effectAllowed = 'move';
   // var dragSrcEl = event.target;
 
-  // var itemType = event.target.innerHTML.trim();
-  // var item = {
-  //   id: new Date(),
-  //   type: 'range',
-  //   content: event.target.innerHTML.trim()
-  // };
+  var itemType = event.target.innerHTML.trim();
+  var item = {
+    id: new Date(),
+    type: 'range',
+    content: event.target.innerHTML.trim()
+  };
 
-  // event.dataTransfer.setData('text', JSON.stringify(item));
+  event.dataTransfer.setData('text', JSON.stringify(item));
 }
 
 function handleDragEndBarge(event) {
@@ -138,8 +195,11 @@ function updateTimline(stringParsing) {
     content: dataParsing.topParent.product + ' ' + dataParsing.bargeVolume + ' T'
   });
 
-  console.log(dataParsing);
-  console.log('dataParsing');
+  console.log(allObjItem());
+  console.log('Load Awal');
+
+  console.log(allGroupItem());
+  console.log('Group Item All');
 }
 
 timeline2.on('doubleClick', function(properties) {

@@ -1,3 +1,106 @@
+//global variable
+const maxCrane = 8;
+const maxbarge = 7;
+const maxCraneItem = 3;
+let numberOfGroups = 8;
+
+let groups = new vis.DataSet();
+let groupParentBefore = -1;
+let groupBefore = -1;
+let groupChild = '';
+
+let items = new vis.DataSet();
+let sumCrane = 0;
+let sumBarge = 0;
+let idSubGroupCrane = 1;
+let idSubGroupBarge = 1;
+
+let taboneoViewOptions = {
+  height: '99%',
+  min: new Date(2019, 9, 1), // lower limit of visible range
+  max: new Date(2019, 12, 1), // upper limit of visible range
+  // zoomMin: 1000 * 60 * 60 * 24,             // one day in milliseconds
+  zoomMax: 1000 * 60 * 60 * 24 * 31 * 2, // about three months in milliseconds
+  locale: 'en',
+  showCurrentTime: true,
+  stack: true,
+  stackSubgroups: true,
+  // start: '2019-11-23 00:00', //'2019-10-21 00:00:00' 2019-11-23 00:00
+  // end: '2019-12-12 12:00', //2019-12-17 00:00
+  start: today,
+  end: nextWeek,
+  editable: true,
+  verticalScroll: true,
+  zoomKey: 'ctrlKey',
+  orientation: 'top',
+  margin: {
+    item: {
+      horizontal: -1
+    }
+  },
+  itemsAlwaysDraggable: {
+    item: true,
+    range: true
+  },
+  loadingScreenTemplate: function() {
+    return '<br><h1>Loading...</h1>';
+  },
+  groupOrder: function(a, b) {
+    return b.orderGroup - a.orderGroup;
+  },
+  // onUpdate: function(item, callback) {
+  //   prettyPrompt('Update item', 'Edit items text:', item.content, function(value) {
+  //     if (value) {
+  //       item.content = value;
+  //       callback(item); // send back adjusted item
+  //     } else {
+  //       callback(null); // cancel updating the item
+  //     }
+  //   });
+  // },
+  // onAdd: function(item, callback) {
+  //   addCranePopup(item, callback);
+  //   // prettyPrompt('Add item', 'Enter text content for new item:', item.content, function(value) {
+  //   //   if (value) {
+  //   //     item.content = value;
+  //   //     callback(item); // send back adjusted new item
+  //   //   } else {
+  //   //     callback(null); // cancel item creation
+  //   //   }
+  //   // });
+  // },
+  // groupOrder: 'orderGroup',  // groupOrder can be a property name or a sorting function
+  onMove: function(item, callback) {
+    //when resize item
+    callback(item); // send back adjusted new item
+    updateActualVessel(item.groupParent);
+    showPopOverItem(item);
+
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
+  },
+  onRemove: function(item, callback) {
+    localStorage.setItem('item_added_to_cart', 1);
+    localStorage.setItem('id', item.id);
+    localStorage.setItem('start', item.start);
+    localStorage.setItem('end', item.end);
+    removeConfirm(item, callback);
+    // prettyConfirm('Remove item', 'Do you really want to remove item ' + item.content + '?', function(ok) {
+    //   if (ok) {
+
+    //   } else {
+    //     callback(null); // cancel deletion
+    //   }
+    // });
+  }
+};
+
+const container = document.getElementById('mytimeline');
+
+var timeline1 = new vis.Timeline(container, items, groups, taboneoViewOptions);
+
 let numberOfItems = dataItem.length;
 const allObjItem = function(indexItem) {
   return timeline1.itemsData.get(indexItem);
