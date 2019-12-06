@@ -64,6 +64,7 @@
           </div>
 
           <div class="side">
+            <input type="text" class="form-control datetimepicker-input" id="edtEndDate" data-toggle="datetimepicker" data-target="#edtEndDate" />
             <h3>Object with &quot;target:&apos;item&apos;&quot;:</h3>
             <li draggable="true" class="object-item">
               object with target:&apos;item&apos;
@@ -98,5 +99,14 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"
     ></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+    <script>
+      let selectedEndItem = '2019-12-05 12:00:00';
+      $('#edtEndDate').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        sideBySide: true
+        // date: moment(selectedEndItem, "YYYY-MM-DD HH:mm:ss")
+      });
+      $('#edtEndDate').datetimepicker('date', moment(selectedEndItem, 'YYYY-MM-DD HH:mm:ss'));
+    </script>
   </body>
 </html>
